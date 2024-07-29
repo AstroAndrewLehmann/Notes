@@ -1,0 +1,1285 @@
+\chapter{Matrix methods} \label{ch:matrices}
+
+
+
+Consider a system of $N$ linear equations
+\begin{align*}
+\begin{array}{ccc}
+a_{11} x_1 + a_{12} x_2 + \cdots + a_{1N} x_N & = & b_1 \\
+a_{21} x_1 + a_{22} x_2 + \cdots + a_{2N} x_N & = & b_2 \\
+\vdots & & \\
+a_{N1} x_1 + a_{N2} x_2 + \cdots + a_{NN} x_N & = & b_N
+\end{array}
+\end{align*}
+where the $a_{ij}$ are constant coefficients, the $b_i$ are also constants, and the $x_i$ are the variables we are trying to determine. This system can be written more succinctly as a matrix equation:
+\begin{align*}
+\underbrace{
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1N} \\
+a_{21} & a_{22} & \cdots & a_{2N} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{N1} & a_{N2} & \cdots & a_{NN}
+\end{pmatrix}
+}_\mathlarger{\mathlarger{\mathlarger{\mathlarger{A}}}}
+\underbrace{
+\begin{pmatrix}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{N}
+\end{pmatrix}
+}_\mathlarger{\mathlarger{\mathlarger{\mathlarger{X}}}}
+=
+\underbrace{
+\begin{pmatrix}
+b_{1} \\
+b_{2} \\
+\vdots \\
+b_{N}
+\end{pmatrix}
+}_\mathlarger{\mathlarger{\mathlarger{\mathlarger{B}}}}
+\end{align*}
+So, the goal is to find the column $X$. The obvious method to do this is to invert the matrix $A$, so that we can multiply both sides of the matrix equation by $A^{-1}$, giving the solution directly
+\begin{align*}
+X = A^{-1}B,
+\end{align*}
+assuming that the inverse exists. This assumption is true if and only if $A$ has non-zero determinant: $\det(A)\neq 0$.
+
+\section{Gaussian reduction}
+Let's quickly remind ourselves how Gaussian reduction works with an example. This example will also serve to define various useful terms.
+
+\exemple{\upline}
+{
+	Consider the system
+	\begin{align*}
+	\begin{pmatrix}
+	2 & 1 & 2 \\
+	1 & 3 & 3 \\
+	3 & 1 & 1
+	\end{pmatrix}
+	\begin{pmatrix}
+	x_1 \\
+	x_2 \\
+	x_3
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	-1 \\
+	2 \\
+	0
+	\end{pmatrix}.
+	\end{align*}
+	To simplify we work with the augmented matrix:
+	\begin{align*}
+	\begin{pmatrix}[ccc|c]
+	\fbox{2} & 1 & 2 & -1 \\
+	1 & 3 & 3 & 2 \\
+	3 & 1 & 1 & 0
+	\end{pmatrix}
+    \end{align*}
+    I have boxed the first element of the first row. At this step, this is the \textit{pivot} or \textit{pivot element}. We use a pivot to zero the rest of the column below it. In the first step the pivot will always be the leftmost uppermost non-zero element. Since row 2 has a 1 in the first column, we zero it by subtracting 1/2 of the first row (or, said differently, replacing row 2 with row 2 minus half of row 1).
+	\begin{align*}
+	\begin{matrix}
+	R_2 - \frac{1}{2}R_1 \\
+	\to \\
+    R_3 - \frac{3}{2}R_1
+    \end{matrix}
+    \quad
+    \begin{pmatrix}[ccc|c]
+    2 &    1 &  2 &  -1 \\
+    0 &  \fbox{5/2} &  2 & 5/2 \\
+    0 & -1/2 & -2 & 3/2
+    \end{pmatrix}
+    \end{align*}
+    Now that the first column has been zeroed below the first pivot, we move on to the second column. So now the pivot is the element in the second column and second row, which is boxed above. [Note: If this element was zero, we would have to switch the second row with another row (not including the first) in order to get a nonzero pivot there. If there were no nonzero elements in the second row to move here, we'd be in trouble. In fact the system would be under-determined and we would have infinite solutions. We'll ignore this situation for the moment.] We use the new pivot to zero the rest of the column below it. We have to take the 3rd row, and subtract minus 1/5th of the 2nd row. That is, add 1/5th of the 2nd row:
+	\begin{align*}
+    \begin{matrix}
+     \\
+    \to \\
+    R_3 + \frac{1}{5}R_2
+    \end{matrix}
+    \quad
+    \begin{pmatrix}[ccc|c]
+    2 &    1 &    2 &  -1 \\
+    0 &  5/2 &    2 & 5/2 \\
+    0 &    0 & -8/5 &   2
+    \end{pmatrix}
+    \end{align*}
+    Now we end up with a matrix (everything left of the vertical bar) in \textit{upper triangular form}. We unpack this starting from the bottom:
+    \begin{align*}
+    & -\frac{8}{5} x_3 = 2 \quad \implies \quad x_3 = -\frac{5}{4} \\
+    & \frac{5}{2} x_2 + 2 x_3 = \frac{5}{2} \quad \implies \quad x_2 = \frac{2}{5}\left(\frac{5}{2} - 2 x_3\right)  = \frac{2}{5}\left(\frac{5}{2} + \frac{5}{2}\right) = 2 \\
+    & 2 x_1 + x_2 + 2 x_3 = -1 \quad \implies \quad x_1 = \frac{1}{2}\left(-1 - x_2 - 2 x_3 \right) = \frac{1}{2}\left(-1 - 2 + \frac{5}{2}\right) = -\frac{1}{4}
+    \end{align*}
+    So, the solution to this system is $(x_1, x_2, x_3) = (-1/4, 2, -5/4)$. Geometrically, are 3 equations were each an equation for a plane. The solution represents the point at which all 3 planes intersect.
+}{\downline}
+
+Take note of this previous example. We will soon write down very general things to codify this process, and if you're ever lost on exactly what we've done, come back to this concrete example of the steps of Gaussian reduction. In this 3$\times$3 example, everything we will do in the following paragraphs can be seen in practice.
+
+Imagine now a general system of $N$ equations and $N$ unknowns, given by $AX=B$. At the $n^{th}$ step of the reduction process we reach a matrix $A^{(n)}$. The matrix equation looks like
+\begin{align*}
+A^{(n)}X = b^{(n)} \to 
+\underbrace{
+\begin{pmatrix}[ccccccc|c]
+a^{(n)}_{11} & a^{(n)}_{12} & a^{(n)}_{13} & \cdots & a^{(n)}_{1n} & a^{(n)}_{1,n+1} & \cdots & b_1    \\
+0            & a^{(n)}_{22} & a^{(n)}_{23} & \cdots & a^{(n)}_{2n} & a^{(n)}_{2,n+1} & \cdots & b_2    \\
+0            & 0            & a^{(n)}_{33} & \cdots & a^{(n)}_{3n} & a^{(n)}_{3,n+1} & \cdots & b_3    \\
+\vdots       & \vdots       & \vdots       & \ddots & \vdots       & \vdots          & \cdots & \vdots \\
+0            & 0            & 0            & \cdots & a^{(n)}_{nn} & a^{(n)}_{n,n+1} & \cdots & b_n    \\
+\vdots       & \vdots       & \vdots       & \vdots & \vdots       & \vdots          & \cdots & \vdots \\
+0            & 0            & 0            & \cdots & 0            & a^{(n)}_{N,n+1} & \cdots & b_N    \\
+\end{pmatrix}
+}_\text{zeros under the diagonal for the first $n$ columns.}
+\end{align*}
+Our goal is to give concrete expressions of these coefficients, $a^{(n)}_{ij}$, as though we were going to code them in a computer program. Recall that for $a^{(n)}_{ij}$, this is the element in the $i$th row and $j$th column. For notational consistency, let's rename the original matrices $A=A^{(0)}$ and $B=B^{(0)}$. So, let's do this slowly. In the first step,the $a^{(0)}_{11}$ element is the pivot that we use to zero the column below it. To do that we have to take an arbitrary row, $R_k$, and subtract from it the right amount, call it $C^{(1)}_k$, of row 1 to remove its first element $a^{(0)}_{k1}$, that is $R_k \to R_k - C^{(1)}_k R_i$. The first element is thus forced to be zero like so
+\begin{align*}
+& a^{(1)}_{k1} = a^{(0)}_{k1} - C^{(1)}_k a^{(0)}_{11} = 0
+\end{align*}
+which determines this constant $C^{(1)}_k$
+\begin{align*}
+C^{(1)}_k = \frac{a^{(0)}_{k1}}{a^{(0)}_{11}}.
+\end{align*}
+So after the first step the matrix equation will look like
+\begin{align*}
+A^{(1)}X = b^{(1)} \to 
+\begin{pmatrix}[ccccc|c]
+a^{(0)}_{11} & a^{(0)}_{12}                                                  & a^{(0)}_{13}                                                  & \cdots & a^{(0)}_{1n}                                                  & b_1    \\
+0            & a^{(0)}_{21} - \frac{a^{(0)}_{21}}{a^{(0)}_{11}} a^{(0)}_{11} & a^{(0)}_{22} - \frac{a^{(0)}_{21}}{a^{(0)}_{11}} a^{(0)}_{13} & \cdots & a^{(0)}_{2N} - \frac{a^{(0)}_{21}}{a^{(0)}_{11}} a^{(0)}_{1N} & b^{(0)}_2  - \frac{a^{(0)}_{21}}{a^{(0)}_{11}} b^{(0)}_{1N} \\
+0            & a^{(0)}_{31} - \frac{a^{(0)}_{31}}{a^{(0)}_{11}} a^{(0)}_{11} & a^{(0)}_{32} - \frac{a^{(0)}_{31}}{a^{(0)}_{11}} a^{(0)}_{13} & \cdots & a^{(0)}_{3N} - \frac{a^{(0)}_{31}}{a^{(0)}_{11}} a^{(0)}_{1N} & b^{(0)}_3  - \frac{a^{(0)}_{31}}{a^{(0)}_{11}} b^{(0)}_{1N} \\
+\vdots       & \vdots                                                        & \vdots                                                        & \ddots & \vdots                                                        & \vdots \\
+0            & a^{(0)}_{N1} - \frac{a^{(0)}_{31}}{a^{(0)}_{11}} a^{(0)}_{11} & a^{(0)}_{N2} - \frac{a^{(0)}_{31}}{a^{(0)}_{11}} a^{(0)}_{13} & \cdots & a^{(0)}_{NN} - \frac{a^{(0)}_{N1}}{a^{(0)}_{11}} a^{(0)}_{1N} & b^{(0)}_N  - \frac{a^{(0)}_{31}}{a^{(0)}_{11}} b^{(0)}_{1N} \\
+\end{pmatrix}
+\end{align*}
+Now this matrix is tough to look at. I think it's easier to focus on the elements, $a^{(0)}_{ij}$, themselves. The easiest thing to say is that the first column, other than the first row, will be zero, so
+\begin{align*}
+a^{(1)}_{k1} = 0,  \quad \text{for } k=2,3,4,\dots,N.
+\end{align*}
+We can see also that the whole first row stays the same
+\begin{align*}
+a^{(1)}_{1k} = a^{(0)}_{1k},  \quad \text{for } k=1,2,3,\dots,N.
+\end{align*}
+Now each of the rest of the elements are replaced by their old value minus a multiple (that we found earlier) of the first row, so
+\begin{align*}
+a^{(1)}_{ij} = a^{(0)}_{ij} - \frac{a^{(0)}_{i1}}{a^{(0)}_{11}}a^{(0)}_{1j},  \quad \text{for any } i,j=2,3,\dots,N.
+\end{align*}
+It's a good idea to stare at these last three equations until you convince yourself that you understand them. One question you should ask is if you choose any possible $i$ or $j$ (between 1 and $N$), do one of these three equations apply? Finally, in the Gaussian reduction we also have to work on the $B$ column in the augmented matrix. Nothing new, it's the same rules as above. The first element is unchanged
+\begin{align*}
+b^{(1)}_1 = b^{(0)}_1,
+\end{align*}
+but all the rest have the same subtraction factor as in the matrix
+\begin{align*}
+b^{(1)}_{i} = b^{(0)}_{i} - \frac{a^{(0)}_{i1}}{a^{(0)}_{11}} b^{(0)}_i,  \quad \text{for } i=2,3,\dots,N.
+\end{align*}
+
+Now let's look at what happens at step 2. We've zeroed the first column (below the top left element) and it remains untouched
+\begin{align*}
+& a^{(2)}_{k1} = a^{(1)}_{k1},  \quad \text{for } k=1,2,3,\dots,N.
+\end{align*}
+So now we need to zero the second column \textit{below the diagonal}
+\begin{align*}
+a^{(2)}_{k2} = 0,  \quad \text{for } k=3,4,5,\dots,N.
+\end{align*}
+The first \textit{and} second row remain the same
+\begin{align*}
+& a^{(2)}_{1k} = a^{(1)}_{1k},  \quad \text{for } k=2,3,4,\dots,N. \\
+& a^{(2)}_{2k} = a^{(1)}_{2k},  \quad \text{for } k=2,3,4,\dots,N.
+\end{align*}
+And now we need to subtract a multiple of the second row from all the other rows (from row 3 downwards), by that multiple, $C^{(2)}_k$, that zerod the second row
+\begin{align*}
+C^{(2)}_k = \frac{a^{(2)}_{k2}}{a^{(1)}_{22}}.
+\end{align*}
+So any element (not in the first two rows or columns) is replaced by
+\begin{align*}
+a^{(2)}_{ij} = a^{(1)}_{ij} - \frac{a^{(1)}_{i2}}{a^{(1)}_{22}} a^{(1)}_{2j},  \quad \text{for any } i,j=3,4,\dots,N.
+\end{align*}
+Now for the $B$ column, the first two elements are unchanged
+\begin{align*}
+b^{(2)}_1 = b^{(1)}_1, \\
+b^{(2)}_2 = b^{(1)}_2 \\
+\end{align*}
+but all the rest have the same subtraction factor as in the matrix
+\begin{align*}
+b^{(2)}_{i} = b^{(1)}_{i} - \frac{a^{(1)}_{i2}}{a^{(1)}_{22}} b^{(1)}_i,  \quad \text{for } i=3,4,\dots,N.
+\end{align*}
+
+OK, after 2 steps I think we can recognise the pattern. Now let's skip to the $n$th step. These will be the expressions for all the matrix elements, and $B$ column terms, that could be used in a computer program to iteratively complete the Gaussian reduction procedure until we reach an upper triangular matrix.
+
+\noindent \fbox{\begin{minipage}{\linewidth}
+\underline{\textbf{$n$ steps of Gaussian reduction:} $A^{(n)}X = b^{(n)}$ }
+
+At this step, the first $n$ columns have been zeroed below the diagonal, and so those columns remain untouched on every row
+\begin{align*}
+& a^{(n)}_{ij} = a^{(n-1)}_{ij},  \quad \text{for } i=1,2,3,\dots,N \quad \text{and } j=1,2,3,\dots,n.
+\end{align*}
+Similarly, the first $n$ rows remain the same rightwards of those first $n$ columns
+\begin{align*}
+& a^{(n)}_{ij} = a^{(n-1)}_{ij},  \quad \text{for } i=1,2,3,\dots,n \quad \text{and } j=n+1,n+2,n+3,\dots,N.
+\end{align*}
+The rest of the elements must subtract a multiple of the $n$ row
+\begin{align*}
+a^{(n)}_{ij} = a^{(n-1)}_{ij} - \frac{a^{(n-1)}_{in}}{a^{(n-1)}_{nn}} a^{(n-1)}_{nj},  \quad \text{for any } i,j=n+1,n+2,n+3,\dots,N.
+\end{align*}
+This has assumed that $a^{(n-1)}_{nn} \neq 0$. If this element is zero, we need to switch the $n$th row with another row larger than $n$. If none of the lower rows have a non-zero element in this column, then we simply let $A^{(n)} = A^{(n-1)}$, and continue with the next step.
+
+For the $B$ column, the first $n$ elements remain the same
+\begin{align*}
+b^{(n)}_i = b^{(n-1)}_i,  \quad \text{for } i=1,2,3,\dots,n
+\end{align*}
+and the remaining elements have the same subtraction factor as the $A$ elements
+\begin{align*}
+b^{(n)}_{i} = b^{(n-1)}_{i} - \frac{a^{(n-1)}_{in}}{a^{(n-1)}_{nn}} b^{(n-1)}_i,  \quad \text{for } i=n+1,n+2,n+3,\dots,N.
+\end{align*}
+\end{minipage}}
+
+Once we have reduced the matrix $A$ to an upper triangular matrix, then we can determine the solution by unpacking the matrix equation back into explicit equations starting from the bottom of the matrix. This is called the method of ascent, which we detail in the next section.
+
+\subsection{Method of ascent and method of descent}
+If we have a matrix equation in upper triangular form
+\begin{align*}
+\begin{pmatrix}[ccccc|c]
+a_{11} & a_{12} & a_{13} & \cdots & a_{1N} & b_1    \\
+0      & a_{22} & a_{23} & \cdots & a_{2N} & b_2    \\
+0      & 0      & a_{33} & \cdots & a_{3N} & b_3    \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+0      & 0      & 0      & \cdots & a_{NN} & b_N
+\end{pmatrix}
+\end{align*}
+we unpack the matrix equation starting from the bottom. The last line gives
+\begin{align*}
+a_{NN} x_N = b_N \quad \implies \quad x_N = b_N /a_{NN}.
+\end{align*}
+The second last line gives
+\begin{align*}
+a_{N-1,N-1}x_{N-1} + a_{N-1,N} x_N = b_{N-1} \quad \implies \quad x_{N-1} & = \frac{1}{a_{N-1,N-1}}\left(b_{N-1} - a_{N-1,N}x_{N}\right) \\
+& = \frac{1}{a_{N-1,N-1}}\left(b_{N-1} - a_{N-1,N} \frac{b_N}{a_{NN}} \right).
+\end{align*}
+We repeat this procedure succissively to determine every $x_i$. If we look at row $i$, we see a bunch of zeros before the $x_i$ term
+\begin{align*}
+& 0x_1 + 0 x_2 + \cdots + 0 x_{i-1} + a_{ii} x_i + a_{i,i+1} x_{i+1} + \cdots + a_{i,N} x_N = b_i.
+\end{align*}
+This allows us to see the general expression computing the solution
+\begin{align*}
+\boxed{x_i = \frac{1}{a_{ii}}\left(b_i - \sum_{k=i+1}^N a_{ik} x_{k}\right).}
+\end{align*}
+Be careful, this expression must be applied successively, \textit{starting from the end}, $i=N$. This is the reason it is the method of ascent.
+
+Now a related method is just the reverse of this. If you have a \textit{lower triangular matrix} equation, then \textit{starting from the top}, you will reach an equation like
+\begin{align*}
+& a_{i1}x_1 + a_{i2} x_2 + \cdots + a_{i,i-1} x_{i-1} + a_{ii} x_i + 0 x_{i+1} + \cdots + 0 x_N = b_i.
+\end{align*}
+The method of \textit{descent} then gives the general expression
+\begin{align*}
+\boxed{x_i = \frac{1}{a_{ii}}\left(b_i - \sum_{k=1}^{i-1} a_{ik} x_{k}\right).}
+\end{align*}
+
+
+\subsection{Computational problem with Gaussian reduction}
+To briefly summarise, with Gaussian reduction we solve a matrix equation $AX=B$ with successive steps representing row operations with the goal of achieving an upper triangular matrix. Once we reach this goal, we apply the method of ascent to find the solution $X$. But what if we merely slightly change the original equation to $AX=C$? If you look through the algorithm, you'll notice that we would need to start the whole thing again, because the rightmost column in the augmented matrix comes along for the ride. It needs to experience every step in order. So unless you want to save every row operation (which is certainly feasible, you only need to save the $C^{(n)}_k$ for every step), then we need to find a new method. We will look at 2 methods that bypass this problem in the next sections, the method of LU decomposition and the Jacobi iteration method.
+
+\section{LU decomposition}
+
+\subsection*{Decomposition}
+For a square matrix $A \in \mathcal{M}_{n\times n} (\mathbb{R})$ we seek to decompose it into a product of two matrices
+\begin{align*}
+A = L U
+\end{align*}
+where the matrix $L$ is an $n\times n$ lower triangular matrix and the matrix $U$ is an $n\times n$ upper triangular matrix. We further make the assumption that $L$ has only $1$s along the diagonal. Both $L$ and $U$ are results of a Gaussian reduction process. For example, let $A$ be the following $3\times 3$ matrix and start by constructing $L$ as follows
+\begin{align*}
+A = 
+\begin{pmatrix}
+3 & 1 & 2 \\
+1 & 2 & 2 \\
+2 & 1 & 3
+\end{pmatrix}
+\quad\text{and}\quad
+L = 
+\begin{pmatrix}
+1     & 0     & 0 \\
+\cdot & 1     & 0 \\
+\cdot & \cdot & 1
+\end{pmatrix}
+\end{align*}
+We perform the Gaussian reduction and use the row operation to determine $L$. 
+\begin{align*}
+&
+\begin{matrix}
+  \\
+R_2 - \left( 1/3 \right)R_1  \\
+R_3 - \left( 2/3 \right)R_1 
+\end{matrix}
+\quad\to\quad
+A' = 
+\begin{pmatrix}
+3 & 1 & 2 \\
+0 & 5/3 & 4/3 \\
+0 & 1/3 & 5/3 
+\end{pmatrix}
+\quad\to\quad
+L = 
+\begin{pmatrix}
+1   & 0     & 0 \\
+1/3 & 1     & 0 \\
+2/3 & \cdot & 1 
+\end{pmatrix}
+\\
+%%%%
+%%%%
+%%%%
+&
+\begin{matrix}
+  \\
+  \\
+R_3 - \left( 1/5 \right)R_2 
+\end{matrix}
+\quad\to\quad
+A'' = 
+\begin{pmatrix}
+3 & 1 & 2 \\
+0 & 5/3 & 4/3 \\
+0 & 0 & 7/5 
+\end{pmatrix}
+\quad\to\quad
+L = 
+\begin{pmatrix}
+1   & 0     & 0 \\
+1/3 & 1     & 0 \\
+2/3 & 1/5 & 1 
+\end{pmatrix}
+\end{align*}
+Now this last reduced matrix is exactly the upper triangular $U=A''$ we are looking for. So the decomposition is
+\begin{align*}
+A = 
+\begin{pmatrix}
+3 & 1 & 2 \\
+1 & 2 & 2 \\
+2 & 1 & 3
+\end{pmatrix}
+=
+\underbrace{
+\begin{pmatrix}
+1   & 0     & 0 \\
+1/3 & 1     & 0 \\
+2/3 & 1/5 & 1 
+\end{pmatrix}}_{L}
+\underbrace{
+\begin{pmatrix}
+3 & 1 & 2 \\
+0 & 5/3 & 4/3 \\
+0 & 0 & 7/5 
+\end{pmatrix}}_{U}
+\end{align*}
+
+What you can see in this example is that $U$ is simply the final result of the Gaussian reduction, and $L$ encodes the row operations performed in that reduction. We saw that did row operations
+\begin{align*}
+R_2 - \left( 1/3 \right)R_1  \\
+R_3 - \left( 2/3 \right)R_1
+\end{align*}
+and that gave us $L$ entries $L_{21}=1/3$ and $L_{31}=2/3$. The indices of the rows in the operation give us the row/column indices for the entries in $L$. Generally, we then perform row operations
+\begin{align*}
+R_i - L_{ij}R_j
+\end{align*}
+where these operations must use a pivot to zero the column below the pivot.
+
+
+\subsection*{Usage}
+Why do we do this LU decomposition? In the end we are still trying to solve linear systems, which have matrix form
+\begin{align*}
+AX = B
+\end{align*}
+where $X$ is the column of $n$ unknowns (variables) we are trying to solve for and $B$ is a column of known values. The LU decomposition allows us to solve this system without taking an inverse. The algorithm runs as follows
+\begin{align*}
+AX &= B \quad\implies\quad (LU)X = B \quad\implies\quad L(UX) &= B
+\end{align*}
+Now $UX$ is an $n\times n$ matrix multiplied by a column of size $n$. So it must result in another column of size $n$, call it $Y$. That is, we have
+\begin{align*}
+L\left(UX\right) &= B \quad\implies\quad  LY = B.
+\end{align*}
+This last equation gives a lower triangular matrix, $L$, multplied by a column of unknowns, $Y$, equal to a column of known values $B$. That's really easy to solve! We use the method of \textit{descent} to solve it, turning $Y$ into a column of known values. But we earlier defined
+\begin{align*}
+UX = Y
+\end{align*}
+which is also an easy problem to solve. This is an upper triangular matrix, $U$, multiplied by a column of unknowns, $X$, equal to a column of known values $Y$. Thus we use the method of \textit{ascent} to solve it, giving us what we want, the variables in $X$. Let's use the previous example LU decomposition to see this in practice.
+
+\exemple{\upline}{
+Recall 
+\begin{align*}
+A = 
+\begin{pmatrix}
+3 & 1 & 2 \\
+1 & 2 & 2 \\
+2 & 1 & 3
+\end{pmatrix}
+=LU 
+\quad\text{for}\quad
+L=
+\begin{pmatrix}
+1   & 0     & 0 \\
+1/3 & 1     & 0 \\
+2/3 & 1/5 & 1 
+\end{pmatrix}
+\quad\text{and}\quad
+U=
+\begin{pmatrix}
+3 & 1 & 2 \\
+0 & 5/3 & 4/3 \\
+0 & 0 & 7/5 
+\end{pmatrix}
+\end{align*}
+Let's solve the system
+\begin{align*}
+\begin{pmatrix}
+3 & 1 & 2 \\
+1 & 2 & 2 \\
+2 & 1 & 3
+\end{pmatrix}
+\underbrace{
+\begin{pmatrix}
+x_1 \\ x_2 \\ x_3
+\end{pmatrix}
+}_{X}
+=
+\underbrace{
+\begin{pmatrix}
+1 \\ 2 \\ 3
+\end{pmatrix}
+}_{B}
+\end{align*}
+So we first use $LUX=B$ to define a new column of unknowns 
+\begin{align*}
+Y = 
+\begin{pmatrix}
+y_1 \\ y_2 \\ y_3
+\end{pmatrix}
+\end{align*}
+such that $Y=UX$. This let's us write the equation $LY = B$, explicitly
+\begin{align*}
+\begin{pmatrix}
+1   & 0     & 0 \\
+1/3 & 1     & 0 \\
+2/3 & 1/5 & 1 
+\end{pmatrix}
+\begin{pmatrix}
+y_1 \\ y_2 \\ y_3
+\end{pmatrix}
+=
+\begin{pmatrix}
+1 \\ 2 \\ 3
+\end{pmatrix}
+\end{align*}
+With the \textit{method of descent} we then have
+\begin{align*}
+& y_1 = 1 \\
+& (1/3)y_1 + y_2 = 2 \quad\implies\quad y_2 = 5/3 \\
+& (2/3)y_1 +(1/5) y_2 + y_3 = 2 \quad\implies\quad y_3 = 2
+\end{align*}
+Now we have determined the $Y$ column, we have
+\begin{align*}
+UX = Y \quad\implies\quad
+\begin{pmatrix}
+3 & 1 & 2 \\
+0 & 5/3 & 4/3 \\
+0 & 0 & 7/5 
+\end{pmatrix}
+%
+\begin{pmatrix}
+x_1 \\ x_2 \\ x_3
+\end{pmatrix}
+%
+=
+%
+\begin{pmatrix}
+1 \\ 5/3 \\ 2
+\end{pmatrix}
+\end{align*}
+With the \textit{method of ascent} we then have
+\begin{align*}
+& (7/5)x_3 = 2 \quad\implies\quad x_3 = 10/7 \\
+& (5/3)x_2 + (4/3)x_3 = 5/3 \quad\implies\quad x_2 = - 1/7 \\
+& 3x_1 + x_2 + 2x_3 = 1 \quad\implies\quad x_1 = -4/7
+\end{align*}
+So that the unique solution to the system $AX=B$ is given by $(x_1, \, x_2, \, x_3)=(-4/7, \, -1/7, \,10/7)$.
+}{\downline}
+
+
+\section{Iterative matrix methods}
+We still seek to solve linear systems of the form $AX = B$ for square matrix $A$. We split the matrix $A$ into an addition of matrices
+\begin{align*}
+A = M + N
+\end{align*}
+so that
+\begin{align*}
+& AX = B  \\
+\implies & (M + N)X = B  \\
+\implies & MX = B - NX  \\
+\implies & X = M^{-1}B - M^{-1}NX
+\end{align*}
+This last equation gives the iterative scheme
+\begin{align*}
+X^{(k+1)} = M^{-1}\left(B - NX^{(k)}\right).
+\end{align*}
+The choices of $M$ and $N$ give rise to different iterative schemes, with different speeds of convergence. We will look at two sets of choices, giving the schemes of Jacobi iteration and Gauss-Seidel iteration.
+
+\subsection{Jacobi Iteration}
+In this scheme, we choose $M$ to be the matrix of diagonal elements of $A$, called $D$, and we choose $N$ to be the matrix of the rest of the elements, called $O$ for ``off-diagonal''. Explicitly, these two matrices are defined as follows
+\begin{align*}
+D_{ij} =
+\begin{cases}
+A_{ij} & \text{when } i=j \\
+0 & \text{when } i\neq j 
+\end{cases} \\
+O_{ij} =
+\begin{cases}
+0 & \text{when } i=j \\
+A_{ij} & \text{when } i\neq j 
+\end{cases}
+\end{align*}
+The Jacobi iteration is therefore given by
+\begin{align*}
+X^{(k+1)} = D^{-1}\left(B - OX^{(k)}\right).
+\end{align*}
+
+\exemple{\upline}{
+Let's use Jacobi iteration on the system
+\begin{align*}
+\begin{cases}
+3x - y + z = 2 \\
+x - 2y - z = 1 \\
+2x + 2y + 4z = 3
+\end{cases}
+\end{align*}
+As a matrix equation this system is given by
+\begin{align*}
+\underbrace{
+\begin{pmatrix}
+3 & -1 &  1 \\
+1 & -2 & -1 \\
+2 &  2 &  4 
+\end{pmatrix}
+}_{A}
+%
+\underbrace{
+\begin{pmatrix}
+x \\
+y \\
+z
+\end{pmatrix}
+}_{X}
+%
+=
+%
+\underbrace{
+\begin{pmatrix}
+2 \\
+1 \\
+3
+\end{pmatrix}
+}_{B}
+\end{align*}
+Hence we split $A$ with a diagonal and off-diagonal matrix
+\begin{align*}
+\begin{pmatrix}
+3 & -1 &  1 \\
+1 & -2 & -1 \\
+2 &  2 &  4 
+\end{pmatrix}
+=
+\underbrace{
+\begin{pmatrix}
+3 &  0 &  0 \\
+0 & -2 &  0 \\
+0 &  0 &  4 
+\end{pmatrix}
+}_{D}
++
+\underbrace{
+\begin{pmatrix}
+0 & -1 &  1 \\
+1 &  0 & -1 \\
+2 &  2 &  0 
+\end{pmatrix}
+}_{O}
+\end{align*}
+So we have the Jacobi iteration scheme
+\begin{align*}
+\begin{pmatrix}
+x_{k+1} \\
+y_{k+1} \\
+z_{k+1}
+\end{pmatrix} 
+&= 
+\begin{pmatrix}
+3 &  0 &  0 \\
+0 & -2 &  0 \\
+0 &  0 &  4 
+\end{pmatrix}^{-1}
+\left(
+\begin{pmatrix}
+2 \\
+1 \\
+3
+\end{pmatrix} 
+- 
+\begin{pmatrix}
+0 & -1 &  1 \\
+1 &  0 & -1 \\
+2 &  2 &  0 
+\end{pmatrix}
+\begin{pmatrix}
+x_{k} \\
+y_{k} \\
+z_{k}
+\end{pmatrix}
+\right)
+%%%
+%%%
+%%%
+\\
+&= 
+\begin{pmatrix}
+1/3 &  0 &  0 \\
+0 & -1/2 &  0 \\
+0 &  0 &  1/4 
+\end{pmatrix}
+\left(
+\begin{pmatrix}
+2 \\
+1 \\
+3
+\end{pmatrix} 
+- 
+\begin{pmatrix}
+-y_{k} + z_{k} \\
+x_{k} - z_{k}  \\
+2x_{k} + 2y_{k}
+\end{pmatrix}
+\right)
+%%%
+%%%
+%%%
+\\
+&= 
+\begin{pmatrix}
+1/3 &  0 &  0 \\
+0 & -1/2 &  0 \\
+0 &  0 &  1/4 
+\end{pmatrix}
+\begin{pmatrix}
+2 +y_{k} - z_{k} \\
+1 - x_{k} + z_{k}  \\
+3 - 2x_{k} - 2y_{k}
+\end{pmatrix}
+%%%
+%%%
+%%%
+\\
+\begin{pmatrix}
+x_{k+1} \\
+y_{k+1} \\
+z_{k+1}
+\end{pmatrix} 
+&= 
+\begin{pmatrix}
+\frac{1}{3}\left(2 +y_{k} - z_{k} \right)\\
+-\frac{1}{2}\left(1 - x_{k} + z_{k} \right)  \\
+\frac{1}{4}\left(3 - 2x_{k} - 2y_{k} \right)
+\end{pmatrix}
+\end{align*}
+With this example, I want to show that there is a much easier way to derive this iteration scheme, without ever thinking about diagonal and off-diagonal matrices. Let's start with the system of equations
+\begin{align*}
+\begin{cases}
+3x - y + z = 2 \\
+x - 2y - z = 1 \\
+2x + 2y + 4z = 3
+\end{cases}
+\implies
+\begin{cases}
+x= \frac{1}{3}\left(2 + y - z \right) \\
+y = -\frac{1}{2}\left(1 - x + z \right)\\
+z = \frac{1}{4}\left(3 - 2x - 2y \right)
+\end{cases}
+\end{align*}
+We used the first equation to isolate the $x$ variable, the second equation to isolate the $y$ variable and the third equation to isolate the $z$ variable. Now we interprate these new 3 equations as giving an iterative scheme
+\begin{align*}
+\begin{cases}
+x_{k+1}= \dfrac{1}{3}\left(2 + y_k - z_k \right) \\
+y_{k+1} = -\dfrac{1}{2}\left(1 - x_k + z_k \right)\\
+z_{k+1} = \dfrac{1}{4}\left(3 - 2x_k - 2y_k \right)
+\end{cases}
+\end{align*}
+and we have the same 3 equations that we found with the matrix manipulations, but in a fashion far easier and direct. If we make an initial guess of $(x_0,y_0,z_0)=(0,0,0)$, the first 5 iterations are shown below, making sure to keep only 4 decimal places at each iteration
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{l||l|l|l}
+$k$ & $x_k$ & $y_k$ & $z_k$ \\ \hline
+0 & 0      &       0 &      0 \\
+1 & 0.6667 & -0.5000 & 0.7500 \\
+2 & 0.2500 & -0.5416 & 0.6666 \\
+3 & 0.2639 & -0.7083 & 0.8958 \\
+4 & 0.1320 & -0.8159 & 0.9722 \\
+5 & 0.0706 & -0.9210 & 1.0919 
+\end{tabular}
+\end{center}
+\end{table}
+It's not clear whether this converges or not at this stage.
+}{\downline}
+
+
+\subsection{Gauss-Seidel Iteration}
+In this scheme, we choose $M$ to be the matrix of lower diagonal elements of $A$, called $L$, and we choose $N$ to be the matrix of the rest of the elements, called $U^*$ for the \textit{strictly} upper diagonal elements of $A$. 
+Explicitly, these two matrices are defined as follows
+\begin{align*}
+L_{ij} =
+\begin{cases}
+A_{ij} & \text{when } i \geq j \\
+0 & \text{when } i < j 
+\end{cases} \\
+U^*_{ij} =
+\begin{cases}
+0 & \text{when } i \geq j \\
+A_{ij} & \text{when } i < j 
+\end{cases}
+\end{align*}
+Note that $L$ contains the diagonal of $A$ and $U^*$ \textit{does not contain the diagaonal} of $A$. The Gauss-Seidel iteration is therefore given by
+\begin{align*}
+X^{(k+1)} = L^{-1}\left(B - U^*X^{(k)}\right).
+\end{align*}
+
+
+\exemple{\upline}{
+Let's take up the previous system to compare the Gauss-Seidel iteration scheme to the Jacobi scheme for the same system. We thus have the matrix system
+\begin{align*}
+\underbrace{
+\begin{pmatrix}
+3 & -1 &  1 \\
+1 & -2 & -1 \\
+2 &  2 &  4 
+\end{pmatrix}
+}_{A}
+%
+\underbrace{
+\begin{pmatrix}
+x \\
+y \\
+z
+\end{pmatrix}
+}_{X}
+%
+=
+%
+\underbrace{
+\begin{pmatrix}
+2 \\
+1 \\
+3
+\end{pmatrix}
+}_{B}
+\end{align*}
+Hence we split $A$ with a lower triangular and \textit{strictly} upper triangular matrix
+\begin{align*}
+\begin{pmatrix}
+3 & -1 &  1 \\
+1 & -2 & -1 \\
+2 &  2 &  4 
+\end{pmatrix}
+=
+\underbrace{
+\begin{pmatrix}
+3 &  0 &  0 \\
+1 & -2 &  0 \\
+2 &  2 &  4 
+\end{pmatrix}
+}_{L}
++
+\underbrace{
+\begin{pmatrix}
+0 & -1 &  1 \\
+0 &  0 & -1 \\
+0 &  0 &  0 
+\end{pmatrix}
+}_{U^*}
+\end{align*}
+So we have the Gauss-Seidel iteration scheme
+\begin{align*}
+\begin{pmatrix}
+x_{k+1} \\
+y_{k+1} \\
+z_{k+1}
+\end{pmatrix} 
+&= 
+\begin{pmatrix}
+3 &  0 &  0 \\
+1 & -2 &  0 \\
+2 &  2 &  4 
+\end{pmatrix}^{-1}
+\left(
+\begin{pmatrix}
+2 \\
+1 \\
+3
+\end{pmatrix} 
+- 
+\begin{pmatrix}
+0 & -1 &  1 \\
+0 &  0 & -1 \\
+0 &  0 &  0 
+\end{pmatrix}
+\begin{pmatrix}
+x_{k} \\
+y_{k} \\
+z_{k}
+\end{pmatrix}
+\right)
+&= 
+\begin{pmatrix}
+3 &  0 &  0 \\
+1 & -2 &  0 \\
+2 &  2 &  4 
+\end{pmatrix}^{-1}
+\begin{pmatrix}
+2  + y_k - z_k \\
+1 + z_{k}\\
+3
+\end{pmatrix}
+\end{align*}
+Now we have an inverse that is a little bit more difficult than for a diagonal. Fortunately determinants of triangular matrices are always just the multiplication of the diagonal. Let's use the cofactor form of the inverse
+\begin{align*}
+\begin{pmatrix}
+3 &  0 &  0 \\
+1 & -2 &  0 \\
+2 &  2 &  4 
+\end{pmatrix}^{-1}
+=
+\frac{1}{\det(L)}
+\begin{pmatrix}
+\left| \begin{matrix} -2 & 0 \\ 2 & 4 \end{matrix}\right| &  -\left| \begin{matrix} 1 & 0 \\ 2 & 4 \end{matrix}\right| &  \left| \begin{matrix} 1 & -2 \\ 2 & 2 \end{matrix}\right| \\
+-\left| \begin{matrix} 0 & 0 \\ 2 & 4 \end{matrix}\right| &  \left| \begin{matrix} 3 & 0 \\ 2 & 4 \end{matrix}\right| &  -\left| \begin{matrix} 3 & 0 \\ 2 & 2 \end{matrix}\right| \\
+\left| \begin{matrix} 0 & 0 \\ -2 & 0 \end{matrix}\right| &  -\left| \begin{matrix} 3 & 0 \\ 1 & 0 \end{matrix}\right| &  \left| \begin{matrix} 3 & 0 \\ 1 & -2 \end{matrix}\right|
+\end{pmatrix}^{T}
+=
+\frac{-1}{24}
+\begin{pmatrix}
+-8 &   0 &   0 \\
+ -4 &  12 &   0 \\
+  6 &  -6 &  -6
+\end{pmatrix}
+\end{align*}
+So we continue where we left off
+\begin{align*}
+\begin{pmatrix}
+x_{k+1} \\
+y_{k+1} \\
+z_{k+1}
+\end{pmatrix} 
+&= 
+\frac{-1}{24}
+\begin{pmatrix}
+-8 &   0 &   0 \\
+ -4 &  12 &   0 \\
+  6 &  -6 &  -6
+\end{pmatrix}
+\begin{pmatrix}
+2  + y_k - z_k \\
+1 + z_{k}\\
+3
+\end{pmatrix}
+\\
+%%%
+%%%
+%%%
+&= 
+\begin{pmatrix}
+\frac{2}{3}  + \frac{1}{3}y_k - \frac{1}{3}z_k \\
+- \frac{1}{6} + \frac{1}{6}y_k- \frac{2}{3}z_k \\
+\frac{1}{2} - \frac{1}{4} y_k
+\end{pmatrix}
+\end{align*}
+As with the Jacobi example, there is a much easier way to derive this iteration scheme, without ever thinking about lower triangular (and its inverse!) and upper triangular matrices. We do the same as with Jacobi, starting with the system of equations we isolate each variable
+\begin{align*}
+\begin{cases}
+3x - y + z = 2 \\
+x - 2y - z = 1 \\
+2x + 2y + 4z = 3
+\end{cases}
+\implies
+\begin{cases}
+x= \frac{1}{3}\left(2 + y - z \right) \\
+y = -\frac{1}{2}\left(1 - x + z \right)\\
+z = \frac{1}{4}\left(3 - 2x - 2y \right)
+\end{cases}
+\end{align*}
+As before we used the first equation to isolate the $x$ variable, the second equation to isolate the $y$ variable and the third equation to isolate the $z$ variable. Now we interprate these new 3 equations as giving an iterative scheme, but using the latest possible information. That is, the first equation gives
+\begin{align*}
+x_{k+1}= \dfrac{1}{3}\left(2 + y_k - z_k \right)
+\end{align*}
+Now a computer has this new iteration of $x$ in it's memory, so let's use this immediately! The second equation gives the updated $y$
+\begin{align*}
+y_{k+1} = -\dfrac{1}{2}\left(1 - x_{k+1} + z_k \right)
+\end{align*}
+Now we have new iterations of both $x$ and $y$, which can be used in the computation of $z$
+\begin{align*}
+z_{k+1} = \dfrac{1}{4}\left(3 - 2x_{k+1} - 2y_{k+1} \right)
+\end{align*}
+But these aren't the 3 equations we found earlier! Or are they? The first equation is the same. The equation for $y_{k+1}$ contains an $x_{k+1}$, so insert that into it
+\begin{align*}
+y_{k+1} = -\dfrac{1}{2}\left(1 - \dfrac{1}{3}\left(2 + y_k - z_k \right) + z_k \right)= -\dfrac{1}{6} +  \dfrac{1}{6}y_k - \dfrac{2}{3}z_k
+\end{align*}
+Now this is the same as in the matrix. Insert these $y_{k+1}$ and $x_{k+1}$ into the equation for $z_{k+1}$
+\begin{align*}
+z_{k+1} = \dfrac{1}{4}\left(3 - 2\dfrac{1}{3}\left(2 + y_k - z_k \right) - 2\left(-\dfrac{1}{6} +  \dfrac{1}{6}y_k - \dfrac{2}{3}z_k\right) \right) = \frac{1}{2} - \frac{1}{4} y_k
+\end{align*}
+and so all three equations are the same. But! We should not do this rearrangement. The system built from the simple rearrangement
+\begin{align*}
+\begin{cases}
+x_{k+1} = \dfrac{1}{3}\left(2 + y_k - z_k \right) \\
+y_{k+1} = -\dfrac{1}{2}\left(1 - x_{k+1} + z_k \right) \\
+z_{k+1} = \dfrac{1}{4}\left(3 - 2x_{k+1} - 2y_{k+1} \right)
+\end{cases}
+\end{align*}
+is easy enough to use and avoids an inversion of the matrix $L$. It also has a simple interpretation which is nicer from the perspective of programming the method: each equation uses the results of the previous equations. The computer has done the work and is storing the number, why not use it immediately?
+
+If we make an initial guess of $(x_0,y_0,z_0)=(0,0,0)$, the first 5 iterations are shown below, making sure to keep only 4 decimal places at each iteration
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{l||l|l|l}
+$k$ & $x_k$ & $y_k$ & $z_k$ \\ \hline
+0 &  0      &       0 &      0 \\
+1 &  0.6667 & -0.1667 & 0.5000 \\
+2 &  0.4444 & -0.5278 & 0.7917 \\
+3 &  0.2268 & -0.7824 & 1.0278 \\
+4 &  0.0633 & -0.9823 & 1.2095 \\
+5 & -0.0639 & -1.1367 & 1.3503 
+\end{tabular}
+\end{center}
+\end{table}
+It's not clear whether this converges or not at this stage.
+}{\downline}
+
+\subsection*{Convergence of matrix iterative schemes}
+Recall the general equation defining the iterative scheme
+\begin{align*}
+X^{(k+1)} = M^{-1}\left(B - NX^{(k)}\right) = M^{-1}B - M^{-1}NX^{(k)}.
+\end{align*}
+We define a matrix
+\begin{align*}
+B_i = M^{-1}N
+\end{align*}
+as the iteration matrix, so that
+\begin{align*}
+B_i = \begin{cases}
+B_J = D^{-1}O &  \quad\text{(Jacobi iteration matrix)} \\
+B_{GS} = L^{-1}U^* & \quad\text{(Gauss-Seidel iteration matrix)} 
+\end{cases}
+\end{align*}
+This iteration matrix can be used to determine whether the scheme will converge or not
+\theorem{}{: Convergence of matrix iteration schemes}{\\
+A matrix iteration scheme will converge \textit{if and only if} the maximum of the absolute value of the eigenvalues of $B_i$ is less than 1. That is
+\begin{align*}
+\rho(B_i) < 1
+\end{align*}
+where
+\begin{align*}
+\rho(B_i) = \max \left\{ | \lambda_k | \quad | \quad \lambda_k \text{ eigenvalue of } B_i \right\}.
+\end{align*}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Exercises %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\exercises{
+\section{Exercises}
+
+\exercice{$2\times 2$ matrices}
+\begin{enumerate}[label=\alph*)]
+	\item For the following matrices, find $L$ and $U$ such that $LA_i=U$
+	\begin{align*}
+	A_1 = 
+	\begin{pmatrix}
+	1 & 2 \\
+	1 & 1
+	\end{pmatrix}, \,\,\,
+	A_2 = 
+	\begin{pmatrix}
+	2 & 2 \\
+	3 & -1
+	\end{pmatrix}, \,\,\,
+	A_3 = 
+	\begin{pmatrix}
+	-2 &  1 \\
+	 1 & -1
+	\end{pmatrix}
+	\end{align*}
+	
+	\item For the previous matrices $A_i$ solve for $x_1$ and $x_2$, given
+	\begin{align*}
+	A_1
+	\begin{pmatrix}
+	x_1 \\
+	x_2
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	1 \\
+	2
+	\end{pmatrix}
+	\end{align*}
+	
+	\item For the previous matrices $A_i$ solve for $x_1$ and $x_2$, given
+	\begin{align*}
+	A_1
+	\begin{pmatrix}
+	x_1 \\
+	x_2
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	-1 \\
+	2
+	\end{pmatrix}
+	\end{align*}
+\end{enumerate}
+
+
+
+
+\exercice{$3\times 3$ matrices}
+\begin{enumerate}[label=\alph*)]
+	\item For the following matrices, find $L$ and $U$ such that $LA_i=U$
+	\begin{align*}
+	A_1 = 
+	\begin{pmatrix}
+	1 & 2 & 1 \\
+	1 & 1 & 1 \\
+	2 & 3 & 1
+	\end{pmatrix}, \,\,\,
+	A_2 = 
+	\begin{pmatrix}
+	1 & 2 & 1 \\
+	-1 & 1 & 1 \\
+	2 & 3 & -1
+	\end{pmatrix}, \,\,\,
+	A_3 = 
+	\begin{pmatrix}
+	 1 &  2 & -4 \\
+	-2 &  2 &  1 \\
+	-5 & -3 &  3
+	\end{pmatrix}
+	\end{align*}
+	
+	\item For the previous matrices $A_i$ solve for $x_1$ and $x_2$, given
+	\begin{align*}
+	A_1
+	\begin{pmatrix}
+	x_1 \\
+	x_2 \\
+	x_3
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	1 \\
+	2 \\
+	3
+	\end{pmatrix}
+	\end{align*}
+	
+	\item For the previous matrices $A_i$ solve for $x_1$ and $x_2$, given
+	\begin{align*}
+	A_1
+	\begin{pmatrix}
+	x_1 \\
+	x_2 \\
+	x_3
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	-1 \\
+	2 \\
+	-1
+	\end{pmatrix}
+	\end{align*}
+\end{enumerate}
+
+
+
+\exercice{Convergence}
+\begin{enumerate}[label=\alph*)]
+	\item For the following system, give a range of values that $k$ can take to guarantee the Jacobi iteration scheme converges on the true solution.
+	\begin{align*}
+	\begin{pmatrix}
+	k & -1 \\
+	1 & 2
+	\end{pmatrix}
+	\begin{pmatrix}
+	x \\
+	y
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	3 \\
+	-5
+	\end{pmatrix}
+	\end{align*}
+	
+	\item For the following system, give ranges of values that $\alpha$, $\beta$, and $\gamma$ can take to guarantee the Jacobi iteration scheme converges on the true solution?
+	\begin{align*}
+	\begin{pmatrix}
+	3 & -1 & \alpha \\
+	\beta & -3 & 2 \\
+	1 & 1 & \gamma \\
+	\end{pmatrix}
+	\begin{pmatrix}
+	x \\
+	y \\
+	z
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	1 \\
+	2 \\
+	-2
+	\end{pmatrix}
+	\end{align*}
+\end{enumerate}
+
+
+
+
+
+\exercice{Schemes}
+
+For the following matrices, write the Jacobi iterative system of equations.
+
+\begin{align*}
+	A_1 = 
+	\begin{pmatrix}
+	2 & 1 \\
+	1 & 3
+	\end{pmatrix}, \,\,\,
+	A_2 = 
+	\begin{pmatrix}
+	3 & -1 \\
+	1 & -2
+	\end{pmatrix}, \,\,\,
+	A_3 = 
+	\begin{pmatrix}
+	3 & -1 &  1 \\
+	0 & -3 &  2 \\
+	1 &  1 & -4
+	\end{pmatrix}, \,\,\,
+	A_4 = 
+	\begin{pmatrix}
+	 4 & -1 &  1 \\
+	-1 &  5 & -2 \\
+	 1 & -1 & -4
+	\end{pmatrix}
+\end{align*}
+
+
+
+
+\exercice{Jacobi iteration}
+
+For the following systems, use Jacobi iteration 3 times to find $X^{(3)}$.
+\begin{enumerate}[label=\alph*)]
+	\item \begin{align*}
+	\begin{pmatrix}
+	2 & 1 \\
+	1 & 3
+	\end{pmatrix}
+	\begin{pmatrix}
+	x \\
+	y
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	3 \\
+	-5
+	\end{pmatrix}, \,\,\,\,
+	{\rm with} \,\,
+	X^{(0)}=
+	\begin{pmatrix}
+	0 \\
+	0
+	\end{pmatrix}	
+	\end{align*}
+	
+	\item \begin{align*}
+	\begin{pmatrix}
+	2 & 1 \\
+	1 & 3
+	\end{pmatrix}
+	\begin{pmatrix}
+	x \\
+	y
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	2 \\
+	1
+	\end{pmatrix}, \,\,\,\,
+	{\rm with} \,\,
+	X^{(0)}=
+	\begin{pmatrix}
+	1 \\
+	1
+	\end{pmatrix}
+	\end{align*}
+	
+	
+	\item \begin{align*}
+	\begin{pmatrix}
+	3 & -1 &  1 \\
+	0 & -3 &  2 \\
+	1 &  1 & -4
+	\end{pmatrix}
+	\begin{pmatrix}
+	x \\
+	y \\
+	z
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	1 \\
+	2 \\
+	-2
+	\end{pmatrix}, \,\,\,\,
+	{\rm with} \,\,
+	X^{(0)}=
+	\begin{pmatrix}
+	0 \\
+	0 \\
+	0
+	\end{pmatrix}
+	\end{align*}
+	
+	
+	\item \begin{align*}
+	\begin{pmatrix}
+	3 & -1 &  1 \\
+	0 & -3 &  2 \\
+	1 &  1 & -4
+	\end{pmatrix}
+	\begin{pmatrix}
+	x \\
+	y \\
+	z
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	-1 \\
+	3 \\
+	0
+	\end{pmatrix}, \,\,\,\,
+	{\rm with} \,\,
+	X^{(0)}=
+	\begin{pmatrix}
+	1 \\
+	2 \\
+	3
+	\end{pmatrix}
+	\end{align*}
+\end{enumerate}
+}

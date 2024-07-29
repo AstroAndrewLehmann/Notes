@@ -1,0 +1,1653 @@
+\chapter{Matrix Algebra} \label{ch:matrixalgebra}
+
+\section{Basic Definitions}
+
+\definition{Matrix}{
+A matrix is a collection of numbers from a field $\mathbb{F}$ (e.g. rational numbers) usually represented by a rectangular array. For example, an $m \times n$ (said m by n) matrix $A$ with coefficients $a_{ij}\in\mathbb{F}$  would be represented by an array with $m$ rows and $n$ columns:
+\begin{align*}
+A = 
+\begin{pmatrix}
+a_{11} & a_{12} & a_{13} & \cdots & a_{1j} & \cdots & a_{1m} \\
+a_{21} & a_{22} & a_{23} & \cdots & a_{2j} & \cdots & a_{2m} \\
+a_{31} & a_{32} & a_{33} & \cdots & a_{3j} & \cdots & a_{3m} \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+a_{i1} & a_{12} & a_{13} & \cdots & a_{ij} & \cdots & a_{im} \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & a_{n3} & \cdots & a_{nj} & \cdots & a_{nm}
+\end{pmatrix}
+=
+\left( a_{ij} \right)_{\substack{ 1 \leq i \leq m \\ 1 \leq j \leq n }}.
+\end{align*}
+Sometimes it is convenient to refer to the coefficients in the array like so: $a_{ij} = \left(A\right)_{ij}$.
+}
+
+\definition{Set of all $m \times n$ matrices}{
+We write the set of all $m \times n$ matrices with coefficients in $\mathbb{F}$ as
+\begin{align*}
+\mathcal{M}_{m,n}(\mathbb{F})
+\end{align*}
+}
+
+\noindent It is sometimes useful in calculations to use the columns or rows of a matrix, and so we create the following notation.
+
+\definition{Matrix columns and rows}{
+For a matrix $A\in\mathcal{M}_{m,n}(\mathbb{F})$ we denote its j$^{th}$ column and i$^{th}$ row
+\begin{align*}
+A^{(j)} =
+\begin{pmatrix}
+ a_{1j} \\
+ a_{2j} \\
+ a_{3j} \\
+ \vdots \\
+ a_{ij} \\
+ \vdots \\
+ a_{mj}
+\end{pmatrix},
+\qquad
+A_{(i)} =
+\begin{pmatrix}
+a_{i1} & a_{12} & a_{13} & \cdots & a_{ij} & \cdots & a_{in}
+\end{pmatrix}
+\end{align*}
+}
+
+\noindent For the rest of this course, unless otherwise noted, we will implicitly assume real matrices by writing $\mathcal{M}_{m,n}(\mathbb{R}) = \mathcal{M}_{m,n}$.
+
+\definition{Transpose of a matrix}{
+The transpose of an $m \times n$ matrix, $A$, is an $n \times m$ matrix, denoted $A^T$, with rows equal to the columns of $A$. That is, $\left(A^T\right)_{ij} = \left(A\right)_{ji}$ for all combinations of $i$ and $j$. 
+}
+
+\noindent For example
+\begin{align*}
+\begin{pmatrix}
+1  & -2  \\
+0  & -1  \\
+-1 &  0
+\end{pmatrix}^T
+=
+\begin{pmatrix}
+ 1  &  0 & -1\\
+-2  & -1 &  0
+\end{pmatrix}
+\end{align*}
+
+
+\definition{Diagonal matrix}{
+A square matrix $A$ is said to be diagonal if all its non-diagonal elements are zero, e.g. $(A)_{ij}=0$ whenever $i \neq j$.
+}
+
+\definition{Symmetric matrix}{
+A matrix $A$ is symmetric if it is equal to its transpose, $A = A^T$.
+}
+
+
+\noindent For example:
+\begin{align*}
+&\begin{pmatrix}
+1.5 & 3 & \pi \\
+3   & 2 & 2 \\
+\pi & 2 & 1
+\end{pmatrix}^T
+=
+\begin{pmatrix}
+1.5 & 3 & \pi \\
+3   & 2 & 2 \\
+\pi & 2 & 1
+\end{pmatrix}
+\quad \text{symmetric} \\
+%
+&\begin{pmatrix}
+1.5 & 1 & \pi \\
+3   & 2 & 2 \\
+7 & 2 & 1
+\end{pmatrix}^T
+=
+\begin{pmatrix}
+1.5 & 3 & 7 \\
+1   & 2 & 2 \\
+\pi & 2 & 1
+\end{pmatrix}
+\quad \text{not symmetric}
+\end{align*}
+
+\section{Matrix addition and scalar multiplication}
+
+
+\definition{Matrix addition}{
+Matrix addition is done coefficient by coefficient, that is, for two matrices $A$ and $B$ we define the i,j$^{th}$ coefficient of the addition as the addition of the i,j$^{th}$ coefficients of each matrix: 
+\begin{align*}
+\left(A+B\right)_{ij} = \left(A\right)_{ij}+\left(B\right)_{ij}.
+\end{align*}
+}
+
+\noindent For example
+\begin{align*}
+\begin{pmatrix}
+1 &  2 & -2 \\
+3 & -1 & 0   
+\end{pmatrix}
++
+\begin{pmatrix}
+0 & -1 & 3 \\
+2 &  0 & 3   
+\end{pmatrix}
+=
+\begin{pmatrix}
+1+0 & 2-1 & -2+3 \\
+3+2 & -1+0 & 0+3   
+\end{pmatrix}
+=
+\begin{pmatrix}
+1 &  1 & 1 \\
+5 & -1 & 3   
+\end{pmatrix}.
+\end{align*}
+This definition means that matrix addition is only well defined if the matrices have the same shape. It also implies that any two matrices $A,B \in \mathcal{M}_{m,n}$ add to give a third matrix $C \in \mathcal{M}_{m,n}$. That is, $\mathcal{M}_{m,n}$ is closed under addition with this definition.
+
+\theorem{Matrix addition is associative}{ 
+Given three matrices $A,B,C \in \mathcal{M}_{m,n}$:
+\begin{align*}
+A + (B + C) = (A + B) + C
+\end{align*}
+}
+
+\begin{proof}
+Let $D = B + C$, so that the definition of matrix addition gives us 
+\begin{align*}
+(D)_{ij}=(B)_{ij} + (C)_{ij}.
+\end{align*}
+Then $A + (B + C)= A + D$ has coefficients 
+\begin{align*}
+(A)_{ij} + (D)_{ij} = (A)_{ij} + ((B)_{ij} + (C)_{ij}).
+\end{align*}
+Addition in fields is associative, so
+\begin{align*}
+(A)_{ij} + ((B)_{ij} + (C)_{ij}) = ((A)_{ij} + (B)_{ij}) + (C)_{ij}
+\end{align*}
+These are exactly the coefficients of $(A+B)+C$.
+\end{proof}
+
+\theorem{Matrix addition is commutative}{ 
+Given two matrices $A,B \in \mathcal{M}_{m,n}$:
+\begin{align*}
+A + B = B + A
+\end{align*}
+}
+
+
+
+\definition{Scalar multiplication}{
+Given a number $k\in\mathbb{R}$ (called a scalar) and a matrix $A \in \mathcal{M}_{m,n}$, we define matrix scalar multiplication, $kA$, to be a matrix $B \in \mathcal{M}_{m,n}$ with coefficients given by:
+\begin{align*}
+b_{ij} = ka_{ij},
+\end{align*}
+that is, we multiply \textit{every coefficient} by the scalar.
+} 
+
+\noindent For example:
+\begin{gather*}
+k
+\begin{pmatrix}
+ 1 & 3 \\
+ 7 & 2 
+\end{pmatrix}
+=
+\begin{pmatrix}
+ k & 3k \\
+ 7k & 2k 
+\end{pmatrix}
+%%%%%%%%
+%%%%%%%%
+\\
+%%%%%%%%
+%%%%%%%%
+\frac{1}{2}
+\begin{pmatrix}
+ 2 & 2 \\
+ 1 & 1 \\
+ 0 & 3 
+\end{pmatrix}
+=
+\begin{pmatrix}
+ 1 & 1 \\
+ 1/2 & 1/2 \\
+ 0 & 3/2 
+\end{pmatrix}
+\end{gather*}
+
+\theorem{Scalar multiplication is distributive}{
+For any scalars $\alpha,\beta \in \mathbb{R}$ and matrices $A,B \in \mathcal{M}_{n,m}$, scalar multiplication on matrices is both distributive over matrix addition:
+\begin{align*}
+\alpha(A + B) = \alpha A + \alpha B
+\end{align*}
+and distributive over scalar addition
+\begin{align*}
+(\alpha + \beta)A = \alpha A + \beta A.
+\end{align*}
+}
+
+\theorem{Scalar multiplication is associative}{
+For any scalars $\alpha,\beta \in \mathbb{R}$ and matrix $A$, scalar multiplication is associative in the following sense:
+\begin{align*}
+\alpha(\beta A) = (\alpha \beta ) A.
+\end{align*}
+}
+
+The concept of zero is fundamentally that when we add zero to something we get back the same thing. For matrices then we want, for a matrix $A$, that $A + M_0 = A$. First this means this zero object must be a matrix of the same shape as $A$. Looking at coefficients, we have
+\begin{align*}
+(A + M_0)_{ij} = (A)_{ij} + (M_0)_{ij} = A_{ij} \implies (M_0)_{ij} = 0
+\end{align*}
+This gives the following definition.
+
+\definition{Zero matrix}{
+The zero matrix of any shape is a matrix $M_0 \in\mathcal{M}_{m,n}$ consisting entirely of zeros as coefficients.
+} 
+Note that this means there is no unique zero matrix, but rather a zero matrix for every possible matrix shape.
+
+\example{Zero matrices}{
+\begin{align*}
+\begin{pmatrix}
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 
+\end{pmatrix}
+\quad\quad
+\begin{pmatrix}
+0 & 0 \\
+0 & 0 \\
+0 & 0 
+\end{pmatrix}
+\end{align*}
+}
+
+With this zero matrix we can find the additive inverse of a matrix, $A\in\mathcal{M}_{m,n}$, by considering the defining relation $A+B=M_0$, where $B$ is the additive inverse of $A$. This means
+\begin{align*}
+(A+B)_{ij} = (A)_{ij}+(B)_{ij} = 0 \implies (B)_{ij} = - (A)_{ij} = (-A)_{ij}
+\end{align*}
+
+\definition{Additive inverse}{
+Given a matrix $A\in\mathcal{M}_{ij}$, its additive inverse is the same matrix multiplied by the scalar $-1$. We denote the additive inverse of $A$ as $-A$.
+} 
+
+\example{Additive inverses}{
+\begin{gather*}
+A=
+\begin{pmatrix}
+2 & 0 & -1 \\
+0 & 1 &  3 
+\end{pmatrix}
+\quad\implies\quad
+-A=
+\begin{pmatrix}
+ -2 &  0 &  1 \\
+  0 & -1 & -3 
+\end{pmatrix}
+\\
+B=
+\begin{pmatrix}
+  3 & -1 \\
+\pi &  0 
+\end{pmatrix}
+\quad\implies\quad
+-B=
+\begin{pmatrix}
+  -3 &  1 \\
+-\pi &  0 
+\end{pmatrix}
+\end{gather*}
+}
+
+
+
+
+
+\subsection*{Summary of properties of matrix addition and scalar multiplication}
+
+Let's collect a list of key properties of operations with matrices that are shared with tuples. The following are true for any matrices $A,B,C\in\mathcal{M}_{m,n}$ and any real numbers $k$ and $l\in\mathbb{R}$.
+
+\begin{align*}
+& \text{addition of matrices gives another matrix} && \quad A + B \in\mathcal{M}_{m,n} &\\
+%
+& \text{matrix addition is associative} && \quad (A + B) + C = A + (B + C) &\\
+%
+& \text{the zero matrix is a matrix of zeros} && \quad A + M_0 = M_0 + A = A &\\
+%
+& \text{the negative of a matrix is the additive inverse} && \quad A + (-A) = M_0 &\\
+%
+& \text{the order of matrix addition doesn't matter} && \quad A + B = B + A &\\
+%
+& \text{scalar multiplication of a matrix gives another matrix} && \quad kA\in\mathcal{M}_{m,n} &\\
+%
+& \text{scalar multiplication distributes of matrix addition} && \quad k(A+B)=kA+kB &\\
+%
+& \text{scalar addition distributes over matrix} && \quad (k+l)A=kA+lA &\\
+%
+& \text{scalar multiplication order doesn't matter} && \quad k(lA)=(kl)A &\\
+%
+& \text{scalar multiplication by 1 is an identity operation} && \quad 1A=A &
+\end{align*}
+
+
+\section{Multiplication of matrices by columns}
+
+When restricting ourselves to simple addition of matrices or scalar multiplication we see that matrices and tuples have the same rules. In fact we could simply think of tuples as $2\times 1$ or $1\times 2$ matrices. Here we will introduce a new type of multiplication, that of matrices by matrices. This is not the same as the dot product.
+
+\definition{Multiplication of a matrix by a column}{
+Consider a matrix $A \in \mathcal{M}_{m,n}$ and a column $X \in \mathcal{M}_{n,1}$. We define the product $AX$ to result in the column $Y\in\mathcal{M}_{m,1}$ with coefficients
+\begin{align*}
+(Y)_i = a_{i1}x_1 + a_{i2}x_2 + \cdots + a_{im}x_m = \sum_{k=1}^m a_{ik} x_k 
+\end{align*}
+Visually
+\begin{align*}
+\begin{pmatrix}
+y_{1} \\
+y_{2} \\
+\vdots \\
+y_{n} 
+\end{pmatrix}
+%%%
+%%%
+%%%
+&=
+%%%
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{pmatrix}
+\begin{pmatrix}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{m} 
+\end{pmatrix}
+%%%
+%%%
+%%%
+=
+%%%
+x_{1}
+\begin{pmatrix}
+a_{11} \\
+a_{21} \\
+\vdots \\
+a_{n1} 
+\end{pmatrix}
++
+x_{2}
+\begin{pmatrix}
+a_{12} \\
+a_{22} \\
+\vdots \\
+a_{n2} 
+\end{pmatrix}
++ \cdots +
+x_m
+\begin{pmatrix}
+a_{1m} \\
+a_{2m} \\
+\vdots \\
+a_{nm} 
+\end{pmatrix}
+\\ \\
+%%%
+%%%
+%%%
+&\implies Y = x_{1}A^{(1)} + x_{2}A^{(2)} + \cdots + x_{m}A^{(m)}
+\end{align*}
+}
+
+\noindent Notice that in this definition, to be able to multiply a matrix by a column the matrix must have the same number of columns as the elements of the column. Additionally, the answer will be a column of the same shape as the columns of the matrix, \textit{not the column that is multipled by the matrix}.
+
+\noindent Note also that not only is multiplication of matrices by columns not commutative, $AX \neq XA$, but that the latter is not even defined. We cannot multiply a column by a matrix left to right.
+
+\example{Matrix multiplication by columns}{
+\begin{align*}
+& \begin{pmatrix}
+      1 &  2 & 4  \\
+      3 & -1 & 0
+\end{pmatrix}
+\begin{pmatrix}
+      3 \\
+     -1 \\
+      2
+\end{pmatrix}
+=
+3\begin{pmatrix}
+1 \\
+3
+\end{pmatrix}
+-
+1\begin{pmatrix}
+2 \\
+-1
+\end{pmatrix}
++
+2\begin{pmatrix}
+4 \\
+0
+\end{pmatrix}
+=
+\begin{pmatrix}
+ 9 \\
+ 10
+\end{pmatrix} \\
+%%%%%
+%%%%%
+%%%%%
+& \begin{pmatrix}
+      1 &  3  \\
+      2 & -1 \\
+      0 &  4       
+\end{pmatrix}
+\begin{pmatrix}
+      3 \\
+      2
+\end{pmatrix}
+=
+3\begin{pmatrix}
+      1 \\
+      2 \\
+      0  
+\end{pmatrix}
++
+2\begin{pmatrix}
+      3  \\
+     -1 \\
+      4       
+\end{pmatrix}
+=
+\begin{pmatrix}
+      9 \\
+      4 \\
+      8       
+\end{pmatrix}
+\end{align*}
+}
+
+\noindent There is another method of remembering how to do this matrix multiplication. It comes from recognising the dot product in the calculation of the coefficients. Recall for $AX=Y$ we have
+\begin{align*}
+(Y)_i = a_{i1}x_1 + a_{i2}x_2 + \cdots + a_{im}x_m = \left(a_{i1},\,a_{i2}, \dots, a_{im}  \right) \cdot \left(x_{1},\,x_{2}, \dots, x_{m}  \right)
+\end{align*}
+where we have the i$^{th}$ row of $A$ and the column $X$ interpreted as tuples. We make a small notational modification, denoting with bold font, e.g. $\mathbf{A}_{(i)}$ or $\mathbf{X}$, that we interpret a column as a tuple. Then we can write $(Y)_i = \mathbf{A}_{(i)} \cdot \mathbf{X}$. Just be careful to note that we aren't right now using the objects $A_{(i)}$ and $X$, but rather their tuple versions.
+
+
+
+\example{Matrix multiplication by columns with dot product}{
+Let $A=\begin{pmatrix}
+      1 &  2 & 1  \\
+      3 &  0 & 0  \\
+      2 &  1 & 1
+\end{pmatrix}$ and $X=\begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}$. Then we have
+\begin{align*}
+& AX = \begin{pmatrix}
+      1 &  2 & 1  \\
+      3 &  0 & 0  \\
+      2 &  1 & 1
+\end{pmatrix}
+\begin{pmatrix} 1 \\ 2 \\ 3 \end{pmatrix}
+=
+\begin{pmatrix}
+ \mathbf{A}_{(1)} \cdot \mathbf{X} \\
+ \mathbf{A}_{(2)} \cdot \mathbf{X} \\
+ \mathbf{A}_{(3)} \cdot \mathbf{X}
+\end{pmatrix}
+=
+\begin{pmatrix}
+ (1, 2, 1) \cdot (1, 2, 3) \\
+ (3, 0, 0) \cdot (1, 2, 3) \\
+ (2, 1, 1) \cdot (1, 2, 3)
+\end{pmatrix}
+=
+\begin{pmatrix}
+ 1 \times 1 + 2 \times 2 + 1 \times 3 \\
+ 3 \times 1 + 0 \times 2 + 0 \times 3 \\
+ 2 \times 1 + 1 \times 2 + 1 \times 3
+\end{pmatrix}
+=
+\begin{pmatrix}
+ 8 \\
+ 3 \\
+ 7
+\end{pmatrix}
+\end{align*}
+}
+
+\section{Euclidean transformation matrices}
+\subsection*{Rotation matrices}
+
+\noindent One notable usage of multiplication of matrices by columns is the representation of operation of rotating Euclidean vectors. Consider an arbitrary Euclidean vector $\mathbf{v}\in\mathbb{R}^2$ with decomposition $\mathbf{v} = (x ,y)$. Say we want to rotate this vector anti-clockwise an angle $\theta$, with the result a new vector $\mathbf{w} = (x' ,y')$, as pictured below.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[% styles used in image code
+         > = Straight Barb, % defined in "arrows.meta
+dot/.style = {circle, fill,
+              minimum size=2mm, inner sep=0pt, outer sep=0pt,
+              node contents={}},
+box/.style = {draw, thin, minimum  width=2mm, minimum height=4mm,
+              inner sep=0pt, outer sep=0pt,
+              node contents={}, sloped},
+my angle/.style args = {#1/#2}{draw,->,
+                               angle radius=#1,
+                               angle eccentricity=#2,
+                               } % angle label position!
+                        ]
+	% coordinate axis
+	\draw[->] (-1, 0)   -- (5,0) node[below left] {$x$};
+	\draw[->] ( 0,-0.5) -- (0,4) node[below left] {$y$};
+
+	\coordinate (O) at (0,0);
+	\coordinate (v1) at (3,2);
+	\coordinate (v2) at (1.013,3.460);
+	
+	\draw (O) node[below left] {$\mathcal{O}$};
+	\draw [->,magenta,very thick] (O) --(v1) node[above right,black] {$\mathbf{v}=(x,y)$};
+	\draw [->,red,very thick] (O) --(v2) node[above right,black] {$\mathbf{w}=(x',y')$};
+	
+	\begin{scope}
+	\path[clip] (O) -- (3,0.1) -- ($(v1)+(0,-0.2)$);
+	\draw[black] (O) circle (20mm);
+	\node at ($(O)+(15:15mm)$) {$\alpha$};
+	\end{scope}
+	
+	\begin{scope}
+	\path[clip] (O) -- ($(v1)+(0,0.2)$) -- ($(v2)+(0.2,0)$);
+	\draw[black] (O) circle (18mm);
+	\node at ($(O)+(55:15mm)$) {$\theta$};
+	\end{scope}
+\end{tikzpicture} \caption*{Rotation of Euclidean vectors.}
+\end{figure}
+
+\noindent The rotated vector has a decomposition with its norm and angle as
+\begin{align*}
+x' &= \|\mathbf{w}\| \cos(\alpha+\theta)\\
+y' &= \|\mathbf{w}\| \sin(\alpha+\theta)
+\end{align*}
+Rotation doesn't change the norm of a vector, so $\|\mathbf{w}\| = \|\mathbf{v}\| = \sqrt{x^2+y^2}$. Then, using the angle sum trigonometry identities we have
+\begin{align*}
+&\begin{array}{l}
+x' = \sqrt{x^2+y^2} \left( \cos\alpha\cos\theta-\sin\alpha\sin\theta \right)\\
+y' = \sqrt{x^2+y^2} \left( \sin\alpha\cos\theta + \cos\alpha\sin\theta \right)
+\end{array} \\ \\
+\implies
+& \begin{array}{l}
+x' = \sqrt{x^2+y^2} \left( \dfrac{x}{\sqrt{x^2+y^2}}\cos\theta-\dfrac{y}{\sqrt{x^2+y^2}}\sin\theta \right)\\
+y' = \sqrt{x^2+y^2} \left( \dfrac{y}{\sqrt{x^2+y^2}}\cos\theta + \dfrac{x}{\sqrt{x^2+y^2}}\sin\theta \right)
+\end{array} \\ \\
+\implies
+& \begin{array}{l}
+x' = x\cos\theta-y\sin\theta \\
+y' = y\cos\theta + x\sin\theta 
+\end{array}
+\end{align*}
+We can represent the rotated vector as the column
+\begin{align*}
+\begin{pmatrix} x' \\ y' \end{pmatrix}
+=
+\begin{pmatrix} 
+x\cos\theta - y\sin\theta \\ 
+x\sin\theta + y\cos\theta 
+\end{pmatrix}
+=
+\begin{pmatrix} 
+x\cos\theta \\ 
+x\sin\theta
+\end{pmatrix}
++
+\begin{pmatrix} 
+- y\sin\theta \\ 
+y\cos\theta 
+\end{pmatrix}
+=
+x
+\begin{pmatrix} 
+\cos\theta \\ 
+\sin\theta
+\end{pmatrix}
++
+y
+\begin{pmatrix} 
+- \sin\theta \\ 
+\cos\theta 
+\end{pmatrix}
+\end{align*}
+This last expression is how we've defined a matrix multiplied by a column! So we have
+\begin{gather*}
+\begin{pmatrix} x' \\ y' \end{pmatrix}
+=
+\begin{pmatrix} 
+\cos\theta & -\sin\theta \\ 
+\sin\theta &  \cos\theta  
+\end{pmatrix}
+\begin{pmatrix} x \\ y \end{pmatrix}
+\end{gather*}
+which gives us the definition of the general rotation matrix:
+
+\definition{Rotation matrix - arbtirary angle anti-clockwise}{
+By using a column $X\in\mathcal{M}_{2,1}$ to represent a Euclidean vector, the following matrix allows the operation of rotataion, anti-clockwise, of $X$ by an angle $\theta$:
+\begin{align*}
+R_\theta =
+\begin{pmatrix} 
+\cos\theta & -\sin\theta \\ 
+\sin\theta &  \cos\theta  
+\end{pmatrix}
+\end{align*}
+where the rotated vector is represented by a column $X'\in\mathcal{M}_{2,1}$ obtained by matrix multiplication $X' = R_\theta X$.
+}
+
+\subsection*{Reflection matrices}
+
+\subsection*{Compression and dilation matrices}
+
+\subsection*{Skew matrices}
+
+\subsection*{Summary of Euclidean transformation matrices}
+
+\begin{table}[H]
+\begin{center}
+\begin{tabular}{l|l}
+Transformation & Matrix \\ \hline\hline \\[-7pt]
+Rotation by 45 degrees & $R_{\theta=\pi/4} = \dfrac{1}{\sqrt{2}}\begin{pmatrix} 1 & -1 \\ 1 & 1 \end{pmatrix}$ \\[10pt] \hline  \\[-7pt]
+Rotation by 90 degrees & $R_{\theta=\pi/2} = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}$ \\[10pt] \hline \\[-7pt]
+Rotation by $\theta$ degrees & $R_{\theta} = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}$ \\[10pt] \hline \\[-7pt]
+Reflection across $x$-axis & $R_{x} = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}$ \\ [10pt] \hline \\[-7pt]
+Reflection across $y$-axis & $R_{y} = \begin{pmatrix} -1 & 0 \\ 0 & 1 \end{pmatrix}$ \\ [10pt] \hline \\[-7pt]
+Reflection across $y=x$ line & $R_{y=x} = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$ \\ [10pt] \hline \\[-7pt]
+Reflection across $y=-x$ line & $R_{y=-x} = \begin{pmatrix} 0 & -1 \\ -1 & 0 \end{pmatrix}$ \\[10pt] \hline \\[-7pt]
+Reflection across origin & $R_{\mathcal{O}} = \begin{pmatrix} -1 & 0 \\ 0 & -1 \end{pmatrix}$ \\[10pt] \hline \\[-7pt]
+Dilation & $D = \begin{pmatrix} k & 0 \\ 0 & k \end{pmatrix}, \quad k>1$ \\[10pt] \hline \\[-7pt]
+Compression & $D = \begin{pmatrix} k & 0 \\ 0 & k \end{pmatrix}, \quad 0\leq k<1$ \\[10pt] \hline \\[-7pt]
+Skew in the $x$ direction & $S_{x,k} = \begin{pmatrix} k & 0 \\ 0 & 1 \end{pmatrix}$ \\[10pt] \hline \\[-7pt]
+Skew in the $y$ direction & $S_{y,k} = \begin{pmatrix} 1 & 0 \\ 0 & k \end{pmatrix}$
+\end{tabular}
+\end{center}
+\end{table}
+
+\section{Multiplication of matrices by matrices}
+
+We will start with the definition of matrix multiplication before justifying some of its properties.
+
+\definition{Multiplication of two matrices}{
+Consider two matrices $A \in \mathcal{M}_{n,m}$ and $B \in \mathcal{M}_{m,q}$. We define the product $AB$ to be the matrix $C\in\mathcal{M}_{n,q}$ with coefficients
+\begin{gather*}
+c_{ij} = a_{i1}b_{1j} + a_{i2}b_{2j} + \cdots + a_{im}b_{mj} = \sum_{k=1}^m a_{ik} b_{kj} \\
+%%%
+%%%
+%%%
+\implies
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{pmatrix}
+\begin{pmatrix}
+b_{11} & b_{12} & \cdots & b_{1q} \\
+b_{21} & b_{22} & \cdots & b_{2q} \\
+\vdots & \vdots & \ddots & \vdots \\
+b_{m1} & b_{m2} & \cdots & b_{mq}
+\end{pmatrix} \\
+%%%
+%%%
+%%%
+=
+\left(
+b_{11}
+\underbrace{
+\begin{pmatrix}
+a_{11} \\
+a_{21} \\
+\vdots \\
+a_{n1} 
+\end{pmatrix}
++ \cdots +
+b_{m1}
+\begin{pmatrix}
+a_{1m} \\
+a_{2m} \\
+\vdots \\
+a_{nm} 
+\end{pmatrix}
+}_{\text{\large first column}}
+%%
+\quad \cdots \quad 
+%%
+b_{1q}
+\underbrace{
+\begin{pmatrix}
+a_{11} \\
+a_{21} \\
+\vdots \\
+a_{n1} 
+\end{pmatrix}
++ \cdots +
+b_{mq}
+\begin{pmatrix}
+a_{1m} \\
+a_{2m} \\
+\vdots \\
+a_{nm} 
+\end{pmatrix}
+}_{\text{\large n$^{th}$ column}}
+\right)
+\end{gather*}
+Additionally, for the product
+\begin{align*}
+\underbrace{A}_{(\colorbox{Mahogany!20}{n},\colorbox{airforceblue!20}{m})} \underbrace{B}_{(\colorbox{airforceblue!20}{m},\colorbox{Mahogany!20}{q})}
+\end{align*}
+we will call the indices for the columns of $A$ and rows of $B$ the \textit{inner indices} (blue), whereas the indices for the rows of $A$ and columns of $B$ will be called the \textit{outer indices} (red).
+}
+
+\example{Matrix multiplication}{
+\begin{align*}
+\begin{pmatrix}
+      1 &  2 & 4  \\
+      3 & -1 & 0  \\
+\end{pmatrix}
+\begin{pmatrix}
+      2 &  5  \\
+      1 &  3  \\
+     -1 & -4  \\
+\end{pmatrix}
+=
+\left(
+\overbrace{
+2\begin{pmatrix}
+1 \\
+3
+\end{pmatrix}
++
+1\begin{pmatrix}
+2 \\
+-1
+\end{pmatrix}
+-1\begin{pmatrix}
+4 \\
+0
+\end{pmatrix}
+}^{\text{\large first column}}
+%%%
+\quad
+%%%
+\overbrace{
+5\begin{pmatrix}
+1 \\
+3
+\end{pmatrix}
++
+3\begin{pmatrix}
+2 \\
+-1
+\end{pmatrix}
+-4\begin{pmatrix}
+4 \\
+0
+\end{pmatrix}
+}^{\text{\large second column}}
+\right)
+=
+\begin{pmatrix}
+ 0 & -5 \\
+ 5 & 12
+\end{pmatrix}
+\end{align*}
+}
+
+\noindent It should be clear that the j$^{th}$ column of the result is like we just did matrix multiplication of $A$ by the j$^{th}$ column of $B$. Otherwise put, the i,j$^{th}$ element of $AB$ comes from the dot product of the i$^{th}$ row of $A$ by the j$^{th}$ column of $B$: $c_{ij}=(a_{i1}, a_{i2}, \dots , a_{im})\cdot(b_{1j},b_{2j},\dots,b_{mj})=\mathbf{A_{(i)}}\cdot\mathbf{B^{(j)}}$. Visually:
+\begin{align*}
+&
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{pmatrix}
+\begin{pmatrix}
+b_{11} & b_{12} & \cdots & b_{1q} \\
+b_{21} & b_{22} & \cdots & b_{2q} \\
+\vdots & \vdots & \ddots & \vdots \\
+b_{m1} & b_{m2} & \cdots & b_{mq}
+\end{pmatrix} \\
+&=
+\begin{pmatrix}
+\mathbf{A}_{(1)}\cdot\mathbf{B}^{(1)} & \mathbf{A}_{(1)}\cdot\mathbf{B}^{(2)} & \cdots & \mathbf{A}_{(1)}\cdot\mathbf{B}^{(m)} \\
+\mathbf{A}_{(2)}\cdot\mathbf{B}^{(1)} & \mathbf{A}_{(2)}\cdot\mathbf{B}^{(2)} & \cdots & \mathbf{A}_{(2)}\cdot\mathbf{B}^{(m)} \\
+\vdots & \vdots & \ddots & \vdots \\
+\mathbf{A}_{(n)}\cdot\mathbf{B}^{(1)} & \mathbf{A}_{n}\cdot\mathbf{B}^{(2)} & \cdots & \mathbf{A}_{(n)}\cdot\mathbf{B}^{(m)}
+\end{pmatrix}
+\end{align*}
+
+
+
+\example{Matrix multiplication with dot products}{
+\begin{align*}
+\begin{pmatrix}
+      3 &  0 \\
+     -1 &  2
+\end{pmatrix}
+\begin{pmatrix}
+      1 &  2 & -4  \\
+      1 & -3 &  1
+\end{pmatrix}
+&=
+\begin{pmatrix}
+  \mathbf{A}_{(1)}\cdot\mathbf{B}^{(1)} & \mathbf{A}_{(1)}\cdot\mathbf{B}^{(2)}  & \mathbf{A}_{(1)}\cdot\mathbf{B}^{(3)}  \\
+  \mathbf{A}_{(2)}\cdot\mathbf{B}^{(1)}  & \mathbf{A}_{(2)}\cdot\mathbf{B}^{(2)} &  \mathbf{A}_{(2)}\cdot\mathbf{B}^{(3)}
+\end{pmatrix}
+%%%%
+%%%%
+%%%%
+\\
+&=
+\begin{pmatrix}
+  (3,0)\cdot(1,1) & (3,0)\cdot(2,-3)  & (3,0)\cdot(-4,1)  \\
+  (-1,2)\cdot(1,1) & (-1,2)\cdot(2,-3)  & (-1,2)\cdot(-4,1)
+\end{pmatrix} 
+\\
+&=
+\begin{pmatrix}
+  3 &  6  & -12  \\
+  1 & -8  &   6
+\end{pmatrix}
+\end{align*}
+}
+
+Let's now try to understand why the shapes must be what they are. Suppose we have two matrices $A$ and $B$. We would like to define the matrix multiplication $AB=C$ so that the following associative law holds:
+\begin{align*}
+CX = (AB)X = A(BX)
+\end{align*}
+for a column $X$ of an appropriate size. 
+
+Let's start with $B$ as the matrix with known size $m \times n$. This forces the size of $X$ \textit{given how we defined multiplication of a matrix by a column}: $X$ must have the same number of elements as \textit{columns} of $B$. So $X\in\mathcal{M}_{n,1}$ and the multiplication $BX$ gives a new column $X'$ with known shape: 
+\begin{align*}
+\underbrace{B}_{(m,n)} \underbrace{X}_{(n,1)} = \underbrace{X'}_{(m,1)}
+\end{align*}
+So $A(BX)$ becomes $AX'$, another multiplication of a matrix by a column. So $A$ must have the same number of columns as the elements of the column it multiplies: $A\in\mathcal{M}_{q,n}$ for some $q$. The multiplication $AX'$ gives a new column $X''$ with known shape: 
+\begin{align*}
+\underbrace{A}_{(q,n)} \underbrace{X'}_{(n,1)} = \underbrace{X''}_{(q,1)}
+\end{align*}
+Finally we have $CX = X''$. This forces the shape of $C$, the product of $A$ and $B$. $C$ must have the same number of columns as elements of $X$, $n$. The column $X''$ must have the same number of elements, $q$, as \textit{rows} of $C$. So we have $C\in\mathcal{M}_{q,n}$. Notice that this means the shape of the product $A$ and $B$ comes from the outer indices of their shapes:
+\begin{align*}
+\underbrace{A}_{(\colorbox{Mahogany!20}{n},\colorbox{airforceblue!20}{m})} \underbrace{B}_{(\colorbox{airforceblue!20}{m},\colorbox{ForestGreen!30}{q})} = \underbrace{C}_{(\colorbox{Mahogany!20}{n},\colorbox{ForestGreen!30}{q})}
+\end{align*}
+The inner indices must be the same, $m$ in this case, and doesn't appear in the answer.
+
+
+
+
+\example{Multiplication of rotation matrices}{
+Let $R_\theta$ and $R_\phi$ be anti-clockwise rotation matrices for angles $\theta$ and $\phi$. That is
+\begin{align*}
+R_\theta
+=
+\begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}
+\quad \text{and} \quad
+R_\alpha
+=
+\begin{pmatrix} \cos\phi & -\sin\phi \\ \sin\phi & \cos\phi \end{pmatrix}
+\end{align*}
+When we multiply these matrices we get
+\begin{align*}
+R_\theta R_\alpha
+&=
+\begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}
+\begin{pmatrix} \cos\phi & -\sin\phi \\ \sin\phi & \cos\phi \end{pmatrix} \\
+&=
+\begin{pmatrix}
+\cos\theta\cos\phi - \sin\theta\sin\phi & -\cos\theta\sin\phi -\sin\theta\cos\phi \\
+\sin\theta\cos\phi + \cos\theta\sin\phi & -\sin\theta\sin\phi +\cos\theta\cos\phi
+\end{pmatrix} \\
+&=
+\begin{pmatrix}
+\cos(\theta+\phi) & -\sin(\theta+\phi) \\
+\sin(\theta+\phi) & \cos(\theta+\phi)
+\end{pmatrix}
+\end{align*}
+This result is just an anti-clockwise rotation matrix for angle $\theta+\phi$. This should make sense. Rotating a vector by $\theta$, and then rotating the resulting vector by $\phi$ is the same as doing it in one go by the addition of these angles.
+}
+
+\theorem{Square matrix multiplication and commutativity}{
+For any two matrices $A$ and $B$, if the products $AB$ and $BA$ are well defined then both products result in square matrices. If the products give the same result, $AB=BA$, then both $A$ and $B$ must also be square matrices of the same shape.
+}
+\begin{proof}
+Let $A\in\mathcal{M}_{m,n}$ and $B\in\mathcal{M}_{p,q}$. Then for $AB$ to be well defined, recall that the inner indices must be equal: the number of columns of $A$ must match the number of rows of $B$, so $n=p$. Similarly for $BA$ to be well defined, the number of columns of $B$ must match the number of rows of $A$, so $q=m$. Hence $B\in\mathcal{M}_{n,m}$ and therefore
+\begin{itemize}
+\item $AB \in\mathcal{M}_{m,m}$, and
+\item $BA \in\mathcal{M}_{n,n}$.
+\end{itemize}
+Now if we have that $AB=BA$ we must have that $m=n$. Hence
+\begin{itemize}
+\item $A \in\mathcal{M}_{m,n}=\mathcal{M}_{m,m}$, and
+\item $B \in\mathcal{M}_{p,q}=\mathcal{M}_{n,m}=\mathcal{M}_{m,m}$.
+\end{itemize}
+
+\end{proof}
+
+\noindent Now that multiplication of matrices is well defined, we can introduce the notion of the multiplicative identity, the parallel of the number 1 for matrices. That is, the identity matrix $I$ should multiply by any matrix, say $A$, and return the same: $IA=A$. Suppose $A\in\mathcal{M}_{m,n}$ and $I\in\mathcal{M}_{p,q}$, so we have
+\begin{align*}
+\underbrace{I}_{(p,q)} \underbrace{A}_{(m,n)} = \underbrace{A}_{(m,n)}.
+\end{align*}
+Then to satisfy the shapes condition we must have that the inner indices match, so $q=m$, and outer indices give the resulting shape, so $p=m$. So $I$ must be a square matrix $I\in\mathcal{M}_{m,m}$ where the size matches the number of rows of $A$. Now we can look at each element in the product
+\begin{align*}
+(IA)_{ij} &= \mathbf{I}_{(i)}\cdot\mathbf{A}^{(j)} \\
+&= (I)_{i1}a_{1j} + (I)_{i2}a_{2j} + \cdots + (I)_{ii}a_{ij} + \cdots + (I)_{im}a_{mj}.
+\end{align*}
+This must equal $a_{ij}$ to satisfy $IA=A$ and so $(I)_{ik}=0$ for all the $k$ except $k=i$ where $(I)_{ii}=1$. So we have the following definition.
+
+\definition{Identity matrix}{
+The $n$-dimensional identity matrix $I$ is a square matrix of size $n\times n$ with 1s along the diagonal and 0s elsewhere, that is, 
+\begin{align*}
+(I)_{ij}
+=
+\begin{cases}
+1 & \text{whenever } \, i=j, \\
+0 & \text{whenever } \, i \neq j.
+\end{cases}
+\end{align*}
+}
+
+\example{Identity matrices}{
+\begin{align*}
+I_2 =
+\begin{pmatrix}
+1 & 0 \\
+0 & 1
+\end{pmatrix}
+\quad\quad
+I_3 =
+\begin{pmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{pmatrix}
+\end{align*}
+}
+
+We have defined above, in fact, the \textit{left} identity matrix because the defining relation was multiplication on the left $IA=A$. If we have $AI=A$ then by the previous reasoning we find $I$ must be a square matrix with size matching the columns of $A$ instead. It's only in the case that $A$ itself is a square matrix that we can have a two-sided identity matrix satisfying $IA=AI=A$.
+
+\example{Matrix multiplication giving the zero matrix}{
+Curiously, we can have two non-zero matrices multiply to give a zero matrix:
+\begin{gather*}
+\begin{pmatrix}
+1 & 2 \\
+0 & 0
+\end{pmatrix}
+\begin{pmatrix}
+0 & 3 \\
+0 & 2
+\end{pmatrix}
+=
+\begin{pmatrix}
+0 & 0 \\
+0 & 0
+\end{pmatrix}
+\\
+\begin{pmatrix}
+1 & 2 & 0 \\
+1 & 0 & -1
+\end{pmatrix}
+\begin{pmatrix}
+0 &  2 \\
+0 & -1 \\
+0 &  2
+\end{pmatrix}
+=
+\begin{pmatrix}
+0 & 0 \\
+0 & 0
+\end{pmatrix}
+\end{gather*}
+}
+
+
+Just like the zero matrix gives us the idea of the additive inverse, the identity matrix gives the idea of the \textit{multiplicative} inverse. However, though every matrix has an additive inverse, not every matrix will have a multiplicative inverse. The following gives the defining relation of invertible matrices.
+
+\definition{Invertible matrix}{
+A matrix $A$ is invertible if and only if there exists a matrix $B$ such that
+\begin{align*}
+A B = BA = I
+\end{align*}
+This matrix $B$ is called the inverse of $A$ and is denoted $A^{-1}$. As we have commutative matrices, $AB=BA$, recall that this can only happen if $A$ is square. So, only square matrices can have inverses.
+}
+
+\example{Invertible matrix}{
+Let $A=\begin{pmatrix} 1 & 2 \\ 0 & -1 \end{pmatrix}$. Given that
+\begin{align*}
+\begin{pmatrix} 1 & 2 \\ 3 & -1 \end{pmatrix}
+\begin{pmatrix} 1/7 & 2/7 \\ 3/7 & -1/7 \end{pmatrix}
+=
+\begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix},
+\end{align*}
+then we have $A^{-1}=\begin{pmatrix} 1/7 & 2/7 \\ 3/7 & -1/7 \end{pmatrix}$.
+}
+
+\noindent Before we develop techniques for finding inverses of matrices, we will introduce a function that allows us to determine \textit{whether} a given square matrix is invertible or not. This function is called the determinant. 
+
+\section{Determinants of matrices}
+
+The idea of the determinant of a matrix is to assign a single number to any square matrix which can be used to determine if that matrix is invertible or not. It will turn out that the determinant of a matrix will break down into determinants of smaller matrices. So we start with determinants of 1 by 1 matrices.
+
+Suppose we have a general 1 by 1 matrix $A = \begin{pmatrix} a \end{pmatrix}$. It shouldn't be too difficult to see that the inverse matrix must be $A^{-1} = \begin{pmatrix} 1/a \end{pmatrix}$ because the multiplication $\begin{pmatrix} a \end{pmatrix}\begin{pmatrix} 1/a \end{pmatrix} = \begin{pmatrix} 1 \end{pmatrix}$, the identity matrix. Since $1/a$ is well defined only if $a\neq 0$, the value of $a$ itself satisfies this idea ``if this value is non-zero, the matrix is invertible''. So we have justified the following.
+
+\definition{Determinant of a 1 by 1 matrix}{
+The determinant of any 1 by 1 matrix is given by its only coefficient:
+
+\begin{align*}
+\det \left( \begin{pmatrix} a \end{pmatrix}\right)  = a
+\end{align*}
+}
+
+Now, to define the determinant of any matrix, as stated before there is an iterative process where the determinant of an $n\times n$ matrix is equal to a certain combination of determinants of $n-1 \times n-1$ matrices. So we first have to define how to break apart a matrix into particular smaller \textit{submatrices}.
+
+\definition{Submatrix}{
+From a matrix $A$ we generate the \textit{submatrix} $A_{ij}$ by deleting the $ith$ row and $jth$ column:
+\begin{align*}
+\text{For} \, A =
+\begin{pmatrix}
+a_{1,1}   & \cdots & a_{1,j-1}   & a_{1,j}   & a_{1,j+1}   & \cdots & a_{1,n}   \\
+\vdots    & \cdots & \vdots      & \vdots    & \vdots      & \cdots & \vdots    \\
+a_{i-1,1} & \cdots & a_{i-1,j-1} & a_{i-1,j} & a_{i-1,j+1} & \cdots & a_{i-1,n} \\
+a_{i,1}   & \cdots & a_{i,j-1}   & a_{i,j}   & a_{i,j+1}   & \cdots & a_{i,n}   \\
+a_{i+1,1} & \cdots & a_{i+1,j-1} & a_{i+1,j} & a_{i+1,j+1} & \cdots & a_{i+1,n} \\
+\vdots    & \cdots & \vdots      & \vdots    & \vdots      & \cdots & \vdots    \\
+a_{m,1}   & \cdots & a_{m,j-1}   & a_{m,j}   & a_{m,j+1}   & \cdots & a_{m,n} 
+\end{pmatrix} \\
+\text{The submatrix} \, A_{ij} =
+\begin{pmatrix}
+a_{1,1}   & \cdots & a_{1,j-1}   & a_{1,j+1}   & \cdots & a_{1,n}   \\
+\vdots    & \cdots & \vdots      & \vdots      & \cdots & \vdots    \\
+a_{i-1,1} & \cdots & a_{i-1,j-1} & a_{i-1,j+1} & \cdots & a_{i-1,n} \\
+a_{i+1,1} & \cdots & a_{i+1,j-1} & a_{i+1,j+1} & \cdots & a_{i+1,n} \\
+\vdots    & \cdots & \vdots      & \vdots      & \cdots & \vdots    \\
+a_{m,1}   & \cdots & a_{m,j-1}   & a_{m,j+1}   & \cdots & a_{m,n} 
+\end{pmatrix}
+\end{align*}
+\textit{Note}: we generally have to specify in words that we create a submatrix. The notation $A_{ij}$ is a little ambiguous without being explicit. 
+}
+
+
+\example{Submatrices of a $3\times 3$ matrix}{
+Let $A = 
+\begin{pmatrix}
+  1 &  0 &  3 \\
+ -1 &  2 & -1 \\
+  2 & -3 &  0
+\end{pmatrix},$ then some submatrices of $A$ are
+\begin{align*}
+A_{13}
+=
+\begin{pmatrix}
+ -1 &  2 \\
+  2 & -3
+\end{pmatrix},
+\qquad
+A_{22}
+=
+\begin{pmatrix}
+  1 &  3 \\
+  2 &  0
+\end{pmatrix},
+\qquad
+A_{32}
+=
+\begin{pmatrix}
+  1 &  3 \\
+ -1 & -1
+\end{pmatrix}.
+\end{align*}
+}
+
+\noindent Now we are ready to define the general determinant operation.
+
+\definition{Determinant of an $n \times n$ matrix}{
+For any square matrix $A\in\mathcal{M}_{n,n}$, its determinant is given by
+\begin{align*}
+\det(A) = \sum_{i=1}^n (-1)^{i+j} a_{ij} \det(A_{ij})
+\end{align*}
+where the $a_{ij}$ are coefficients of $A$, $A_{ij}$ is the $i,j^{th}$ submatrix of $A$ and for any $1\leq j \leq n$. We can also sum over the $j$ index for any $1\leq i \leq n$
+\begin{align*}
+\det(A) = \sum_{j=1}^n (-1)^{i+j} a_{ij} \det(A_{ij})
+\end{align*}
+and we will show that the answer is the same.
+}
+
+\noindent This definition hides what is in fact a fairly simple computation that becomes very clear with some examples. Suppose we have a general 2 by 2 matrix 
+\begin{align*}
+A = \begin{pmatrix} a & b \\ c & d\end{pmatrix}
+\end{align*}
+The determinant is therefore (choosing $j=1$ for the first summation)
+\begin{align*}
+\det(A) = \sum_{i=1}^n (-1)^{i+1} a_{i1} \det(A_{i1}) &= (-1)^{2} a_{11} \det(A_{11}) + (-1)^{3} a_{21} \det(A_{21})\\
+ &= a \det\begin{pmatrix} d\end{pmatrix} - c \det\begin{pmatrix} b \end{pmatrix}.
+\end{align*}
+We defined earlier the determinants of 1 by 1 matrices, so we have the following formula worth remembering.
+
+\theorem{Determinant of a $2\times 2$ matrix}{
+For a $2\times 2$ matrix
+\begin{align*}
+A =
+\begin{pmatrix}
+a & b \\
+c & d
+\end{pmatrix}
+\end{align*}
+its determinant, denoted $\det(A)$ or $|A|$, is given by
+\begin{align*}
+\det \begin{pmatrix}
+a & b \\
+c & d
+\end{pmatrix}
+=
+\left|
+\begin{matrix}
+a & b \\
+c & d
+\end{matrix}
+\right|
+= ad - bc
+\end{align*}
+}
+
+\noindent This function will be used so often it's worth memorising it. I remember its form by saying in my head ``on-diagonal minus off-diagonal'', where ``on-diagonal'' means the multiplication of the diagonal terms, $a$ and $d$, and ``off-diagonal'' means the multiplication of the other terms, $b$ and $c$.
+
+\example{Determinant of a 3 by 3 matrix}{
+Let $A = 
+\begin{pmatrix}
+  1 &  0 &  3 \\
+ -1 &  2 & -1 \\
+  2 & -3 &  0
+\end{pmatrix}$. If we choose $j=2$, we are ``summing down column 2'':
+\begin{align*}
+\left|
+\begin{matrix}
+  1 &  \colorbox{Mahogany!30}{0} &  3 \\
+ -1 &  \colorbox{ForestGreen!30}{2} & -1 \\
+  2 & \colorbox{airforceblue!30}{-3} &  0
+\end{matrix}
+\right|
+&= 
+(-1)^{1+2}\colorbox{Mahogany!30}{0}|A_{12}| + (-1)^{2+2}\colorbox{ForestGreen!30}{2}|A_{22}| + (-1)^{3+2}\colorbox{airforceblue!30}{($-$3)}|A_{32}|
+\\
+&=
+-\colorbox{Mahogany!30}{0}
+\left|\begin{matrix}
+ -1 &  -1 \\
+  2 &  0
+\end{matrix}\right|
++
+\colorbox{ForestGreen!30}{2}
+\left|\begin{matrix}
+  1 &  3 \\
+  2 &  0
+\end{matrix}\right|
++
+-\colorbox{airforceblue!30}{$-$3}
+\left|\begin{matrix}
+  1 &   3 \\
+ -1 &  -1 \\
+\end{matrix}\right|
+\\
+&=
+\colorbox{ForestGreen!30}{2}
+\left((1)(0) - (3)(2)\right)
++
+\colorbox{airforceblue!30}{3}
+\left((1)(-1) - (3)(-1)\right)
+\\ 
+&=
+\colorbox{ForestGreen!30}{2}\times -6
++
+\colorbox{airforceblue!30}{3}\times 2 
+\\
+&= -6
+\end{align*}
+
+If instead we choose $i=1$, then we are ``summing across row 1'':
+\begin{align*}
+\left|
+\begin{matrix}
+  \colorbox{Mahogany!30}{1} &  \colorbox{ForestGreen!30}{0} &  \colorbox{airforceblue!30}{3} \\
+ -1 &  2 & -1 \\
+  2 & -3 &  0
+\end{matrix}
+\right|
+&= 
+(-1)^{1+1}\colorbox{Mahogany!30}{1}|A_{11}| + (-1)^{2+1}\colorbox{ForestGreen!30}{0}|A_{12}| + (-1)^{3+1}\colorbox{airforceblue!30}{3}|A_{13}|
+\\
+&=
+\colorbox{Mahogany!30}{1}
+\left|\begin{matrix}
+ 2 & -1 \\
+ -3 &  0
+\end{matrix}\right|
+-
+\colorbox{ForestGreen!30}{0}
+\left|\begin{matrix}
+ -1 & -1 \\
+  2 &  0
+\end{matrix}\right|
++
+\colorbox{airforceblue!30}{3}
+\left|\begin{matrix}
+ -1 &  2 \\
+  2 & -3 
+\end{matrix}\right|
+\\
+&=
+\colorbox{Mahogany!30}{1}
+\left((2)(0) - (-1)(-3)\right)
+-
+\colorbox{ForestGreen!30}{0}
+\left((-1)(0) - (-1)(2)\right)
++
+\colorbox{airforceblue!30}{3}
+\left((-1)(-3) - (2)(2)\right)
+\\ 
+&=
+\colorbox{Mahogany!30}{1}\times -3
++
+\colorbox{airforceblue!30}{3}\times -1 
+\\
+&= -6
+\end{align*}
+Notice that we got the same answer in both cases.
+}
+
+
+\noindent In the determinant expression there is this term $(-1)^{i+j}$ that appears in both summations. It can only give two possible values:
+\begin{align*}
+(-1)^{i+j} = 
+\begin{cases}
++1 & \text{if $i+j$ is even} \\
+-1 & \text{if $i+j$ is odd}
+\end{cases}
+\end{align*}
+As the $i$ and $j$ are the row and columns indices, respectivel, this term determines the following $+$ or $-$ pattern to any matrix
+\begin{align*}
+\begin{pmatrix}
++ & - & + & - & \cdots \\
+- & + & - & + & \cdots \\
++ & - & + & - & \cdots \\
+\vdots & \vdots & \vdots & \vdots & \ddots
+\end{pmatrix}
+\end{align*}
+Noticing this pattern lets you avoid having to explicitly write $(-1)^{i+j}$ during the calculations.
+
+\theorem{Determinant when a column is multiplied by a constant}{
+If we multiply a column by a constant, $k$, then the determinant is multiplied by that constant. 
+\vspace{-0.1cm}\begin{center} \textcolor{airforceblue}{\rule{0.7\textwidth}{0.3mm}} \end{center}
+}
+
+\begin{proof} Let's multiply the j$^{th}$ column of a matrix $A$ by $k$ to get the new matrix
+\begin{align*}
+A' =
+\begin{pmatrix}
+a_{11} & \cdots & ka_{1j} & \cdots & a_{1n} \\
+a_{21} & \cdots & ka_{2j} & \cdots & a_{2n} \\
+\vdots & \ddots & \vdots & \cdots & \vdots \\
+a_{n1} & \cdots & ka_{nj} & \cdots & a_{nn}
+\end{pmatrix}
+\end{align*}
+Then, calculate the determinant of $A'$, choosing to compute it along the j$^{th}$ column
+\begin{align*}
+\det(A') = \sum_{i=1}^n (-1)^{i+j} (ka_{ij}) \det(A'_{ij}) = k\sum_{i=1}^n (-1)^{i+j} a_{ij} \det(A'_{ij}) = k \det (A)
+\end{align*}
+\end{proof}
+
+\theorem{Determinant of a multiplication}{
+Given two matrices $A,B\in \mathcal{M}_{n,n}$, we have
+\begin{align*}
+\det(AB)=\det(A)\det(B)
+\end{align*}
+}
+
+\theorem{Determinant of a diagonal matrix}{
+Let $A\in\mathcal{M}_{n,n}$ be a diagonal matrix. Then
+\begin{align*}
+\det(A)=a_{11}\times a_{22} \times \cdots \times a_{nn}
+\end{align*}
+}
+
+\theorem{Determinant of a triangular matrix}{
+Let $A\in\mathcal{M}_{n,n}$ be a triangular matrix. Then
+\begin{align*}
+\det(A)=a_{11}\times a_{22} \times \cdots \times a_{nn}
+\end{align*}
+}
+
+\begin{proof} Consider an upper triangular matrix
+\begin{align*}
+A =
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+0 & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & a_{nn}
+\end{pmatrix}
+\end{align*}
+If we take the determinant along the first column at each step we get
+\begin{align*}
+\det(A) 
+= a_{11} 
+\det\begin{pmatrix}
+a_{22} & a_{23} & \cdots & a_{2n} \\
+0 & a_{33} & \cdots & a_{3n} \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & a_{nn}
+\end{pmatrix} 
+= a_{11}a_{22} 
+\det\begin{pmatrix}
+a_{33} & a_{34} & \cdots & a_{3n} \\
+0 & a_{44} & \cdots & a_{4n} \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & a_{nn}
+\end{pmatrix}
+= \cdots = a_{11}a_{22} \cdots  a_{nn}
+\end{align*}
+\end{proof}
+
+\theorem{Determinant of any matrix multiplied by a diagonal matrix}{
+Let $\Lambda, A\in\mathcal{M}_{n,n}$ with $\Lambda=\lambda I$ a diagonal matrix. Then
+\begin{align*}
+\det(\Lambda A)=\lambda^n \det(A)
+\end{align*}
+}
+
+\theorem{Determinant of an inverse}{
+Let $A\in\mathcal{M}_{n,n}$ be an invertible matrix. Then
+\begin{align*}
+\det(A) \neq 0 
+\quad \text{and} \quad 
+\det(A^{-1})=\frac{1}{\det(A)}
+\end{align*}
+}
+
+\begin{proof} 
+Since $A$ is invertible, its inverse exists and is defined by $AA^{-1}=I$. The determinant of this relation is
+\begin{align*}
+\det(AA^{-1}) &= \det(I) \\
+\det(A)\det(A^{-1}) &= 1 \qquad (\implies \det(A^{-1})\neq 0 \text{ and } \det(A)\neq 0)\\
+\det(A^{-1}) &=\frac{1}{\det(A)}
+\end{align*}
+\end{proof}
+
+\theorem{Determinant of $PAP^{-1}$.}{
+Let $P\in\mathcal{M}_{n,n}$ be an invertible matrix. Then for any matrix $A\in\mathcal{M}_{n,n}$ we have
+\begin{align*}
+\det(PAP^{-1}) = \det(A).
+\end{align*}
+}
+
+\begin{proof} 
+Using the ``determinant of a multiplication'' theorem we have
+\begin{align*}
+\det(PAP^{-1}) = \det(P)\det(A)\det(P^{-1}).
+\end{align*}
+These determinants are just numbers, so their multiplication is commutative:
+\begin{align*}
+\det(P)\det(A)\det(P^{-1}) &= \det(P)\det(P^{-1})\det(A) \\
+ &= \det(P)\frac{1}{\det(P)}\det(A) \\
+ &= \det(A)
+\end{align*}
+\end{proof}
+
+\theorem{Determinant when two columns are equal}{
+Let $A\in\mathcal{M}_{n,n}$ be a square matrix. If any two columns of $A$ are equal to each other then $\det(A)=0$.
+}
+
+For example
+\begin{align*}
+\det\begin{pmatrix}
+ 2 &  1 & 2 \\
+ 4 &  2 & 4 \\
+ 6 &  0 & 6 
+\end{pmatrix}
+=0.
+\end{align*}
+
+\theorem{Determinant when a column is a multiple of another}{
+If any column is a multiple of another, then $\det(A)=0$.
+}
+
+For example
+\begin{align*}
+\det\begin{pmatrix}
+ 1 &  3 & 0 \\
+ 2 &  6 & 3 \\
+ 2 &  6 & 3 
+\end{pmatrix}
+=0.
+\end{align*}
+
+
+
+\theorem{Determinant and column exchange}{
+Let $A\in\mathcal{M}_{n,n}$ be a square matrix. If we exchange any two columns, then the determinant of the new matrix is $-1$ times the old.
+}
+
+For example
+\begin{align*}
+\det\begin{pmatrix}
+ 2 &  1 & 7 \\
+ 4 &  2 & 4 \\
+ 6 &  0 & 3 
+\end{pmatrix}
+=-1
+\det\begin{pmatrix}
+ 2 &  7 & 1 \\
+ 4 &  4 & 2 \\
+ 6 &  3 & 0 
+\end{pmatrix}
+\end{align*}
+
+\theorem{Determinant and column operations}{
+The determinant is unchanged if we add to a column a linear combination of other columns.
+}
+
+For example
+\begin{align*}
+\det\begin{pmatrix}
+ 2 &  1 & 7 \\
+ 4 &  2 & 4 \\
+ 6 &  0 & 3 
+\end{pmatrix}
+=
+\det\begin{pmatrix}
+ 2 &  1 & 9 \\
+ 4 &  2 & 8 \\
+ 6 &  0 & 3 
+\end{pmatrix}
+\end{align*}
+(the new third column is the old third column + 2 times the second column)
+
+
+\theorem{Determinants and row properties and operations}{
+For every square matrix $A$, the previous theorems about column properties and operations also hold for rows! That is, we have the following.
+\begin{itemize}
+\item If two rows are equal to each other, then $\det(A)=0$.
+\item If any row is a multiple of another, then $\det(A)=0$.
+\item If we exchange any two rows, the new determinant is $-1$ times the old.
+\item The determinant is unchanged if we add to a row a linear combination of other rows.
+\end{itemize}
+}
+
+\theorem{Existance of a triangular matrix with the same determinant}{
+For every square matrix, $A$, there exists a triangular matrix, $T$, such that $\det(A)=\det(T)$.
+}
+
+
+\begin{proof}
+Let $A$ be an $n$ by $n$ square matrix:
+\begin{align*}
+A =
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{pmatrix}
+\end{align*}
+Consider the first column. There are 2 possibilities:
+\begin{enumerate}
+\item All the $a_{i1}=0$. Then $\det(A)=0$ and the zero matrix is a triangular matrix with the same determinant.
+\item There is a non-zero element in the first column, say $a_{k1}\neq 0$. We can add row $k$ to the first row, giving a new matrix $A'$ without changing the determinant. In this way we can always generate a matrix with a non-zero upper left element, $a'_{11}$, and the same determinant.
+\end{enumerate}
+Now we can use this $a'_{11}$ to guarantee it is the \textit{only} non-zero element in the first column. To do this we subtract from every row other than the first this particular multiple of the first row:
+\begin{align*}
+R_i \to R_i - \frac{a_{i1}}{a'_{11}}R_1
+\end{align*}
+This operation does not change the determinant, so we have:
+\begin{align*}
+\det(A)=\det\begin{pmatrix}
+a'_{11} & a'_{12} & \cdots & a'_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{pmatrix}
+=
+\begin{pmatrix}
+a'_{11} & a'_{12} & \cdots & a'_{1n} \\
+0 & a^{(1)}_{22} & \cdots & a^{(1)}_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & a^{(1)}_{n2} & \cdots & a^{(1)}_{nn}
+\end{pmatrix}
+\end{align*}
+We can repeat this procedure for the second column, ignoring the first row, to successively generate an upper triangular matrix
+\begin{align*}
+\det(A)=
+\det\begin{pmatrix}
+a'_{11} & a'_{12} & a'_{13} & \cdots & a'_{1n} \\
+0 & a^{(1)}_{22} & a^{(1)}_{23} & \cdots & a^{(1)}_{2n} \\
+0 & 0 & a^{(2)}_{33} & \cdots & a^{(2)}_{2n} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & a^{(2)}_{3n} & \cdots & a^{(2)}_{nn}
+\end{pmatrix}
+=
+\cdots
+=
+\det\begin{pmatrix}
+a'_{11} & a'_{12} & a'_{13} & \cdots & a'_{1n} \\
+0 & a^{(1)}_{22}  & a^{(1)}_{23} & \cdots & a^{(1)}_{2n} \\
+0 & 0 & a^{(2)}_{33} & \cdots & a^{(2)}_{2n} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 0 & \cdots & a^{(n-1)}_{nn}
+\end{pmatrix}
+\end{align*}
+and there's the triangular matrix.
+
+\end{proof}
+
+\noindent Now it's much easier to calculate the determinant of this triangular matrix (multiply the diagonal). In this way, at the end of the Gaussian reduction we can know immediately if the matrix is invertible or not (whether there is a zero on the diagonal).
+
+
+
+\section{Matrix inversion}
+
+Reminder: for a square matrix $M$, the inverse matrix $M^{-1}$ is defined by the relation:
+\begin{align*}
+M M^{-1} = M^{-1} M = I
+\end{align*}
+Where $I$ is the identity matrix of the same size as $M$. This inverse matrix is useful for solving systems of equations (with equal number of unknowns as equations). For example, for a system written in matrix form
+\begin{align*}
+AX = Y
+\end{align*}
+if the matrix $A$ has an inverse and we can compute it, then the unique solution to the
+system is given by:
+\begin{align*}
+X = A^{-1}Y.
+\end{align*}
+
+Now, in the cofactor method of finding the inverse of a matrix we must introduce an associated matrix.
+
+\definition{Cofactor matrix}{
+From a matrix $A$ we generate its cofactor matrix $C_A$ which has entries given by determinants of submatrices of $A$ with the same plus/minus pattern as in a determinant calculation. That is, the entries of $C_A$ are $c_{ij}=(-1)^{i+j} \det(A_{ij})$:
+\begin{align*}
+C_A =
+\begin{pmatrix}
+ |A_{11}| & -|A_{12}| &  |A_{13}| & \cdots   \\
+-|A_{21}| &  |A_{22}| & -|A_{23}| & \cdots   \\
+ |A_{31}| & -|A_{32}| &  |A_{33}| & \cdots   \\
+ \vdots   &  \vdots   &  \vdots   & \ddots
+\end{pmatrix}
+\end{align*}
+}
+
+With this cofactor matrix we can compute the inverse of any invertible square matrix.
+
+\theorem{Inverse matrix (cofactor method)}{
+The inverse of a matrix $A$ can be computed from its cofactor matrix:
+\begin{align*}
+A^{-1} = \frac{1}{\det(A)}C_A^T
+\end{align*}
+}
+
+\example{Cofactor method}{
+Let's use the cofactor method to find the inverse of the following matrix:
+\begin{align*}
+A = 
+\begin{pmatrix}
+  0 & 1 & -1 \\
+  5 & 4 &  3 \\
+  3 & 0 & -1
+\end{pmatrix}
+\end{align*}
+First we need the determinant $\det(A)=26$ (verify this). Now there are nine elements to the comatrix:
+\begin{align*}
+C_{11} &= (-1)^{1+1}\left|\begin{matrix} 4 & 3 \\ 0 & -1 \end{matrix}\right|=-4, & 
+C_{12} &= (-1)^{1+2}\left|\begin{matrix} 5 & 3 \\ 3 & -1 \end{matrix}\right|=14, & 
+C_{13} &= (-1)^{1+3}\left|\begin{matrix} 5 & 4 \\ 3 & 0 \end{matrix}\right|=-12 \\
+C_{21} &= (-1)^{2+1}\left|\begin{matrix} 1 & -1 \\ 0 & -1 \end{matrix}\right|=1,
+&
+C_{22} &= (-1)^{2+2}\left|\begin{matrix} 0 & -1 \\ 3 & -1 \end{matrix}\right|=3, &
+C_{23} &= (-1)^{2+3}\left|\begin{matrix} 0 & 1 \\ 3 & 0 \end{matrix}\right|=3
+\\
+C_{31} &= (-1)^{3+1}\left|\begin{matrix} 1 & -1 \\ 4 & 3 \end{matrix}\right|=7,
+&
+C_{32} &= (-1)^{3+2}\left|\begin{matrix} 0 & -1 \\ 5 & 3 \end{matrix}\right|=-5, 
+&
+C_{33} &= (-1)^{3+3}\left|\begin{matrix} 0 & 1 \\ 5 & 4 \end{matrix}\right|=-5
+\end{align*}
+So we have the comatrix
+\begin{align*}
+C_A = 
+\begin{pmatrix}
+ -4 & 14 & -12 \\
+  1 &  3 &   3 \\
+  7 & -5 &  -5
+\end{pmatrix}
+\end{align*}
+Transpose it, divide by the determinant of $A$ and we have the inverse of $A$
+\begin{align*}
+\begin{pmatrix}
+  0 & 1 & -1 \\
+  5 & 4 &  3 \\
+  3 & 0 & -1
+\end{pmatrix}^{-1}
+=
+\frac{1}{26}
+\begin{pmatrix}
+  -4 &  1 &  7 \\
+  14 &  3 & -5 \\
+ -12 &  3 & -5
+\end{pmatrix}
+\end{align*}
+You should verify that $AA^{-1}=A^{-1}A=I$
+}
+
+
+\theorem{Inverse of a $2\times 2$ matrix}{
+With the cofactor method, the inverse of a $2\times 2$ matrix is given by
+\begin{align*}
+\begin{pmatrix}
+a & b \\
+c & d
+\end{pmatrix}^{-1}
+=
+\frac{1}{ad - bc}
+\begin{pmatrix}
+d & -c \\
+-b & a
+\end{pmatrix}
+\end{align*}
+}

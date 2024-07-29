@@ -1,0 +1,367 @@
+\chapter{Matrix Algebra} \label{ch:matrixalgebra}
+
+
+\definition{Matrix}{
+A matrix is a collection of numbers from a field $\mathbb{F}$ (e.g. rational numbers) usually represented by a rectangular array. For example, an $m \times n$ (said m by n) matrix $A$ with coefficients $a_{ij}\in\mathbb{F}$  would be represented by an array with $m$ rows and $n$ columns:
+\begin{align*}
+A = 
+\begin{pmatrix}
+a_{11} & a_{12} & a_{13} & \cdots & a_{1j} & \cdots & a_{1m} \\
+a_{21} & a_{22} & a_{23} & \cdots & a_{2j} & \cdots & a_{2m} \\
+a_{31} & a_{32} & a_{33} & \cdots & a_{3j} & \cdots & a_{3m} \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+a_{i1} & a_{12} & a_{13} & \cdots & a_{ij} & \cdots & a_{im} \\
+\vdots & \vdots & \vdots & \ddots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & a_{n3} & \cdots & a_{nj} & \cdots & a_{nm}
+\end{pmatrix}
+=
+\left( a_{ij} \right)_{\substack{ 1 \leq i \leq m \\ 1 \leq j \leq n }}.
+\end{align*}
+Sometimes it is convenient to refer to the coefficients in the array like so: $a_{ij} = \left(A\right)_{ij}$.
+}
+
+\definition{Set of all $m \times n$ matrices}{
+We write the set of all $m \times n$ matrices with coefficients in $\mathbb{F}$ as
+\begin{align*}
+\mathcal{M}_{m,n}(\mathbb{F})
+\end{align*}
+}
+
+\definition{Matrix columns and rows}{
+For a matrix $A\in\mathcal{M}_{m,n}(\mathbb{F})$ we denote its j$^{th}$ column and i$^{th}$ row
+\begin{align*}
+A^{(j)} =
+\begin{pmatrix}
+ a_{1j} \\
+ a_{2j} \\
+ a_{3j} \\
+ \vdots \\
+ a_{ij} \\
+ \vdots \\
+ a_{mj}
+\end{pmatrix},
+\qquad
+A_{(i)} =
+\begin{pmatrix}
+a_{i1} & a_{12} & a_{13} & \cdots & a_{ij} & \cdots & a_{in}
+\end{pmatrix}
+\end{align*}
+}
+
+\definition{Transpose of a matrix}{
+The transpose of an $m \times n$ matrix, $A$, is an $n \times m$ matrix, denoted $A^T$, with rows equal to the columns of $A$. That is, $\left(A^T\right)_{ij} = \left(A\right)_{ji}$ for all combinations of $i$ and $j$. 
+}
+
+
+
+\definition{Diagonal matrix}{
+A square matrix $A$ is said to be diagonal if all its non-diagonal elements are zero, e.g. $(A)_{ij}=0$ whenever $i \neq j$.
+}
+
+\definition{Symmetric matrix}{
+A matrix $A$ is symmetric if it is equal to its transpose, $A = A^T$.
+}
+
+
+
+\definition{Matrix addition}{
+Matrix addition is done coefficient by coefficient, that is, for two matrices $A$ and $B$ we define the i,j$^{th}$ coefficient of the addition as the addition of the i,j$^{th}$ coefficients of each matrix: 
+\begin{align*}
+\left(A+B\right)_{ij} = \left(A\right)_{ij}+\left(B\right)_{ij}.
+\end{align*}
+}
+
+
+
+\definition{Scalar multiplication}{
+Given a number $k\in\mathbb{R}$ (called a scalar) and a matrix $A \in \mathcal{M}_{m,n}$, we define matrix scalar multiplication, $kA$, to be a matrix $B \in \mathcal{M}_{m,n}$ with coefficients given by:
+\begin{align*}
+b_{ij} = ka_{ij},
+\end{align*}
+that is, we multiply \textit{every coefficient} by the scalar.
+} 
+
+
+\definition{Zero matrix}{
+The zero matrix of any shape is a matrix $M_0 \in\mathcal{M}_{m,n}$ consisting entirely of zeros as coefficients.
+} 
+
+
+\definition{Additive inverse}{
+Given a matrix $A\in\mathcal{M}_{ij}$, its additive inverse is the same matrix multiplied by the scalar $-1$. We denote the additive inverse of $A$ as $-A$.
+} 
+
+
+\definition{Multiplication of a matrix by a column}{
+Consider a matrix $A \in \mathcal{M}_{m,n}$ and a column $X \in \mathcal{M}_{n,1}$. We define the product $AX$ to result in the column $Y\in\mathcal{M}_{m,1}$ with coefficients
+\begin{align*}
+(Y)_i = a_{i1}x_1 + a_{i2}x_2 + \cdots + a_{im}x_m = \sum_{k=1}^m a_{ik} x_k 
+\end{align*}
+Visually
+\begin{align*}
+\begin{pmatrix}
+y_{1} \\
+y_{2} \\
+\vdots \\
+y_{n} 
+\end{pmatrix}
+%%%
+%%%
+%%%
+&=
+%%%
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{pmatrix}
+\begin{pmatrix}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{m} 
+\end{pmatrix}
+%%%
+%%%
+%%%
+=
+%%%
+x_{1}
+\begin{pmatrix}
+a_{11} \\
+a_{21} \\
+\vdots \\
+a_{n1} 
+\end{pmatrix}
++
+x_{2}
+\begin{pmatrix}
+a_{12} \\
+a_{22} \\
+\vdots \\
+a_{n2} 
+\end{pmatrix}
++ \cdots +
+x_m
+\begin{pmatrix}
+a_{1m} \\
+a_{2m} \\
+\vdots \\
+a_{nm} 
+\end{pmatrix}
+\\ \\
+%%%
+%%%
+%%%
+&\implies Y = x_{1}A^{(1)} + x_{2}A^{(2)} + \cdots + x_{m}A^{(m)}
+\end{align*}
+}
+
+\definition{Rotation matrix - arbtirary angle anti-clockwise}{
+By using a column $X\in\mathcal{M}_{2,1}$ to represent a Euclidean vector, the following matrix allows the operation of rotataion, anti-clockwise, of $X$ by an angle $\theta$:
+\begin{align*}
+R_\theta =
+\begin{pmatrix} 
+\cos\theta & -\sin\theta \\ 
+\sin\theta &  \cos\theta  
+\end{pmatrix}
+\end{align*}
+where the rotated vector is represented by a column $X'\in\mathcal{M}_{2,1}$ obtained by matrix multiplication $X' = R_\theta X$.
+}
+
+
+\definition{Multiplication of two matrices}{
+Consider two matrices $A \in \mathcal{M}_{n,m}$ and $B \in \mathcal{M}_{m,q}$. We define the product $AB$ to be the matrix $C\in\mathcal{M}_{n,q}$ with coefficients
+\begin{gather*}
+c_{ij} = a_{i1}b_{1j} + a_{i2}b_{2j} + \cdots + a_{im}b_{mj} = \sum_{k=1}^m a_{ik} b_{kj} \\
+%%%
+%%%
+%%%
+\implies
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{pmatrix}
+\begin{pmatrix}
+b_{11} & b_{12} & \cdots & b_{1q} \\
+b_{21} & b_{22} & \cdots & b_{2q} \\
+\vdots & \vdots & \ddots & \vdots \\
+b_{m1} & b_{m2} & \cdots & b_{mq}
+\end{pmatrix} \\
+%%%
+%%%
+%%%
+=
+\left(
+b_{11}
+\underbrace{
+\begin{pmatrix}
+a_{11} \\
+a_{21} \\
+\vdots \\
+a_{n1} 
+\end{pmatrix}
++ \cdots +
+b_{m1}
+\begin{pmatrix}
+a_{1m} \\
+a_{2m} \\
+\vdots \\
+a_{nm} 
+\end{pmatrix}
+}_{\text{\large first column}}
+%%
+\quad \cdots \quad 
+%%
+b_{1q}
+\underbrace{
+\begin{pmatrix}
+a_{11} \\
+a_{21} \\
+\vdots \\
+a_{n1} 
+\end{pmatrix}
++ \cdots +
+b_{mq}
+\begin{pmatrix}
+a_{1m} \\
+a_{2m} \\
+\vdots \\
+a_{nm} 
+\end{pmatrix}
+}_{\text{\large n$^{th}$ column}}
+\right)
+\end{gather*}
+Additionally, for the product
+\begin{align*}
+\underbrace{A}_{(\colorbox{Mahogany!20}{n},\colorbox{airforceblue!20}{m})} \underbrace{B}_{(\colorbox{airforceblue!20}{m},\colorbox{Mahogany!20}{q})}
+\end{align*}
+we will call the indices for the columns of $A$ and rows of $B$ the \textit{inner indices} (blue), whereas the indices for the rows of $A$ and columns of $B$ will be called the \textit{outer indices} (red).
+}
+
+\definition{Identity matrix}{
+The $n$-dimensional identity matrix $I$ is a square matrix of size $n\times n$ with 1s along the diagonal and 0s elsewhere, that is, 
+\begin{align*}
+(I)_{ij}
+=
+\begin{cases}
+1 & \text{whenever } \, i=j, \\
+0 & \text{whenever } \, i \neq j.
+\end{cases}
+\end{align*}
+}
+
+\definition{Invertible matrix}{
+A matrix $A$ is invertible if and only if there exists a matrix $B$ such that
+\begin{align*}
+A B = BA = I
+\end{align*}
+This matrix $B$ is called the inverse of $A$ and is denoted $A^{-1}$. As we have commutative matrices, $AB=BA$, recall that this can only happen if $A$ is square. So, only square matrices can have inverses.
+}
+
+\definition{Determinant of a 1 by 1 matrix}{
+The determinant of any 1 by 1 matrix is given by its only coefficient:
+
+\begin{align*}
+\det \left( \begin{pmatrix} a \end{pmatrix}\right)  = a
+\end{align*}
+}
+
+
+\definition{Submatrix}{
+From a matrix $A$ we generate the \textit{submatrix} $A_{ij}$ by deleting the $ith$ row and $jth$ column:
+\begin{align*}
+\text{For} \, A =
+\begin{pmatrix}
+a_{1,1}   & \cdots & a_{1,j-1}   & a_{1,j}   & a_{1,j+1}   & \cdots & a_{1,n}   \\
+\vdots    & \cdots & \vdots      & \vdots    & \vdots      & \cdots & \vdots    \\
+a_{i-1,1} & \cdots & a_{i-1,j-1} & a_{i-1,j} & a_{i-1,j+1} & \cdots & a_{i-1,n} \\
+a_{i,1}   & \cdots & a_{i,j-1}   & a_{i,j}   & a_{i,j+1}   & \cdots & a_{i,n}   \\
+a_{i+1,1} & \cdots & a_{i+1,j-1} & a_{i+1,j} & a_{i+1,j+1} & \cdots & a_{i+1,n} \\
+\vdots    & \cdots & \vdots      & \vdots    & \vdots      & \cdots & \vdots    \\
+a_{m,1}   & \cdots & a_{m,j-1}   & a_{m,j}   & a_{m,j+1}   & \cdots & a_{m,n} 
+\end{pmatrix} \\
+\text{The submatrix} \, A_{ij} =
+\begin{pmatrix}
+a_{1,1}   & \cdots & a_{1,j-1}   & a_{1,j+1}   & \cdots & a_{1,n}   \\
+\vdots    & \cdots & \vdots      & \vdots      & \cdots & \vdots    \\
+a_{i-1,1} & \cdots & a_{i-1,j-1} & a_{i-1,j+1} & \cdots & a_{i-1,n} \\
+a_{i+1,1} & \cdots & a_{i+1,j-1} & a_{i+1,j+1} & \cdots & a_{i+1,n} \\
+\vdots    & \cdots & \vdots      & \vdots      & \cdots & \vdots    \\
+a_{m,1}   & \cdots & a_{m,j-1}   & a_{m,j+1}   & \cdots & a_{m,n} 
+\end{pmatrix}
+\end{align*}
+\textit{Note}: we generally have to specify in words that we create a submatrix. The notation $A_{ij}$ is a little ambiguous without being explicit. 
+}
+
+
+\definition{Determinant of an $n \times n$ matrix}{
+For any square matrix $A\in\mathcal{M}_{n,n}$, its determinant is given by
+\begin{align*}
+\det(A) = \sum_{i=1}^n (-1)^{i+j} a_{ij} \det(A_{ij})
+\end{align*}
+where the $a_{ij}$ are coefficients of $A$, $A_{ij}$ is the $i,j^{th}$ submatrix of $A$ and for any $1\leq j \leq n$. We can also sum over the $j$ index for any $1\leq i \leq n$
+\begin{align*}
+\det(A) = \sum_{j=1}^n (-1)^{i+j} a_{ij} \det(A_{ij})
+\end{align*}
+and we will show that the answer is the same.
+}
+
+\definition{Cramer system}{
+Suppose we have the following linear system of equations (with unknowns equal to equations)
+\begin{align*}
+\begin{cases}
+a_{11} x_1  + a_{12} x_2 + \cdots + a_{1n} x_n = y_1 \\
+a_{21} x_1  + a_{22} x_2 + \cdots + a_{2n} x_n = y_2 \\
+\vdots \\
+a_{n1} x_1  + a_{n2} x_2 + \cdots + a_{nn} x_n = y_n
+\end{cases}
+\qquad (S)
+\end{align*}
+with the associated matrix form
+\begin{align*}
+\underbrace{
+\begin{pmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{pmatrix}}_A
+%%
+%%
+\underbrace{
+\begin{pmatrix}
+x_{1} \\
+x_{2} \\
+\vdots \\
+x_{n}
+\end{pmatrix}}_X
+%%
+=
+\underbrace{
+\begin{pmatrix}
+y_{1} \\
+y_{2} \\
+\vdots \\
+y_{n}
+\end{pmatrix}}_Y
+\end{align*}
+We say that $(S)$ is a Cramer system if $\det(A) \neq 0$.
+}
+
+\definition{Cofactor matrix}{
+From a matrix $A$ we generate its cofactor matrix $C_A$ which has entries given by determinants of submatrices of $A$ with the same plus/minus pattern as in a determinant calculation. That is, the entries of $C_A$ are $c_{ij}=(-1)^{i+j} \det(A_{ij})$:
+\begin{align*}
+C_A =
+\begin{pmatrix}
+ |A_{11}| & -|A_{12}| &  |A_{13}| & \cdots   \\
+-|A_{21}| &  |A_{22}| & -|A_{23}| & \cdots   \\
+ |A_{31}| & -|A_{32}| &  |A_{33}| & \cdots   \\
+ \vdots   &  \vdots   &  \vdots   & \ddots
+\end{pmatrix}
+\end{align*}
+}
+

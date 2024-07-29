@@ -1,0 +1,1693 @@
+\chapter{Vector Spaces} \label{ch:vectorspaces}
+
+\section{Introductory examples}
+
+\subsection*{Set of polynomials of degree up to $n$}
+Recall that the degree of a polynomial with variable $x$ is the power of the highest power of $x$ amongst all of the terms with non-zero coefficient. Let's consider all of the polynomials with degree up to and including $n$ with only real coefficients, denoted $P_n(\mathbb{R})$. An arbitrary member of this set can be written
+\begin{align*}
+\mathbf{p} = p_0 + p_1 x + p_2 x^2 + \cdots + p_n x^n = \sum_{i=0}^n p_i x^i
+\end{align*}
+where the coefficients $p_i \in \mathbb{R}$. Let's see what happens when we add another polynomial in the same set, say $\mathbf{q}\in P_n(\mathbb{R})$:
+\begin{align*}
+\mathbf{p} + \mathbf{q} &= \sum_{i=0}^n p_i x^i + \sum_{i=0}^n q_i x^i \\
+&= \sum_{i=0}^n (p_i+ q_i) x^i \\
+&= \mathbf{r}.
+\end{align*}
+We see the result is another polynomial of degree up to $n$ (its degree with be the maximum of the degrees of $\mathbf{p}$ and $\mathbf{q}$). That means $\mathbf{r}\in P_n(\mathbb{R})$ and its coefficients are given by $r_i = p_i + q_i$. 
+
+Now what happens if we multiply a polynomial $\mathbf{p}$ by a real number $c\in\mathbb{R}$.
+\begin{align*}
+c\mathbf{p} &= c\sum_{i=0}^n p_i x^i \\
+&= \sum_{i=0}^n (c p_i) x^i \\
+&= \mathbf{r}.
+\end{align*}
+We see the result is another polynomial of degree up to $n$. That means $\mathbf{r}\in P_n(\mathbb{R})$ and its coefficients are given by $r_i = c p_i$. So just like Euclidean vectors we have addition of two objects resulting in an object of the same type, and scalar multiplication resulting in an object of the same type.
+
+Let's prove that these polynomials also satisfy one of the other properties in the summary list of Section~\ref{sec:ch1_summary}, for example the distributivity of scalar multiplication. For polynomials $\mathbf{p}$ and $\mathbf{q}\in P_n(\mathbb{R})$ and a real number $c\in\mathbb{R}$ we have
+\begin{align*}
+c (\mathbf{p}+\mathbf{q}) &= c\left( \sum_{i=0}^n p_i x^i + \sum_{i=0}^n q_i x^i \right) \\
+&= c\sum_{i=0}^n p_i x^i + c\sum_{i=0}^n q_i x^i \\
+&= c \mathbf{p}+ c\mathbf{q}.
+\end{align*}
+So we see that polynomials also satisfy this distributivity property. It would be a good idea to convince yourself that they also satisfy all of the other properties in the list of Section~\ref{sec:ch1_summary}.
+
+
+\subsection*{Set of functions continuous on an interval}
+
+Let's recall the definition of continuity of a function.
+
+\definition{Continuity of a function}{
+A function $f:A \to B$ is continuous at a point $c \in A$ if it satisfies the following limit
+\begin{align*}
+\lim_{x \to c} f(x) = f(c).
+\end{align*}
+Then the function is continuous on an interval $[a,b]$ if it is continuous at all points in the interval. That is
+\begin{align*}
+\forall c\in [a,b] \quad \lim_{x \to c} f(x) = f(c).
+\end{align*}
+}
+
+\indent Now let's consider the set of all functions continuous on the interval $[0,1]$, denoted $\mathcal{C}([0,1])$. Given two functions $f$ and $g\in\mathcal{C}([0,1])$, lets define their addition as a third function $h$ such that
+\begin{align*}
+\forall x\in[0,1] \quad h(x) = f(x) + g(x).
+\end{align*}
+Is this function also continuous on $[0,1]$? Well let's see, we have
+\begin{align*}
+\forall c\in [0,1] \quad \lim_{x \to c} f(x) = f(c) \quad \text{and} \quad \lim_{x \to c} g(x) = g(c).
+\end{align*}
+Now consider the same limit for $h$
+\begin{align*}
+\forall c\in [0,1] \quad \lim_{x \to c} h(x) &= \lim_{x \to c} \left(f(x) + g(x)\right) \\
+&= \lim_{x \to c} f(x) + \lim_{x \to c}  g(x) \\
+&= f(c) + g(c) \\
+&= h(c).
+\end{align*}
+So $h\in\mathcal{C}([0,1])$. What about scalar multiplication? For any $k\in\mathbb{R}$ we have
+\begin{align*}
+\lim_{x \to c} k f(x) = k \lim_{x \to c}  f(x) = k f(c)
+\end{align*}
+so that $kf\in\mathcal{C}([0,1])$. 
+
+Just like Euclidean vectors and polynomials, we have that addition and scalar multiplication remains within the set of objects. Let's prove that these continuous functions also satisfy one of the other properties in the summary list of Section~\ref{sec:ch1_summary}, for example that there exists an additive inverse.
+
+Let $f\in\mathcal{C}([0,1])$. Define $h$ as the function
+\begin{align*}
+\forall x\in[0,1] \quad h(x) = -f(x).
+\end{align*}
+This obviously satisfies the definition of an additive inverse: $f + h = 0$. Now let's show that $h$ is continuous on the interval.
+\begin{align*}
+\forall c\in [0,1] \quad \lim_{x \to c} h(x) &= \lim_{x \to c} \left(-f(x)\right) \\
+ &= - \lim_{x \to c} f(x) \\
+ &= - f(c) \\
+ &= h(c).
+\end{align*}
+Hence $h\in\mathcal{C}([0,1])$. So every function continuous on $[0,1]$ has an additive inverse function which is also continuous on $[0,1]$. It would be a good idea to convince yourself that they also satisfy all of the other properties in the list of Section~\ref{sec:ch1_summary}.
+
+
+\section{Vector space axioms and properties}
+
+So now you should have had enough examples of sets of objects that seem to satisfy the same properties. We abstract away from these particular sets, Euclidean vectors, polynomials, functions, to talk about the properties themselves and the relations between any mathematical objects that satisfy these properties. Then if we look at a new set of objects and we recognise these properties, all of our results will automatically apply. The name for this abstracted algebraic structure is the vector space. Though the power of linear algebra is in this abstraction, we will often try to concretely understand a result by referring back to a particular vector space. For the most part I will use 2d Euclidean vectors to illustrate results.
+
+\definition{Vector space}{
+A \textit{vector space over a field} $\mathbb{F}$ is a set, call it $V$, with elements called vectors supplied with definitions of two operations, \textit{vector addition} (VA) and \textit{scalar multiplication} (SM), that satisfy the following \textit{vector space axioms}:
+\begin{align*}
+& \forall \, \mathbf{u},\mathbf{v},\mathbf{w} \in V \quad \text{and} \quad \forall \, k,l \in \mathbb{F} \\
+\text{(VA1)} & \quad \mathbf{u} + \mathbf{v} \in V  & (\text{closure under vector addition})\\
+%
+\text{(VA2)} & \quad (\mathbf{u} + \mathbf{v}) + \mathbf{w}  =\mathbf{u} + (\mathbf{v} + \mathbf{w} ) & (\text{associativity of vector addition})\\
+%
+\text{(VA3)} & \quad \exists \, \mathbf{0} \in V, \, \text{such that} \, \mathbf{u} + \mathbf{0} = \mathbf{0} + \mathbf{u} = \mathbf{u} & (\text{additive identity})\\
+%
+\text{(VA4)} & \quad \exists \, -\mathbf{u} \in V \, \text{such that} \, \mathbf{u} + (-\mathbf{u}) = \mathbf{0} & (\text{additive inverse})\\
+%
+\text{(VA5)} & \quad \mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u} & (\text{commutativity of vector addition})\\
+%
+\text{(SM1)} & \quad k\mathbf{u} \in V & (\text{closure under scalar multiplication})\\
+%
+\text{(SM2)} & \quad k(\mathbf{u}+\mathbf{v})=k\mathbf{u}+k\mathbf{v} & (\text{distributivity over vector addition})\\
+%
+\text{(SM3)} & \quad (k+l)\mathbf{u}=k\mathbf{u}+l\mathbf{u} & (\text{distributivity over field addition})\\
+%
+\text{(SM4)} & \quad k(l\mathbf{u})=(kl)\mathbf{u} & (\text{compatibility of scalar and field multiplication})\\
+%
+\text{(SM5)} & \quad 1\mathbf{u}=\mathbf{u} & (\text{multiplicative identity})
+\end{align*}
+For now we will restrict ourselves to \textit{real} vector spaces by assuming the field is the real numbers, $\mathbb{F}=\mathbb{R}$.
+}
+
+\theorem{Zero vector}{\label{thm:zerovector}
+If we take the zero from the field, $0\in\mathbb{R}$, and multiply it by any vector, $\mathbf{u}\in V$, then we get the zero vector $\mathbf{0}_V \in V$.
+}
+
+\noindent \begin{proof}
+Let's use axiom SM3 by choosing $k=0$ and keeping the other terms arbitrary. This then says
+\begin{align*}
+(0+l)\mathbf{u}=0\mathbf{u}+l\mathbf{u}.
+\end{align*}
+But we know for real numbers that $0+l = l$. Hence we have the equation
+\begin{align*}
+l \mathbf{u} = 0\mathbf{u}+l\mathbf{u}
+\end{align*}
+which is exactly the form of axiom VA3 which defines the zero vector. Hence we have
+\begin{align*}
+0\mathbf{u} = \mathbf{0}.
+\end{align*}
+Often we distinguish between the zero \textit{vector} and zero number (in the field) by using a subscript: $\mathbf{0}_V$ for the zero vector in the vector space $V$.
+\end{proof}
+
+The set of all Euclidean vectors in $\mathbb{R}^2$ or in $\mathbb{R}^3$ are vector spaces under the definitions of arrow addition and scalar multiplication discussed in Chapter~\ref{ch:euclidean}. The two sets we introduced here, the set of polynomials of degree up to $n$ and the set of functions continuous on some given interval, are also vector spaces. Here's another.
+
+\example{Euclidean line vector space}{
+
+\noindent Let $V$ be the set of all real tuples $(x,y)$ satisfying $y=3x$. Show that $V$ forms a vector space under the standard definitions of tuple addition and scalar multiplication. \\
+
+\noindent For example, if $\mathbf{u}=(u_x,u_y)$ and $\mathbf{v}=(v_x,v_y)$ are two vectors of $V$, then $u_y=3u_x$, $v_y=3v_x$ and their addition $\mathbf{w}=\mathbf{u} + \mathbf{v}$ is a tuple
+\begin{align*}
+(w_x,w_y) &= (u_x,u_y) + (v_x,v_y) \\
+&= (u_x + v_x,3u_x + 3v_y) \\
+&= \left(u_x + v_x,3 (u_x + v_y) \right).
+\end{align*}
+Thus the vector $\mathbf{w}$ has a $y$ component that is 3 times its $x$ component, i.e. $w_y=3w_x$, and so it is also a vector in $V$. That proves the vector space axiom (VA1), the closure under vector addition. The other 9 axioms also hold and it is a good exercise to prove that. We can write this vector space in the form of a set
+\begin{align*}
+V = \{(x,y) \in \mathbb{R}^2 \, | \, 3x - y = 0 \}.
+\end{align*}
+This example showed that even a subset of a vector space ($V$ was a subset of $\mathbb{R}^2$) can also satisfy the vector space axioms.
+}
+
+\example{Vector space of 2 by 2 matrices}{
+
+\noindent Consider the set of 2x2 real matrices, $\mathcal{M}_{2,2}(\mathbb{R})$. Does adding two 2x2 matrices result in another 2x2 matrix? What is the zero element of this vector space? \\
+
+\noindent First we note the usual definitions of matrix addition and scalar multiplication
+\begin{align*}
+&
+\begin{pmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{pmatrix}
++
+\begin{pmatrix}
+b_{11} & b_{12} \\
+b_{21} & b_{22}
+\end{pmatrix}
+=
+\begin{pmatrix}
+a_{11}+b_{11} & a_{12}+b_{12} \\
+a_{21}+b_{21} & a_{22}+b_{22}
+\end{pmatrix}
+\\
+& k
+\begin{pmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{pmatrix}
+=
+\begin{pmatrix}
+ka_{11} & ka_{12} \\
+ka_{21} & ka_{22}
+\end{pmatrix}
+\end{align*}
+Since the results are themselves also 2x2 matrices, these two definitions demonstrate axioms VA1 and SM1. Matrices follow the other rules quite simply (though tedious to show), noting that the zero \textit{vector} is the matrix of zeros:
+\begin{align*}
+\textbf{0}
+=
+\begin{pmatrix}
+0 & 0 \\
+0 & 0
+\end{pmatrix}
+\end{align*}
+}
+
+Hopefully the next example shows you that vector spaces aren't boring, that they don't have to rely on obvious properties of numbers that you've seen over the years. I would like to convince you that mathematics is not really the study of numbers, but rather the study of rules. We come up with some rules, defining a structure like vector spaces, and then we play around with those rules to see what can possibly happen. By this I mean that we can define vector addition and scalar multiplication in ways that are not the familiar multiplication of numbers like we saw for the vector spaces of polynomials, matrices or functions.
+
+\example{A bizarre vector space}{
+
+\noindent Consider the set of positive real numbers $V=\mathbb{R}^+$ supplied with the following bizarre definition for vector addition and scalar multiplication. For two vectors $\mathbf{u}$ and $\mathbf{v} \in V$ representing the positive numbers $u$ and $v$, we define addition using the symbol $\oplus$ to avoid confusion with regular addition, by the regular multiplication of these numbers:
+\begin{align*}
+\mathbf{u} \oplus \mathbf{v} = uv.
+\end{align*}
+For a scalar $k \in \mathbb{R}$ we define the scalar multiplication by exponentiation:
+\begin{align*}
+k\mathbf{u} = u^k.
+\end{align*}
+Show that $V$ is a vector space. What is the zero vector in $V$? \\
+
+\noindent Let $\mathbf{u}$, $\mathbf{v}$ and $\mathbf{w} \in V$ representing the positive real numbers $u$, $v$ and $w$, and let $\alpha$ and $\beta \in \mathbb{R}$. 
+
+Since $u>0$ and $v>0$ we have that the addition
+\begin{align*}
+\mathbf{u} \oplus \mathbf{v} = uv
+\end{align*}
+is also positive. Thus $\mathbf{u} \oplus \mathbf{v} \in V$ and so $V$ is closed under vector addition. 
+
+Let $\mathbf{u} \oplus \mathbf{v} = \mathbf{x}$ where $\mathbf{x}$ represents the positive number $uv$ and $\mathbf{v} \oplus \mathbf{w} = \mathbf{y}$ where $\mathbf{y}$ represents the positive number $vw$. Then we have
+\begin{align*}
+(\mathbf{u} \oplus \mathbf{v}) \oplus \mathbf{w} &= \mathbf{x} \oplus \mathbf{w} \\
+&= (uv)w  \\
+&= u(vw) \\
+&= \mathbf{u} \oplus \mathbf{y} \\
+&= \mathbf{u} \oplus (\mathbf{v} \oplus \mathbf{w})
+\end{align*}
+and so this vector addition is associative. Note that we used the associativity of regular \textit{multiplication} to prove this! Similarly we have commutativity $\mathbf{u} \oplus \mathbf{v} = \mathbf{v} \oplus \mathbf{u}$ thanks to the commutativity of multiplication. 
+
+Now let's look for the additive identity (the zero vector). We want a vector $\mathbf{0}_V\in V$, which must represent some positive real number, call it $x\in\mathbb{R}^+$, such that $\mathbf{0}_V \oplus \mathbf{u} = \mathbf{u} \oplus \mathbf{0}_V = \mathbf{u}$. So we must have
+\begin{align*}
+\mathbf{0}_V \oplus \mathbf{u} = xu = ux = u.
+\end{align*}
+Well this means $x=1$. So our zero vector is surprisingly the number one: $\mathbf{0}_V=1$. Alternatively, we could have used Theorem~\ref{thm:zerovector} to simply find the zero vector by using scalar multiplication of any vector by 0:
+\begin{align*}
+\mathbf{0}_V = 0 \mathbf{u} = u^0 = 1.
+\end{align*}
+
+With the zero vector discovered, we can find out how to make additive inverses. Let $-\mathbf{u}$ represent the positive real number $y$. It must be defined so that
+\begin{align*}
+& \mathbf{u} \oplus (-\mathbf{u}) = \mathbf{0}_V \\
+\implies & uy = 1 \\
+\implies & y = \frac{1}{u}
+\end{align*}
+So for any vector we can find its \textit{negative} by taking the \textit{reciprocal} of the number it represents. Note that dividing 1 by a positive number remains positive, so this additive inverse is still part of $V$. That completes the five vector addition axioms. Now let's look at scalar multiplication.
+
+We have
+\begin{align*}
+\alpha \mathbf{u} = u^\alpha
+\end{align*}
+which is positive no matter the value of $\alpha$ because $u >0$. This means $\alpha \mathbf{u} \in V$ and so $V$ is closed under scalar multiplication.
+
+Let $\mathbf{u} \oplus \mathbf{v} = \mathbf{x}$ where $\mathbf{x}$ represents the positive number $uv$, $\alpha\mathbf{u} = \mathbf{y}$ where $\mathbf{y}$ represents the positive number $u^\alpha$ and finally $\alpha\mathbf{v} = \mathbf{z}$ where $\mathbf{z}$ represents the positive number $v^\alpha$. Then we have
+\begin{align*}
+\alpha(\mathbf{u} \oplus \mathbf{v}) &= \alpha \mathbf{x}\\
+&= (uv)^\alpha \\
+&= u^\alpha v^\alpha \\
+&= \mathbf{y} \oplus \mathbf{z} \\
+&= (\alpha\mathbf{u}) \oplus (\alpha\mathbf{v})
+\end{align*}
+So the exponent law for powers of products gives us the distributivity of scalars over this vector addition.
+
+Let $\alpha\mathbf{u} = \mathbf{x}$ where $\mathbf{x}$ represents the positive number $u^\alpha$ and $\beta\mathbf{u} = \mathbf{y}$ where $\mathbf{y}$ represents the positive number $u^\beta$. Then we have
+\begin{align*}
+(\alpha+\beta)\mathbf{u} &= u^{\alpha+\beta} \\
+&= u^\alpha u^\beta \\
+&= \mathbf{x} \oplus \mathbf{y} \\
+&= (\alpha\mathbf{u}) \oplus (\beta\mathbf{u})
+\end{align*}
+So the exponent law for products of powers gives us the distributivity over field addition. Similarly
+\begin{align*}
+\alpha(\beta\mathbf{u}) &= \alpha(\mathbf{y}) \\
+&= (u^\beta)^\alpha \\
+&= u^{\alpha\beta} \\
+&= (\alpha\beta)\mathbf{u}
+\end{align*}
+So the power of a power exponent law gives us the compatibility of scalar and field multiplication.
+
+Finally, let's verify that the scalar $1$ acts as the multiplicative identity:
+\begin{align*}
+ 1\mathbf{u} = u^1 = u = \mathbf{u}.
+\end{align*} 
+Indeed it does, and so we have shown that this set $V=\mathbb{R}^+$ along with these definitions of vector addition and scalar multiplication satisfies all 10 vector space axioms. 
+}
+
+
+\noindent Let's consider the most general expression of creating a new vector from some given vectors.
+
+\definition{Linear Combination}{
+Let \{$\mathbf{v}_1$, \dots, $\mathbf{v}_n$\} be a set of vectors in a vector space $V$. A linear combination of these vectors is a new vector, $\mathbf{w}\in V$, of the form
+\begin{align*}
+\mathbf{w} = \alpha_1 \mathbf{v}_1 + \cdots + \alpha_n \mathbf{v}_n
+\end{align*}
+where the $\alpha_k$ are real numbers.
+}
+
+\noindent In 2d space, taking linear combinations of two vectors $\mathbf{a}$ and $\mathbf{b}$ is like choosing a pair of directions as reference directions in pirate map explorations. Normally you would say ``3 steps east, 2 steps north'', but you could equally say ``3 steps in direction $\mathbf{a}$, 2 steps in direction $\mathbf{b}$'' as pictured below.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[% styles used in image code
+         > = Straight Barb, % defined in "arrows.meta
+dot/.style = {circle, fill,
+              minimum size=2mm, inner sep=0pt, outer sep=0pt,
+              node contents={}},
+box/.style = {draw, thin, minimum  width=2mm, minimum height=4mm,
+              inner sep=0pt, outer sep=0pt,
+              node contents={}, sloped},
+my angle/.style args = {#1/#2}{draw,->,
+                               angle radius=#1,
+                               angle eccentricity=#2,
+                               } % angle label position!
+                        ]
+	% coordinate axis
+	\draw[->] (-1, 0) -- (4,0) node[below left] {$x$};
+	\draw[->] ( 0,-0.5) -- (0,4) node[below left] {$y$};
+
+	\coordinate (O) at (0,0);
+	\coordinate (a) at (1,0.5);
+	\coordinate (b) at (-0.5,1.3);
+	
+	\draw [->] (O) --($0.9*(a)$) node[pos=0.5,right=2pt] {$\mathbf{a}$};
+	\draw [->,red] (a) --($1.9*(a)$) node[pos=0.5,below right=2pt] {$\mathbf{a}$};
+	\draw [->,red] ($2*(a)$) --($2.9*(a)$) node[pos=0.5,below right=2pt] {$\mathbf{a}$};
+	\draw [->] (O) --($0.9*(b)$) node[pos=0.5,left] {$\mathbf{b}$};
+	\draw [->,blue] ($3*(a)$) --($3*(a) + 0.9*(b)$) node[pos=0.5,right=2pt] {$\mathbf{b}$};
+	\draw [->,blue] ($3*(a) + (b)$) --($3*(a) + 1.9*(b)$) node[pos=0.5,right=2pt] {$\mathbf{b}$};
+	\draw [->] (O) --($3*(a) + 2*(b)$) node[pos=0.7,above left, rotate=67.38] {$3\mathbf{a}+2\mathbf{b}$};
+	%\draw [->] (a) --($(a)+1.3*(r)$) node[pos=0.9,above,rotate=26.5] {$\mathbf{a}}$};
+\end{tikzpicture}
+\end{figure}
+
+
+
+
+
+
+\section{Vector subspaces and spans}
+
+\definition{Vector subspace}{
+Suppose that $V$ is a vector space and $W$ is a subset of $V$. We call $W$ a \textit{vector subspace} if it satisfies the vector space axioms for the same definition of vector addition and scalar multiplication defined for $V$.
+}
+
+\noindent In practice it can be tedious to show all 10 axioms hold for the subset. However, many of the properties are automatically inherited from the known vector space. For example any subset of vectors will obviously satisfy commutativity and associativity. In the end it suffices to prove just 3 properties for the candidate subspace.
+
+\theorem{Demonstration of a vector subspace}{
+Let $W$ be a subset of a vector space $V$. $W$ is a vector subspace if and only if
+\begin{enumerate}
+	\item $W$ is a non-empty set,
+	\item $W$ is closed under vector addition: $\mathbf{u},\mathbf{v}\in W \, \implies \, \mathbf{u}+\mathbf{v}\in W$,
+	\item $W$ is closed under scalar multiplication: $\mathbf{u}\in W \, \text{and} \, k\in\mathbb{R} \, \implies \, k\mathbf{u}\in W$.
+\end{enumerate}
+In fact, we can merge the two closure properties into one: closure under linear combinations
+\begin{gather*}
+\forall \mathbf{u},\mathbf{v}\in W \quad \text{and} \quad \forall \alpha, \beta\in\mathbb{R} \\
+\alpha \mathbf{u} + \beta \mathbf{v} \in W.
+\end{gather*}
+}
+
+\example{Vector subspace of triples satisfying an equation}{
+
+\noindent Consider the equation $2x -y + z = 0$. We want to study the set of all triples, $(x,y,z)$, that satisfy the equation (we might call such a triple a ``solution'' to the equation). The set of these triples are a subset, call it $W$, of the Euclidean vector space $\mathbb{R}^3$. Let's show that $W$ is a vector subspace of $\mathbb{R}^3$. \\ 
+
+\noindent Firstly, the vector $(0,0,0)\in W$ because its components satisfy the equation: $2(0)-(0)+(0)$ indeed equals zero. Hence $W$ has at least one vector, that is, it is a non-empty set (it's also easy to see that, for example, $(1,1,-1)$ or $(1,2,0)$ are also members of $W$). Let $\mathbf{u}=(u_x, u_y, u_z)$ and $\mathbf{v}=(v_x, v_y, v_z)$ be two arbitrary triples in $W$. That means their components satisfy the equation, i.e. $2u_x -u_y + u_z = 0$ and $2v_x -v_y + v_z = 0$. For any real $\alpha$ and $\beta$ we therefore have
+\begin{align*}
+\alpha \mathbf{u} + \beta \mathbf{v} = (\alpha u_x + \beta v_x, \alpha u_y + \beta v_y, \alpha u_z + \beta v_z) = (w_x, w_y, w_z).
+\end{align*}
+We need to check whether the components of this resultant triple satisfies the defining equation of $W$.
+\begin{align*}
+2w_x -w_y + w_z &= 2(\alpha u_x + \beta v_x) - (\alpha u_y + \beta v_y) + \alpha u_z + \beta v_z \\
+&= \alpha (\underbrace{2u_x -u_y + u_z}_{=0}) + \beta \underbrace{2v_x -v_y + v_z}_{=0}.
+\end{align*}
+Since the triple $\alpha \mathbf{u} + \beta \mathbf{v}$ has components satisfying the equation, we conclude that $\alpha \mathbf{u} + \beta \mathbf{v} \in W$. So $W$ is a non-empty subset of a vector space and $W$ is closed under linear combinations. Thus $W$ is a vector subspace.
+}
+
+
+\example{Vector subspace of functions satisfying a equation}{
+
+\noindent Let $W$ be the set of solutions of the following differential equation
+\begin{align*}
+\frac{d^2 y}{dx^2} + 3 \frac{dy}{dx} - 2y = 0.
+\end{align*}
+Is $W$ a vector subspace of the vector space of all real valued functions with real domain, $V$? \\
+
+\noindent Consider the zero function $0(x) = 0$ for all $x\in\mathbb{R}$. This function's first and second derivatives combine to give
+\begin{align*}
+\frac{d^2}{dx^2}(0(x)) + 3 \frac{d}{dx}(0(x)) - 2(0(x)) = 0
+\end{align*}
+and so $0(x) \in W$, which is therefore a non-empty subset of $V$. If we have two functions, $y_1(x)$ and $y_2(x)$, in $V$ then they satisfy
+\begin{align*}
+\frac{d^2 y_1}{dx^2} + 3 \frac{dy_1}{dx} - 2y_1 = 0 \\
+\frac{d^2 y_2}{dx^2} + 3 \frac{dy_2}{dx} - 2y_2 = 0.
+\end{align*}
+For any constants $\alpha$ and $\beta \in \mathbb{R}$ the linear combination of these solutions, $y=\alpha y_1+\beta y_2$, gives
+\begin{align*}
+\frac{d^2 y}{dx^2} + 3 \frac{dy}{dx} - 2y &= \frac{d^2}{dx^2}(\alpha y_1+\beta y_2) + 3 \frac{d}{dx}(\alpha y_1+\beta y_2) - 2(\alpha y_1+\beta y_2) \\
+ &= \alpha\left(\frac{d^2 y_1}{dx^2} + 3 \frac{dy_1}{dx} - 2y_1\right) + \beta\left(\frac{d^2 y_2}{dx^2} + 3 \frac{dy_2}{dx} - 2y_2\right) \\
+ &= 0
+\end{align*}
+and therefore $\alpha y_1+\beta y_2 \in W$. So we have shown that $W$ is a non-empty subset of $V$ which is closed under linear combinations. Hence $W$ is a vector subspace of $V$.
+}
+
+In the previous example we \textit{verified} that a space satisfied the vector space axioms. Now let's generate a vector space out of some given vectors. We can use the idea of linear combinations to generate a whole set of vectors.
+
+\definition{Span}{
+Let $\mathcal{B} = \{\mathbf{v}_1, \dots, \mathbf{v}_n\}$ be a set of vectors from a vector space $V$. The span of these vectors is the set of all linear combinations of those vectors:
+\begin{align*}
+\text{SPAN}(\mathcal{B})  = \text{SPAN} (\mathbf{v}_1, \dots, \mathbf{v}_n) = \left\{ \alpha_1 \mathbf{v}_1 + \cdots + \alpha_n \mathbf{v}_n \, | \, \alpha_1, \dots, \alpha_n \in \mathbb{R}^n \right\}.
+\end{align*}
+This set forms a vector subspace of $V$. It is obviously non-empty because it at least contains the vectors of $\mathcal{B}$. It is also automatically closed under vector addition and scalar multiplication because those are exactly the operations we used to create all the vectors in the span! Therefore $\text{SPAN}(\mathcal{B})$ is a vector subspace of $V$. \\
+
+\noindent Note: we say that a set of vectors, $\mathcal{B}$, spans a vector space $U$ if $\text{SPAN}(\mathcal{B})=U$.
+}
+
+
+
+
+\example{Span of 1 vector}{
+Suppose we have a vector space $V$. For any single arbitrary vector of $\mathcal{V}$ we can form the span subspace:
+\begin{align*}
+\textbf{v} \in V \quad\implies\quad \text{SPAN}(\textbf{v}) = \{k \textbf{v} \, | \, k\in\mathbb{R} \}
+\end{align*}
+If $V$ is $\mathbb{R}^2$, then this span is the line along the same direction of the arrow $\textbf{v}$:
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[> = Triangle,scale=2]
+	% coordinate axes
+	\draw[->] (-1, 0) -- (3,0) node[right] {$x$};
+	\draw[->] (0, -1) -- (0,2) node[left] {$y$};
+
+	\coordinate (O) at (0,0); 
+		
+	% straight line y=x/2
+	\draw[-,nicegreen,line width = 0.6mm] (-1,-0.5)--(3,1.5) node[left=10pt,darkgreen] {$\text{SPAN}(\textbf{v})$};
+	
+	% vectors u=(1,0.5) and v=(2,1)
+	\draw[->,airforceblue,line width = 0.5mm] (O)--(1.2,0.6) node[below right,black] {$\textbf{v}=(x,y)$};
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{tikzpicture}
+\end{figure}
+\noindent If $V$ is, for example, the vector space of functions continuous on a given intervel, this span is a set of constant multiples of some function in $V$:
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[> = Triangle,scale=2]
+	% coordinate axes
+	\draw[->] (-1, 0) -- (3,0) node[right] {$x$};
+	\draw[->] (0, -1) -- (0,2) node[left] {$y$};
+
+
+	\coordinate (O) at (0,0); 
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,nicegreen,line width=0.3mm] plot({\x},{-0.7*(\x+0.6)*\x*(\x-2)});
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,nicegreen,line width=0.3mm] plot({\x},{-0.3*(\x+0.6)*\x*(\x-2)});
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,nicegreen,line width=0.3mm] plot({\x},{-0.1*(\x+0.6)*\x*(\x-2)});
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,nicegreen,line width=0.3mm] plot({\x},{+0.1*(\x+0.6)*\x*(\x-2)});
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,nicegreen,line width=0.3mm] plot({\x},{+0.3*(\x+0.6)*\x*(\x-2)});
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,nicegreen,line width=0.3mm] plot({\x},{+0.5*(\x+0.6)*\x*(\x-2)});
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,airforceblue,line width=0.5mm] plot({\x},{-0.5*(\x+0.6)*\x*(\x-2)}) node[right,black] {$y=f(x)$};
+	
+	\node[black,left] at (-0.1,1.2) {$\textbf{v}=f(x)$};
+	\node[darkgreen,right] at (1.5,1.5) {$\text{SPAN}(\textbf{v})$};
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{tikzpicture}
+\end{figure}
+\noindent Of course these are not all of the functions in the span, as that would be a filled block of green. 
+}
+
+\noindent In 3d Euclidean space, the span of any two vectors pointing in different directions will form a plane. In the picture below we see some linear combinations of $\mathbf{a}$ and $\mathbf{b}$. Hopefully you can convince yourself that no such linear combination could leave the blue plane. We will prove this later.
+
+\begin{figure}[H]
+\centering
+\tdplotsetmaincoords{105}{-30}
+\begin{tikzpicture}[tdplot_main_coords,font=\sffamily]
+  \tdplotsetrotatedcoords{00}{30}{0}
+  \begin{scope}[tdplot_rotated_coords]
+  \begin{scope}[canvas is xy plane at z=0]
+    \fill[blue,fill opacity=0.1] (-3.5,-5) rectangle (2,4); 
+    \path (-150:2) coordinate (H) (-1.5,0) coordinate(X);
+   
+    \coordinate (O) at (0,0);
+    \coordinate (a) at (-1,1.8);
+    \coordinate (b) at (-2,-1);
+    \draw [->,red] (O) --($(a)$) node[pos=0.6,below=1pt] {$\mathbf{a}$};
+    \draw [->,red] (O) --($(b)$) node[pos=0.6,right=1pt] {$\mathbf{b}$};
+    
+    \draw [->] (O) --($(a)+(b)$) node[pos=1,above=1pt] {$\mathbf{a}+\mathbf{b}$};
+    \draw [->,blue] ($(a)+0.05*(b)$) --($(a)+0.9*(b)$) node[pos=0.5,left=1pt] {$\mathbf{b}$};
+    
+    \draw [->] (O) --($(b)-2*(a)$) node[pos=1,right=1pt] {$\mathbf{b}-2\mathbf{a}$};
+    \draw [->,blue] ($(a)-0.1*1.2*(b)$) --($(a)-0.9*1.2*(b)$) node[pos=0.8,left=1pt] {$-1.2\mathbf{b}$};
+    
+    \draw [->] (O) --($(a)-1.2*(b)$) node[pos=1,right=1pt] {$\mathbf{a}-1.2\mathbf{b}$};
+    \draw [->,blue] ($(b)-0.1*2*(a)$) --($(b)-0.9*2*(a)$) node[pos=0.7,above=1pt] {$-2\mathbf{a}$};
+    
+   
+   \pgflowlevelsynccm
+  \end{scope} 
+ \end{scope}
+ \pgfmathsetmacro{\Radius}{1.5}
+ 
+ 
+ \draw[-stealth] (O)-- (2.5*\Radius,0,0) node[pos=1.15] {$y$};
+ \draw[-stealth] (O) -- (0,3.5*\Radius,0) node[pos=1.15] {$x$};
+ \draw[-stealth] (O) -- (0,0,2.5*\Radius) node[pos=1.05] {$z$};
+\end{tikzpicture}\caption*{Some selected linear combinations, the black arrows, of $\mathbf{a}$ and $\mathbf{b}$.}
+\end{figure}
+
+
+
+\example{Checking whether a vector belongs to a span}{
+
+\noindent Let $\mathbf{u}=(1,1,2)$ and $\mathbf{v}=(0,3,1)$ be two Euclidean vectors. Let $\text{SPAN}(\mathbf{u},\mathbf{v})=V$. Does the vector $\mathbf{w}=(1,-5,0)$ belong to $V$? \\
+
+\noindent We need to check whether $\mathbf{w}$ really is a linear combination of $\mathbf{u}$ and $\mathbf{v}$ or not. If it is, then we can write:
+\begin{align*}
+\mathbf{w} = \alpha \mathbf{u} + \beta \mathbf{v}
+\end{align*}
+for some $\alpha$ and $\beta$ that we can find or else we will find a contradiction. We have assumed
+\begin{align*}
+(1,-5,0) &= \alpha(1,1,2) + \beta (0,3,1) \\
+&= (\alpha,\alpha + 3\beta,2\alpha+\beta)
+\end{align*}
+giving the 3 equations
+\begin{align*}
+\alpha=1, \quad \alpha + 3\beta=-5, \quad 2\alpha+\beta = 0
+\end{align*}
+Putting the value of $\alpha$ into either the second or third gives the same result: $\beta = -2$. Importantly $(\alpha,\beta)=(1,-2)$ does not contradict the second equation. Hence $\mathbf{w}$ is a linear combination of $\mathbf{u}$ and $\mathbf{v}$
+\begin{align*}
+\mathbf{w}=\mathbf{u}-2\mathbf{v}
+\end{align*}
+and therefore $\mathbf{w}\in V$. Note that if we had shown that $\alpha$ and $\beta$ were impossible to exist, then this would mean $\textbf{w} \notin V$.
+}
+
+\definition{Cartesian form of Euclidean vector subspaces}{
+Euclidean vector sub spaces can always be written as a set with some defining equations, called the Cartesian form:
+\begin{align*}
+\left\{ (x_1,\dots,x_n) \in \mathbb{R}^n \, | \, \text{equations relating the } x_k \right\}.
+\end{align*}
+For example, the general form of planar vector subspaces of $\mathbb{R}^3$ is
+\begin{align*}
+V_P = \left\{ (x,y,z)\in \mathbb{R}^3 \, | \, ax + by + cz = 0\right\}
+\end{align*}
+where $a$, $b$ and $c$ are some given constants. This set is read aloud as ``all the triples $(x,y,z)$ such that $ax + by + cz = 0$''.
+}
+
+
+\example{Second method to check whether a vector belongs to a span}{
+
+\noindent Let's take up the previous example and answer it with a second method. Let $\mathbf{u}=(1,1,2)$ and $\mathbf{v}=(0,3,1)$ be two Euclidean vectors. Let $\text{SPAN}(\mathbf{u},\mathbf{v})=V$. Does the vector $\mathbf{w}=(1,-5,0)$ belong to $V$? \\
+
+\noindent First we'll find an equation that defines this span. By definition
+\begin{align*}
+V = \{\alpha \mathbf{u} + \beta \mathbf{v} \, | \, \alpha, \beta  \in \mathbb{R}\}.
+\end{align*}
+So a generic vector $(x,y,z)$ in $V$ must satisfy
+\begin{align*}
+(x,y,z) &= \alpha (1,1,2) + \beta (0,3,1).
+\end{align*}
+Let's look for a single equation relating the $x$, $y$ and $z$:
+\begin{align*}
+(x,y,z) =  (\alpha,\alpha + 3\beta,2\alpha + \beta) 
+\implies
+\begin{cases}
+x=\alpha \\
+y=\alpha + 3\beta \\
+z=2\alpha + \beta
+\end{cases}
+\implies
+\begin{cases}
+x=\alpha \\
+y=x + 3\beta \\
+z=2x + \beta
+\end{cases}
+\implies
+\begin{cases}
+x=\alpha \\
+y=x + 3\beta \\
+y-3z=-5x
+\end{cases}
+\end{align*}
+This last line gives us the equation that all vectors of $V$ must satisfy, and so we have its Cartesian form:
+\begin{align*}
+V = \{(x,y,z)\in\mathbb{R}^3 \, | \, 5x + y - 3z = 0 \}.
+\end{align*}
+With this equation we can easily check whether $\mathbf{w}=(1,-5,0)$ belongs to $V$ or not:
+\begin{align*}
+5w_x + w_y - 3w_z = 5(1)+(-5)-3(0) = 0.
+\end{align*}
+The equation is satisfied and so $\mathbf{w}\in V$.
+}
+
+
+\example{Span of two 3d vectors in Cartesian form}{
+
+\noindent Given the vectors
+\begin{align*}
+\textbf{v}_1 = (3,-1,1) \quad\text{and}\quad \textbf{v}_2 = (1,2,0)
+\end{align*}
+what is the Cartesian form of the span of these vectors, SPAN($\textbf{v}_1,\textbf{v}_2$)? \\
+
+\noindent Consider an arbitrary triple in this space: $(x,y,z) \in \text{SPAN}(\textbf{v}_1,\textbf{v}_2)$. To be in this span means to be a linear combination: 
+\begin{align*}
+(x,y,z) = \alpha\textbf{v}_1 + \beta\textbf{v}_2
+\end{align*}
+for constants $\alpha$, $\beta$. This can be expanded 
+\begin{align*}
+(x,y,z) = \alpha(3,-1,1) + \beta(1,2,0) = (3\alpha + \beta,-\alpha + 2\beta,\alpha)
+\end{align*}
+to give the system of equations
+\begin{align*}
+\begin{cases}
+x = 3\alpha + \beta \\
+y = -\alpha + 2\beta \\
+z = \alpha 
+\end{cases}
+\quad\implies\quad
+2x - y - 7z = 0
+\end{align*}
+Which finally means that we have the Cartesian form
+\begin{align*}
+\text{SPAN}(\,(3,-1,1),(1,2,0)\,) = \left\{(x,y,z)\in\mathbb{R}^3 \, | \, 2x - y - 7z = 0\right\}
+\end{align*}
+As $2x - y - 7z = 0$ is a plane equation, this span creates a planar vector space.
+}
+
+\theorem{Span of two 3d vectors gives a plane}{
+For any two 3d Euclidean vectors, $\textbf{u},\textbf{v}\in \mathbb{R}^3$, if they do not point in the same direction ($\textbf{u}\neq k\textbf{v}$ for some constant $k$) then their span gives a planar vector subspace of $\mathbb{R}^3$.
+}
+
+\begin{proof}
+Let $\mathbf{u}=(u_x,u_y,u_z)$, $\mathbf{v}=(v_x,v_y,v_z)$ and $(x,y,z)\in \text{SPAN}(\mathbf{u},\mathbf{v})$. Then we must have some constants $\alpha,\beta \in \mathbb{R}$ such that
+\begin{align*}
+(x,y,z) &= \alpha \mathbf{u} + \beta \mathbf{v} \\
+&= (\alpha u_x + \beta v_x, \, \alpha u_y + \beta v_y, \, \alpha u_z + \beta v_z)
+\end{align*}
+So we have the system of equations
+\begin{align*}
+& \begin{cases}
+x = \alpha u_x + \beta v_x \\
+y = \alpha u_y + \beta v_y \\
+z = \alpha u_z + \beta v_z
+\end{cases}
+\implies
+\begin{cases}
+u_y x = \alpha u_x u_y  + \beta v_x u_y  \\
+u_x y = \alpha u_x u_y + \beta v_y u_x \\
+u_x z = \alpha u_x u_z + \beta v_z u_x \\
+u_z x = \alpha u_x u_z + \beta v_x u_z 
+\end{cases}
+\implies
+\begin{cases}
+u_y x - u_x y = \beta (v_x u_y - v_y u_x) \\
+u_z x - u_x z = \beta (v_x u_z -  v_z u_x)
+\end{cases} \\
+& \implies
+\begin{cases}
+(u_y x - u_x y)(v_x u_z -  v_z u_x) = \beta (v_x u_y - v_y u_x)(v_x u_z -  v_z u_x) \\
+(u_z x - u_x z)(v_x u_y - v_y u_x) = \beta (v_x u_z -  v_z u_x)(v_x u_y - v_y u_x)
+\end{cases} \\
+& \implies
+(u_y x - u_x y)(v_x u_z -  v_z u_x) - (u_z x - u_x z)(v_x u_y - v_y u_x) = 0
+\end{align*}
+A final rearrangement gives us our plane equation
+\begin{align*}
+(v_y u_x u_z-  v_z u_x u_y)x + (v_z u_x^2 - v_x u_z u_x) y + (v_x u_y u_x - v_y u_x^2)z = 0
+\end{align*}
+\textit{Note}: if the two vectors pointed in the same direction, we could find a constant $k$ such that $\mathbf{v}=k\mathbf{u}$ which implies that $v_x=ku_x$, $v_y=ku_y$ and $v_z=ku_z$. Putting this into the plane equation gives
+\begin{align*}
+\underbrace{(ku_y u_x u_z-  ku_z u_x u_y)}_0x + \underbrace{(ku_z u_x^2 - ku_x u_z u_x)}_0 y + \underbrace{(ku_x u_y u_x - ku_y u_x^2)}_0z = 0
+\end{align*}
+Since the left side cancels to zero, we don't have a plane equation relating the $x$, $y$ and $z$ variables.
+\end{proof}
+
+
+\example{From Cartesian form to a span}{
+
+\noindent Given the Cartesian form of a vector space
+\begin{align*}
+A = \left\{(x,y,z)\in\mathbb{R}^3 \, | \, x + 2y - 3z = 0\right\}
+\end{align*}
+write $A$ in the form of a span of vectors. \\
+
+\noindent We can rearrange the equation to $x=3z-2y$. So, every vector in $A$ can be written
+\begin{align*}
+(x,y,z) &= (3z-2y, y, z) \\
+&= (-2y, y, 0) + (3z, 0, z) \\
+&= y(-2, 1, 0) + z(3, 0, 1)
+\end{align*}
+With no further equations relating $y$ and $z$ to each other, they are free variables. This means $y$ and $z$ can take on any value. This means every triple $(x,y,z)\in A$ can be written as some linear combination of the vectors $\textbf{v}=(-2,1,0)$ and $\textbf{u}=(3,0,1)$. That is
+\begin{align*}
+A = \text{SPAN}( \, (-2,1,0), \, (3,0,1) \, )
+\end{align*}
+}
+
+
+\section{Intersection, union and sum of subspaces}
+The span vector space let us generate vector spaces out of given vectors. Now we look at generating vector spaces out of other vector spaces. As vector spaces are sets, it's natural to first consider the normal ways of combining sets: the intersection and union.
+
+\theorem{Intersection of vector subspaces is a vector subspace}{
+Suppose $V$ is a vector space. If $U$ and $W$ are two vector subspaces of $V$, then their intersection $U \cap W$ is also a vector subspace of $V$.}
+
+\begin{proof} Let's show the two sufficient properties:
+\begin{enumerate}
+\item Non-empty - $U$ and $W$ must both contain the zero vector of $V$. Hence their intersection also contains the zero vector, and is thus a non-empty subset of $V$.
+
+\item Closure under linear combinations - Let $\textbf{a}, \textbf{b} \in U \cap W$ and $\alpha, \beta \in \mathbb{R}$. Then $\textbf{a}, \textbf{b} \in U$, which is closed under linear combinations by being a vector space, and so $\alpha\textbf{a}+\beta\textbf{b} \in U$. But $\textbf{a}, \textbf{b} \in W$ also, which is closed under linear combinations, and so $\alpha\textbf{a}+\beta\textbf{b} \in W$. Hence
+\begin{align*}
+\alpha\textbf{a}+\beta\textbf{b} \in U\cap W
+\end{align*}
+and we have that the intersection is a vector subspace.
+\end{enumerate}
+\end{proof} 
+
+
+
+For a visual example, consider the intersection of two planes in $\mathbb{R}^3$, $U$ and $V$, as pictured below.
+
+\begin{figure}[H]
+\begin{center}
+    \begin{tikzpicture}[line cap=round, line join=round, >=Triangle,scale=2]
+
+		% coordinate system
+		\coordinate (O) at (0,0);
+		\draw [->,black] (O)--(-1.5,-1.5) node[right] {$x$}; % x-axis
+		\draw [->,black] (O)--(+2.5,+0.0) node[right] {$y$}; % y-axis
+		\draw [->,black] (O)--(+0.0,+2.0) node[left] {$z$}; % z-axis
+    
+	    % plane 1 vertices positions
+    	\coordinate (A1) at (-1.03,-1.2);
+    	\coordinate (B1) at (-0.73,+1.5);
+    	\coordinate (C1) at (+1.83,+1.9);
+    	\coordinate (D1) at (+1.43,-1.0);
+    	
+	    % plane 2 vertices positions
+    	\coordinate (A2) at (-1.5,-0.8);
+    	\coordinate (B2) at (-0.5,+0.8);
+    	\coordinate (C2) at (+2.3,+1.1);
+    	\coordinate (D2) at (+1.3,-0.7);
+    	
+		\draw [-,nicegreen,line width=1.2pt] (A1)--(B1);
+		\draw [-,nicegreen,line width=1.2pt] (B1)--(C1) node[right,black,pos=1,scale=1.5] {$U$};
+		\draw [-,nicegreen,line width=1.2pt] (C1)--(D1);
+		\draw [-,nicegreen,line width=1.2pt] (D1)--(A1);
+    	
+		\draw [-,airforceblue,line width=1.2pt] (A2)--(B2)node[left=3pt,black,pos=0,scale=1.5] {$W$};
+		\draw [-,airforceblue,line width=1.2pt] (B2)--(C2);
+		\draw [-,airforceblue,line width=1.2pt] (C2)--(D2);
+		\draw [-,airforceblue,line width=1.2pt] (D2)--(A2);
+
+		% vectors
+		\coordinate (u) at (0.5,-0.1);
+		\coordinate (w) at ($1.5*(u)$);
+		\draw [dashed,black,line width=1.1pt] ($-2.5*(u)$)--($4*(u)$);
+		\draw [->,brightmaroon,line width=1.25pt] (O)--($(u)+(w)$) node[below,black,pos=0.75] {\textbf{u}+\textbf{w}};
+		\draw [->,airforceblue,line width=1.25pt] (O)--(w) node[above=3pt,black,pos=0.9] {\textbf{w}};
+		\draw [->,nicegreen,line width=1.25pt] (O)--(u) node[below,black,pos=0.4] {\textbf{u}};
+    \end{tikzpicture}
+\end{center}
+\end{figure}
+The two planes must cross through $(0,0,0)$ to be subspaces (why?). The line of intersection will be a new subspace of $\mathbb{R}^3$. Of course any two vectors on this line will add up to a new vector still on the line.
+
+
+\theorem{Union of vector subspaces}{
+Suppose $V$ is a vector space. If we have 2 subspaces $U$ and $W$, then either
+\begin{enumerate}
+\item $U$ is a subspace of $W$
+\item $W$ is a subspace of $U$
+\item The union of $U$ and $W$ is NOT a subspace of $V$.
+\end{enumerate}
+}
+
+
+\noindent To illustrate the third point, consider two straight lines in $\mathbb{R}^2$, $U$ and $V$.
+
+\begin{figure}[H]
+\begin{center}
+    \begin{tikzpicture}[line cap=round, line join=round, >=Triangle,scale=2]
+		% coordinate system
+		\coordinate (O) at (0,0);
+		\draw [->,black] (-1.5,0)--(+2.5,0) node[right] {$x$}; % x-axis
+		\draw [->,black] (0,-0.5)--(0,+2.5) node[right] {$y$}; % y-axis
+		
+    	\coordinate (u) at (-0.5,+0.5);
+    	\coordinate (w) at (1,0.8);
+    	
+		\draw [-,nicegreen,line width=1pt] ($-0.8*(u)$)--($2*(u)$) node[above,black,pos=1,scale=1.5] {$U$};
+    	\draw [-,airforceblue,line width=1pt] ($-0.5*(w)$)--($2*(w)$) node[above,black,pos=1,scale=1.5] {$W$};
+		
+		\draw [->,nicegreen,line width=1.25pt] (O)--(u) node[left,black,pos=0.4] {\textbf{u}};
+		\draw [->,airforceblue,line width=1.25pt] (O)--(w) node[right,black,pos=0.6] {\textbf{w}};
+    	\draw [->,brightmaroon,line width=1.25pt] (O)--($(u)+(w)$) node[above,black] {\textbf{u}+\textbf{w}};
+    	\draw [->,dashed,nicegreen,line width=1.0pt] (w)--($(u)+(w)$) node[right,black,pos=0.5] {$\textbf{u}$};
+
+    \end{tikzpicture}
+\end{center}
+\end{figure}
+
+\noindent The two lines must cross through $(0,0)$ to be subspaces. Remember that the union of two sets are all the members of both sets. For these two lines, the union will not be a new subspace of $\mathbb{R}^2$ because it is clearly not closed under vector addition. A simple example of this lack of closure is shown: any $\textbf{u}+\textbf{v}$ for $\textbf{u}\in U$ and $\textbf{v}\in V$ (and not the zero vectors) is clearly not going to remain in either $U$ or $V$.
+
+
+
+\definition{Sum of subspaces (sum space)}{
+
+Suppose we have a vector space $V$ with vector subspaces $F$ and $G$. We define the \textbf{sum of subspaces} (or sum space) as a new set denoted
+\begin{align*}
+F + G = \left\{ \textbf{f} + \textbf{g} \, | \, \textbf{f}\in F, \, \textbf{g}\in G\right\}
+\end{align*}
+
+\textit{Note}: The sum space is a \textit{subset} of the parent vector space: $F+G \subset V$.
+}
+
+
+\theorem{Sum space is a vector subspace}{
+Let $F$ and $G$ be vector subspaces of $V$. The sum space $F+G$ is also a vector subspace of $V$.
+}
+
+\begin{proof} Let's show the two sufficient properties:
+\begin{enumerate}
+\item Non-empty. As $F$ is a vector space it must have at least the zero vector $\textbf{0}_V$. As $G$ is a vector space it cannot be empty, so it has at least some vector $\textbf{g}\in G$ (this could possibly be only the zero vector). The addition of these two vectors must be in the sum space: $\textbf{0}_V+\textbf{g}=\textbf{g}\in F+G$. So $F+G$ is not empty.
+
+\item Closure. Let $\textbf{v}$ and $\textbf{w} \in F+G$ and $\alpha,\beta \in \mathbb{R}$. By definition the vectors can be written as the sum of vectors in $F$ and $G$: $\textbf{v}=\textbf{f}_1+\textbf{g}_1$ and $\textbf{w}=\textbf{f}_2+\textbf{g}_2$. The linear combination is thus
+\begin{align*}
+\alpha \textbf{v} + \beta \textbf{w} = \alpha\textbf{f}_1+\beta\textbf{f}_2+\alpha\textbf{g}_1+\beta\textbf{g}_2
+\end{align*}
+As $F$ and $G$ are vector spaces, they are closed under linear combinations. So $\alpha\textbf{f}_1+\beta\textbf{f}_2\in F$ and $\alpha\textbf{g}_1+\beta\textbf{g}_2 \in G$. Hence $\alpha \textbf{v} + \beta \textbf{w} = \textbf{f} + \textbf{g}$ for some $\textbf{f}\in F$ and $\textbf{g}\in G$, and thus $\alpha \textbf{v} + \beta \textbf{w} \in F+G$.
+\end{enumerate}
+\end{proof}
+
+
+\noindent For a visual example of the sum of two subspaces. Consider two lines in $\mathbb{R}^2$ that pass through the origin. As we saw earlier that their union is not a vector subspace. But the sum of the two subspaces ($U$ and $W$ in the picture) includes all the possible vectors that can be reached by a sum of a vector belonging to each line:
+
+\begin{figure}[H]
+\begin{center}
+    \begin{tikzpicture}[line cap=round, line join=round, >=Triangle,scale=2]
+		% coordinate system
+		\coordinate (O) at (0,0);
+		\draw [->,black] (-1.5,0)--(+2.5,0) node[right] {$x$}; % x-axis
+		\draw [->,black] (0,-0.5)--(0,+2.5) node[right] {$y$}; % y-axis
+		
+    	\coordinate (u) at (-0.5,+0.5);
+    	\coordinate (w) at (1,0.8);
+    	
+		\draw [-,nicegreen,line width=1pt] ($-0.8*(u)$)--($2*(u)$) node[above,black,pos=1,scale=1.5] {$U$};
+    	\draw [-,airforceblue,line width=1pt] ($-0.5*(w)$)--($2.5*(w)$) node[above,black,pos=1,scale=1.5] {$W$};
+		
+		\draw [->,nicegreen,line width=1.25pt] (O)--(u) node[left,black,pos=0.4] {$\textbf{u}$};
+		\draw [->,airforceblue,line width=1.25pt] (O)--(w) node[left,black,pos=0.8] {$\textbf{w}$};
+    	\draw [->,brightmaroon,line width=1.25pt] (O)--($(u)+(w)$) node[above,black] {\textbf{u}+\textbf{w}};
+    	\draw [->,dashed,nicegreen,line width=1.0pt] (w)--($(u)+(w)$) node[right,black,pos=0.5] {$\textbf{u}$};
+    	\draw [->,dashed,nicegreen,line width=1.0pt] ($2*(w)$)--($-1*(u)+2*(w)$) node[right,black,pos=0.3] {$-\textbf{u}$};
+    	\draw [->,brightmaroon,line width=1.25pt] (O)--($-1*(u)+2*(w)$) node[right,black] {$2\textbf{w}-\textbf{u}$};
+
+    \end{tikzpicture}
+\end{center}
+\end{figure}
+\noindent Incidentally, in this example, the vector space $U + W$ is equal to all $\mathbb{R}^2$.
+
+You should ask yourself ``how is the sum space different to the span''? The concept of sum space will later let us understand how to decompose vector spaces into constituent \textit{vector spaces}, whereas the span let's us consider the \textit{vectors} themselves as the generating objects.
+
+\theorem{Smallest vector space containing a union of vector spaces}{
+Let $F$ and $G$ be vector subspaces of a vector space $V$. Then $F+G$ is the smallest vector subspace of $V$ that contains the union $F \cup G$.
+}
+
+\definition{Direct sum}{
+Let $F$ and $G$ be two vector subspaces of a vector space $V$ and let $E=F+G$ be the sum space. We say $E$ is a \textbf{direct sum} of $F$ and $G$ if each element of $E$ has a \textbf{unique} decomposition as a sum of vectors in $F$ and vectors in $G$. That is, for every $\textbf{v}\in E$, there exists unique vectors $\textbf{f}\in F$ and $\textbf{g}\in G$ such that $\textbf{v} = \textbf{f} + \textbf{g}$. We denote this direct sum with a new symbol
+\begin{align*}
+E = F \oplus G
+\end{align*}
+}
+
+\noindent Lets build intuition by starting with an example of a sum space that is not a direct sum. 
+
+\example{Sum of two planar vector spaces}{
+Consider the following two vector subspaces of $\mathbb{R}^3$
+\begin{align*}
+A = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x+y+z=0  \right\} \quad\text{and}\quad
+B = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x-y+z=0  \right\}.
+\end{align*}
+Is $A+B$ a direct sum of $A$ and $B$? \\
+
+\noindent Let $\textbf{v}$ be an arbitrary vector in the sum space $A+B$. Then we have
+\begin{align*}
+\textbf{v}= (x,y,z) = \textbf{a} + \textbf{b}
+\end{align*}
+for some $\textbf{a}=(a_x,a_y,a_z)\in A$ and $\textbf{b}=(b_x,b_y,b_z)\in B$. So we can write the system of 5 equations with 6 unknowns 
+\begin{align*}
+x &= a_x + b_x &\quad a_x + a_y + a_z = 0\\
+y &= a_y + b_y &\quad b_x - b_y + b_z = 0 \\
+z &= a_z + b_z
+\end{align*}
+Now the goal is to invert these equations to find $a_x$, $a_y$, $a_z$, $b_x$, $b_y$ and $b_z$ as functions of $x$, $y$ and $z$. We don't have enough equations to do this uniquely, so we end up with a free variable. There are infinite ways to write this, but lets look at the solution if we let $b_z=t$ for any $t\in \mathbb{R}$:
+\begin{align*}
+a_x &= \dfrac{x-y-z+2t}{2}, &\quad a_y &= \dfrac{-x+y-z}{2}, &\quad a_z &= z-t  \\
+b_x &= \dfrac{x+y+z-2t}{2}, &\quad b_y &= \dfrac{x+y+z}{2},  &\quad b_z &= t
+\end{align*}
+Let's consider the triple $(1,1,1)$. We have
+\begin{align*}
+(1,1,1) &= \overbrace{\left(-\dfrac{1}{2},\, -\dfrac{1}{2}, \, 1\right)}^{\in A} + \overbrace{\left( \dfrac{3}{2}, \, \dfrac{3}{2}, \,0 \right)}^{\in B}, \quad \text{for t=0} \\
+(1,1,1) &= \underbrace{\left( \dfrac{1}{2},\, -\dfrac{1}{2},\, 0\right)}_{\in A} + \underbrace{\left (\dfrac{1}{2}, \, \dfrac{3}{2}, \, 1 \right)}_{\in A}, \quad  \text{for t=1}.
+\end{align*}
+This shows we have 2 different sum decompositions of $(1,1,1)$. So $A+B$ cannot be a direct sum of $A$ and $B$ as we don't have \textit{unique} decompositions for all its vectors.
+}
+
+\noindent Now showing that a particular sum of subspaces gives rise to \textit{unique} sum decompositions is not necessarily straight forward. The next theorem gives us an easy method.
+
+\theorem{Direct sum demonstration}{
+Let $F$ and $G$ be two vector subspaces of $V$. Then $E=F+G$ is a direct sum of $F$ and $G$ if and only if the intersection of $F$ and $G$ contains only the zero vector:
+\begin{align*}
+F \cap G = \{\textbf{0}_V \}.
+\end{align*}
+}
+
+\example{Intersection of two planes}{
+Consider again the previous two vector subspaces of $\mathbb{R}^3$
+\begin{align*}
+A = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x+y+z=0  \right\} \quad\text{and}\quad
+B = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x-y+z=0  \right\}.
+\end{align*}
+The defining equations of these sets are both planar equations. Thinking geometrically, the intersection of two planes is a line. So it's trivial to know $A \cap B \neq \{ (0,0,0)\}$. Let's show in detail exactly what this intersection set is.
+\begin{align*}
+A \cap B = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x+y+z=0, \, x-y+z=0 \right\}
+\end{align*}
+These two equations as a system will have to be reduced. Adding them gives $x+z=0 \implies z = -x$. Subtracting them gives $y=0$. So every triple can be written $(x,y,z)=(x,0,-x)=(1,0,-1)x$ for arbitrary $x$. Thus the intersection is
+\begin{align*}
+A \cap B = \left\{ (1,0,-1)t \in\mathbb{R}^3 \, , \, \forall t\in \mathbb{R} \right\}= \text{SPAN}( \, (1,0,-1) \, )
+\end{align*}
+This set represents a straight line in the direction of $(1,0,-1)$. We expected a straight line when we take the intersection of two planes. Since the intersection contains more than just the zero vector, this shows that $A+B$ is not a direct sum of $A$ and $B$.
+}
+
+
+
+\example{Direct sum of a planar and a linear vector space}{
+
+\noindent Consider the following two vector subspaces of $\mathbb{R}^3$
+\begin{align*}
+F = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x+2y-z=0  \right\} \quad\text{and}\quad
+G = \text{SPAN}( \, (2,0,1) \, ).
+\end{align*}
+Show that $\mathbb{R}^3$ is a direct sum of $F$ and $G$. \\
+
+\noindent First we have to convert $G$ from vector form into Cartesian form (left as an exercise): 
+\begin{align*}
+G = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, y=0, \, x=2z \right\}
+\end{align*}
+Which gives the first representation of the intersection set 
+\begin{align*}
+F \cap G = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x+2y-z=0, \, y=0, \, x=2z \right\}
+\end{align*} 
+Now we reduce the system of equations
+\begin{align*}
+\begin{cases}
+x+2y-z=0 \\ y=0 \\ x=2z 
+\end{cases}
+\implies
+\begin{cases}
+x-z=0  \\ y=0 \\ x=2z 
+\end{cases}
+\implies
+\begin{cases}
+x=z \\ y=0  \\ x=2z 
+\end{cases}
+\end{align*}
+The two equations $x=z$ and $x=2z$ imply $x=0$ and $z=0$. So we have shown that all 3 variables are necessarily zero. Hence
+\begin{align*}
+F \cap G = \left\{ (0,0,0)  \right\} = \left\{ \textbf{0}_{\mathbb{R}^3} \right\}
+\end{align*} 
+Let's now show that $F+G=\mathbb{R}^3$. Let $(x,y,z)\in \mathbb{R}^3$. We have to show that it is possible to write
+\begin{align*}
+(x,y,z) = (\alpha,\beta,\gamma) + (a,b,c)
+\end{align*}
+where $(\alpha,\beta,\gamma)\in F$ and $(a,b,c)\in G$. Expanding we get the equations
+\begin{align*}
+x = \alpha + a, \quad y = \beta + b, \quad z = \gamma + c \\
+\alpha+2\beta-\gamma=0, \quad  b=0, \quad a=2c
+\end{align*}
+We want to rearrange these equations to know what $\alpha$, $\beta$, $\gamma$, $a$, $b$ and $c$ must be for a given triple $x$, $y$ and $z$.
+\begin{align*}
+\begin{cases}
+x = \alpha + 2c \\
+y = \beta \\
+z = \gamma + c
+\end{cases}
+\implies
+\begin{cases}
+x + 2y - z =  \alpha + 2c + 2\beta - \gamma - c = c\\
+x - 2z = \alpha - 2\gamma = \alpha - 2(\alpha+2\beta) = -\alpha-4y
+\end{cases}
+\end{align*}
+So we have
+\begin{align*}
+\alpha = -x-4y + 2z, \quad \beta=y, \quad \gamma=-x-2y + 2z \\
+a = 2x+4y-2z, \quad b=0, \quad c=x+2y-z
+\end{align*}
+and hence we can write any triple as the addition of vectors from $F$ and $G$
+\begin{align*}
+(x,y,z) = \underbrace{(-x-4y + 2z, \, y, \, -x-2y + 2z )}_{\in F} + \underbrace{(2x+4y-2z, \, 0, \, x+2y-z)}_{\in G}
+\end{align*}
+This shows $\mathbb{R}^3 \subset F + G$. Since it is trivial that $F+G \subset \mathbb{R}^3$, we have shown that $F+G=\mathbb{R}^3$. Adding that with $F \cap G  = \left\{ \textbf{0}_{\mathbb{R}^3} \right\}$, we have shown that $\mathbb{R}^3$ is a direct sum of $F$ and $G$: $\mathbb{R}^3=F \oplus G$.
+
+\textit{Note}: the definition of the direct sum was about the sum space having \textit{unique} representations of the parent space. If you go through the proof closely, you can understand that the expression we derived:
+\begin{align*}
+(x,y,z) = (-x-4y + 2z, \, y, \, -x-2y + 2z ) + (2x+4y-2z, \, 0, \, x+2y-z)
+\end{align*}
+is the only possibly expression for vectors in this sum space. So it means every triple has this \textit{unique} addition of a vector in $F$ with a vector in $G$. To show that we have a direct sum also included the proof of unique sum decompositions, so we wasted effort by looking at the intersection. In this sense, the investigation of the intersection of the member spaces of the sum is better suited for proving the negative proposition, that a particular sum is \textit{not} a direct sum.
+}
+
+
+\definition{Complementary vector subspaces}{
+Let $F$ and $G$ be two vector subspaces of $V$. $F$ and $G$ are called \textbf{complementary} if $V$ is a direct sum of $F$ and $G$. That is, if and only if
+\begin{itemize}
+\item $V = F+G$, and
+\item $F \cap G = \{\textbf{0}_V \}$
+\end{itemize}
+
+Two examples will reveal the subtlety of this definition:
+\begin{itemize}
+\item For $A=\{ (x,y,z)\in \mathbb{R}^3 \, | \, y=2x \}$ and $B=\{ (x,y,z)\in \mathbb{R}^3 \, | \, y=-x \}$ we do not have the direct sum $\mathbb{R}^3=A \oplus B$ despite the intersection being only the zero vector.
+
+\item For $A=\{ (x,y)\in \mathbb{R}^2 \, | \, y=2x \}$ and $B=\{ (x,y)\in \mathbb{R}^2 \, | \, y=-x \}$ we do have the direct sum $\mathbb{R}^2=A \oplus B$.
+\end{itemize}
+}
+
+\noindent Finally, we have now defined a new type of addition. Don't be fooled by the plus symbol, the sum space is a specific definition of addition of whole vector spaces. However, this operation has parallels to normal number addition. We list some of these properties below.
+
+\properties{of vector space summation}{
+
+\noindent Let $F$, $G$, and $H$ be vector subspaces of a vector space $V$. The sum space satisfies the following properties:
+\begin{itemize}
+\item Associativity: $F + (G + H) = (F + G) + H$
+\item Commutativity: $F + G = G + F$
+\item Null element: $F + \{\textbf{0}_V\} = F$
+\end{itemize}
+}
+
+\noindent While these properties are familiar properties of addition, there are also differences. For example, for any vector subspace $F$, the sum space $F+F=F$ (can you prove this?). This means there is no normal sense of scalar multiplication of vector spaces.
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Linear independence, bases and coordinates}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Linear dependence and independence}
+
+\noindent When we considered the span of two 3d vectors giving a plane I casually inserted an important qualification, that the two vectors \textit{are not in the same direction}. If we have two vectors $\mathbf{u}$ and $\mathbf{v}$ in the same direction then, for example, $\mathbf{v}=k\mathbf{u}$ for some real $k$. Then any linear combination of these two vectors gives a third vector
+\begin{align*}
+\mathbf{w} &= \alpha \mathbf{u} + \beta \mathbf{v} \\
+&= \alpha \mathbf{u} + \beta k\mathbf{u} \\
+&= \left(\alpha + \beta k\right) \mathbf{u}
+\end{align*}
+that is, $\mathbf{w}$ must also be in the same direction as $\mathbf{u}$. The span of these 2 vectors gives only vectors in this single direction. In this case we say that $\mathbf{u}$ and $\mathbf{v}$ are not independent vectors. One can be represented in terms of the other. Let's formalise this notion of vector dependence.
+
+\definition{Linear dependence}{
+A set of vectors $\{\mathbf{v}_1, \dots, \mathbf{v}_n\}$ from a vector space $V$ is said to be \textit{linearly dependent} if there exists a set of constants $\{ \alpha_1, \dots, \alpha_n \}$ \textit{not all zero} such that
+\begin{align*}
+\alpha_1 \mathbf{v}_1 + \cdots + \alpha_n \mathbf{v}_n = \mathbf{0}_V.
+\end{align*}
+\textit{Note}: the right hand side of the equation is the \textit{zero vector}, not the real number $0$.
+}
+
+\example{Linear dependence of two Euclidean vectors}{
+
+\noindent Let $\mathbf{u}=(1,2)$ and $\mathbf{v}=(10.2,20.4)$. Show that $\mathbf{u}$ and $\mathbf{v}$ are linearly dependent. \\
+
+\noindent To show this we must demonstrate that there are two constants, $a$ and $b$, such that $a\mathbf{u} + b\mathbf{v} = \mathbf{0}$. If this was true, we would have
+\begin{align*}
+& a(1,2) + b(10.2,20.4) = (0,0) \\
+\implies & (a + 10.2b,2a + 20.4b) = (0,0)
+\end{align*}
+giving the system of equations
+\begin{align*}
+\begin{cases}
+a + 10.2b = 0 \\
+2a + 20.4b = 0
+\end{cases}
+\end{align*}
+Both equations give the same relation between $a$ and $b$:
+\begin{align*}
+b = -\frac{a}{10.2}
+\end{align*}
+We are free to choose an $a$, for example if $a=10.2$ then $b=-1$ and we have
+\begin{align*}
+10.2 \mathbf{u} - 1 \mathbf{v} = \mathbf{0}
+\end{align*}
+showing that the two vectors are linearly dependent. This example show that the linear dependence of 2 vectors means that 1 vector is a scalar multiple of the other. In this example:
+\begin{align*}
+\mathbf{v} = 10.2 \mathbf{u}.
+\end{align*}
+}
+
+\noindent How does this definition relate to what we understood earlier, that two vectors are dependent on each other if one can be expressed in terms of the other? Well, consider three vectors $\mathbf{u}$, $\mathbf{v}$ and $\mathbf{w}\in \mathbb{R}^3$. If there exists some constants $\alpha$, $\beta$ and $\gamma$, \textit{not all zero}, such that
+\begin{align*}
+\alpha \mathbf{u} + \beta \mathbf{v} + \gamma \mathbf{w} = \mathbf{0}_V
+\end{align*}
+then we can write the vector with the non-zero constant in terms of the other. For example suppose $\alpha \neq 0$, then
+\begin{align*}
+\mathbf{u}  =-\frac{\beta}{\alpha} \mathbf{v} - \frac{\gamma}{\alpha} \mathbf{w}.
+\end{align*}
+In this way $\mathbf{u}$ depends on the other two, or we could say $\mathbf{u} \in \text{SPAN}(\mathbf{v},\mathbf{w})$. This also means that the span of the three vectors $\text{SPAN}(\mathbf{u},\mathbf{v},\mathbf{w})=\text{SPAN}(\mathbf{v},\mathbf{w})$. The vector $\mathbf{u}$ doesn't give anything new. 
+
+For Euclidean vectors, when we have two vectors that are linearly dependent we say that they are \textit{colinear}, as pictured below.
+\begin{figure}[H]
+\begin{center}
+    \begin{tikzpicture}[line cap=round, line join=round, >=Triangle,scale=2]
+		% coordinate system
+		\coordinate (O) at (0,0);
+		\draw [->,black] (-1.5,0)--(+2.5,0) node[right] {$x$}; % x-axis
+		\draw [->,black] (0,-0.5)--(0,+2.5) node[right] {$y$}; % y-axis
+		
+    	\coordinate (u) at (0.5,+0.4);
+    	\coordinate (v) at (1.5,1.2);
+    	
+    	\draw [-,nicegreen,line width=1pt] ($-0.2*(v)$)--($2*(v)$)node[left=10pt,black,pos=0.8, scale=1.2] {$\text{SPAN}(\textbf{u},\textbf{v})$};
+		
+		\draw [->,brightmaroon,line width=1.25pt] (O)--(v) node[left,black,pos=0.8] {$\textbf{v}$};
+		\draw [->,airforceblue,line width=1.25pt] (O)--(u) node[left=5pt,black,pos=0.8] {$\textbf{u}$};
+    \end{tikzpicture}
+\end{center}
+\end{figure}
+
+When we have three 3d Euclidean vectors that are linearly dependent we say that they are \textit{coplanar}. Any two of the vectors give a plane as their span and then adding the 3rd dependent vector gives linear combinations that remain in that plane, as pictured below.
+
+\begin{figure}[H]
+\begin{center}
+    \begin{tikzpicture}[line cap=round, line join=round, >=Triangle,scale=2]
+
+		% coordinate system
+		\coordinate (O) at (0,0);
+		\draw [->,black] (O)--(-1.5,-1.5) node[right] {$x$}; % x-axis
+		\draw [->,black] (O)--(+2.5,+0.0) node[right] {$y$}; % y-axis
+		\draw [->,black] (O)--(+0.0,+2.0) node[left] {$z$}; % z-axis
+    
+    	
+	    % plane vertices positions
+    	\coordinate (A) at (-1.5,-0.8);
+    	\coordinate (B) at (-0.5,+0.8);
+    	\coordinate (C) at (+2.3,+1.1);
+    	\coordinate (D) at (+1.3,-0.7);
+    	
+    	
+		\draw [-,airforceblue,line width=1.2pt] (A)--(B)node[left=3pt,black,pos=0,scale=1.2] {$\text{SPAN}(\textbf{u},\textbf{v},\textbf{w})$};
+		\draw [-,airforceblue,line width=1.2pt] (B)--(C);
+		\draw [-,airforceblue,line width=1.2pt] (C)--(D);
+		\draw [-,airforceblue,line width=1.2pt] (D)--(A);
+
+		% vectors
+		\coordinate (u) at (0.5,-0.1);
+		\coordinate (v) at (1,0.5);
+		\coordinate (w) at (-0.5,0.2);
+		\draw [->,nicegreen,line width=1.25pt] (O)--(u) node[below=3pt,black,pos=0.9] {$\textbf{u}$};
+		\draw [->,airforceblue,line width=1.25pt] (O)--(v) node[above=3pt,black,pos=0.9] {$\textbf{v}$};
+		\draw [->,brightmaroon,line width=1.25pt] (O)--(w) node[above=3pt,black,pos=0.9] {$\textbf{w}$};
+    \end{tikzpicture}
+\end{center}
+\end{figure}
+
+Now, what would it mean for a vector $\mathbf{u}$ to be independent of other vectors $\mathbf{v}$ and $\mathbf{w}$? The formal definition is simple:
+
+\definition{Linear independence}{
+A set of vectors $\{\mathbf{v}_1, \dots, \mathbf{v}_n\}$ from $V$ is said to be \textit{linearly independent} if they are not linearly dependent. That is, the equation
+\begin{align*}
+\alpha_1 \mathbf{v}_1 + \cdots + \alpha_n \mathbf{v}_n =  \mathbf{0}_V.
+\end{align*}
+implies that the constants $\alpha_1, \dots, \alpha_n$ \textit{are all zero}.
+}
+
+\noindent This definition is a little cheeky. Independent means not dependent. Let's understand it in the sense we were thinking earlier, where we think a vector $\mathbf{u}$ being independent of two other vectors $\mathbf{v}$ and $\mathbf{w}$ should mean that we cannot express $\mathbf{u}$ as a linear combination of $\mathbf{v}$ and $\mathbf{w}$. This follows from the definition. If we could write such a linear combination, then there are constants $\alpha$ and $\beta$ such that
+\begin{align*}
+\mathbf{u} &= \alpha \mathbf{u} + \beta \mathbf{v} \\
+\implies & \mathbf{u}- \alpha \mathbf{u} - \beta \mathbf{v} = \mathbf{0}_V,
+\end{align*}
+but this equation is impossible as $\alpha_1 \mathbf{u} + \alpha_2 \mathbf{v} + \alpha_3 \mathbf{w} =  \mathbf{0}_V \implies \alpha_1=\alpha_2=\alpha_3=0$. \\
+
+
+\example{Linear independence of three Euclidean vectors}{
+
+\noindent Consider the following vectors in $\mathbb{R}^3$:
+\begin{align*}
+\mathbf{u} = (1,-1,1), \quad \mathbf{v} = (1,1,1), \quad \text{and} \quad \mathbf{w} = (2,2,4).
+\end{align*}
+Show that these three vectors are linearly independent. \\
+
+\noindent We start with the equation
+\begin{align*}
+\alpha \mathbf{u} + \beta \mathbf{v} + \gamma \mathbf{w} = \mathbf{0}
+\end{align*}
+with the goal of finding possible solutions for $\alpha$, $\beta$ and $\gamma$. Writing the vector equation in full gives
+\begin{align*}
+& \alpha (1,-1,1) + \beta (1,1,1) + \gamma (2,2,4) = (0,0,0) \\
+& (\alpha + \beta + 2\gamma, \, -\alpha + \beta + 2\gamma, \, \alpha + \beta + 4 \gamma) = (0,0,0)
+\end{align*}
+Component by component this vector equation is actually a system of equations
+\begin{align*}
+&\begin{cases}
+\alpha + \beta + 2\gamma = 0 \\
+-\alpha + \beta + 2\gamma = 0 \\
+\alpha + \beta + 4\gamma = 0 
+\end{cases}
+\begin{matrix}
+ \\
+ L_2 \to L_2 + L_1 \\
+ L_3 \to L_3 - L_1
+\end{matrix}
+\\
+&\begin{cases}
+\alpha + \beta + 2\gamma = 0 \implies \alpha = -\beta - 2\gamma \\
+2\beta + 4\gamma = 0 \implies \beta = -2 \gamma \\
+2\gamma = 0
+\end{cases} 
+\end{align*}
+The last equation implies $\gamma=0$, which them implies $\beta=0$, which then implies $\alpha=0$. So the assumption that 
+\begin{align*}
+\alpha \mathbf{u} + \beta \mathbf{v} + \gamma \mathbf{w} = \mathbf{0}
+\end{align*}
+implies that $\alpha=\beta=\gamma=0$. That is exactly the definition of linear independence.
+}
+
+
+\example{Linear independence of three polynomial vectors}{
+
+\noindent Consider the following vectors in the vector space of polynomials with degree up to two:
+\begin{align*}
+\mathbf{u} = 1 + x^2, \quad \mathbf{v} = x-2x^2, \quad \text{and} \quad \mathbf{w} = 3 - x.
+\end{align*}
+Show that these three vectors are linearly independent. \\
+
+\noindent We start with the equation
+\begin{align*}
+\alpha \mathbf{u} + \beta \mathbf{v} + \gamma \mathbf{w} = \mathbf{0}
+\end{align*}
+with the goal of finding possible solutions for $\alpha$, $\beta$ and $\gamma$. Noting that the zero vector in the space of polynomials is the number 0, we write the vector equation in full
+\begin{align*}
+& \alpha ( 1 + x^2) + \beta (x-2x^2) + \gamma (3 - x) = 0 \\
+& (\alpha + 3\gamma)1 + (\beta - \gamma)x + (\alpha - 2\beta)x^2 = (0)1 + (0)x + (0)x^2
+\end{align*}
+Equating the coefficients gives the system
+\begin{align*}
+\begin{cases}
+\alpha + 3\gamma = 0 \implies \alpha = -\gamma/3 \\
+\beta - \gamma = 0 \implies \beta = \gamma\\
+\alpha - 2\beta = 0 \implies \alpha = 2\beta = 2\gamma
+\end{cases}
+\end{align*}
+The only way that $\alpha = -\gamma/3$ and $\alpha = 2\gamma$ is for $\alpha=\gamma=0$. This then implies that $\beta=0$. We have therefore shown that
+\begin{align*}
+\alpha \mathbf{u} + \beta \mathbf{v} + \gamma \mathbf{w} = \mathbf{0}
+\end{align*}
+necessarily implies that $\alpha=\beta=\gamma=0$, and so these three vectors are linearly independent.
+}
+
+\noindent Take note of the simple logic or methodology of the previous three examples. We always start with the equation
+\begin{align*}
+\alpha_1 \mathbf{v}_1 + \alpha_2 \mathbf{v}_2 + \cdots + \alpha_n \mathbf{v}_n = \mathbf{0}_V
+\end{align*}
+and show either that by necessity all of the coefficients are zero (then the vectors are linearly independent), or that we can find at least one non-zero coefficients (then the vectors are linearly dependent). The exact method by which we determine these coefficients depends on which type of vectors we are considering.
+
+\theorem{The span of a dependent set of vectors can be reduced}{
+Let $\mathcal{B}=\{\mathbf{v}_1, \, \mathbf{v}_2, \, \dots, \mathbf{v}_n\}$ be a set of vectors of $V$. If $\mathcal{B}$ is a set of linearly dependent vectors, then we can always remove one of the vectors to form a new set, $\mathcal{B}'=\mathcal{B} \backslash \{\mathbf{v}_k\}$ for some $k$, without changing the span: $\text{SPAN}(\mathcal{B}')=\text{SPAN}(\mathcal{B})$.
+}
+
+\begin{proof}
+Due to the linear dependence of the vectors of $\mathcal{B}$, there exists a set of constants $\alpha_1,\dots,\alpha_n \in \mathbb{R}$ not all zero such that
+\begin{align*}
+\alpha_1 \mathbf{v}_1 + \cdots + \alpha_n \mathbf{v}_n =  \mathbf{0}_V.
+\end{align*}
+Suppose $\alpha_k \neq 0$. Then we can write
+\begin{align*}
+\mathbf{v}_k = -\frac{\alpha_1}{\alpha_k} \mathbf{v}_1 - \cdots -\frac{\alpha_{k-1}}{\alpha_k} \mathbf{v}_{k-1} -\frac{\alpha_{k+1}}{\alpha_k}\mathbf{v}_{k+1} - \cdots -\frac{\alpha_n}{\alpha_k}  \mathbf{v}_n = -\sum_{i \neq k} \frac{\alpha_i}{\alpha_k} \mathbf{v}_i.
+\end{align*}
+which is to say $\mathbf{v}_k \in \text{SPAN}(\mathcal{B}')$ for $\mathcal{B}' = \left\{ \mathbf{v}_1, \, \cdots, \, \mathbf{v}_{k-1}, \,\mathbf{v}_{k+1}, \,  \mathbf{v}_n \right\}$. We want to prove that $\text{SPAN}(\mathcal{B}) = \text{SPAN}(\mathcal{B}')$. To show that two sets are equal we show that they are subsets of each other. That $ \text{SPAN}(\mathcal{B'}) \subset  \text{SPAN}(\mathcal{B})$ is trivial because $\mathcal{B}'$ is created out of $\mathcal{B}$ by only removing one vector. The other direction is more interesting. \\
+
+\noindent Let $\mathbf{v} \in \text{SPAN}(\mathcal{B})$. Then we can find some set of constants $\beta_1$, \dots, $\beta_n$ not all zero such that
+\begin{align*}
+\mathbf{v} &= \beta_1 \mathbf{v}_1 + \cdots + \beta_k \mathbf{v}_k + \cdots + \beta_n \mathbf{v}_n \\
+&= \beta_k \mathbf{v}_k + \sum_{i \neq k} \beta_i \mathbf{v}_i \\
+&= \beta_k \left(-\sum_{i \neq k} \frac{\alpha_i}{\alpha_k} \mathbf{v}_i \right) + \sum_{i \neq k} \beta_i \mathbf{v}_i \\
+&= \sum_{i \neq k} \left(\beta_i - \frac{\beta_k \alpha_i}{\alpha_k} \right)\mathbf{v}_i 
+\end{align*}
+This shows that $\mathbf{v}$ is a linear combination of vectors of $\mathcal{B}'$. So $\mathbf{v} \in \text{SPAN}(\mathcal{B}')$ and therefore $\text{SPAN}(\mathcal{B}) \subset  \text{SPAN}(\mathcal{B'})$.
+\end{proof}
+
+
+\noindent Now linear independence is a very important concept because it allows us to keep reducing the number of vectors in spans until we find a minimal set of vectors that are able to generate some vector space. Such a minimal set is called a basis, and is the focus of the next section.
+
+
+\subsection*{Vector space basis}
+
+\definition{Basis}{
+A \textit{basis of a vector space} $V$ is a minimal set of vectors which spans the vector space. Formally, the set of vectors $\mathcal{B}=\{\mathbf{v}_1, \dots, \mathbf{v}_n\}$ in a vector space $V$ is a basis of $V$ if it is a set of linearly independent vectors and $\text{SPAN}(\mathbf{v}_1, \dots, \mathbf{v}_n) = V$. \textit{Note}: bases are not unique, but they always contain the same number of vectors.
+}
+
+\theorem{Bases of two dimensional Euclidean space}{
+Any two linearly independent vectors in $\mathbb{R}^2$ forms a basis of $\mathbb{R}^2$.
+}
+
+\begin{proof}
+Let $\mathbf{u}=(u_x,u_y)$ and $\mathbf{v}=(v_x,v_y)$ be two linearly independent vectors of $\mathbb{R}^2$. Since we've assumed the linear independence half of the definition of a basis, we only need to show that $\mathbb{R}^2 = \text{SPAN}(\mathbf{u},\mathbf{v})$. Let $(x,y)\in \mathbb{R}^2$. If $(x,y) \in \text{SPAN}(\mathbf{u},\mathbf{v})$ then we can find two constants $\alpha$ and $\beta \in \mathbb{R}$ such that
+\begin{align*}
+(x,y) &= \alpha \mathbf{u} + \beta \mathbf{v} \\
+&= (\alpha u_x + \beta v_x, \,\alpha u_y + \beta v_y )
+\end{align*}
+which gives the system of equations
+\begin{align*}
+&
+\begin{cases}
+x = \alpha u_x + \beta v_x \\
+y = \alpha u_y+ \beta v_y
+\end{cases}
+\\
+\implies &
+\begin{cases} 
+u_y x - u_x y = (u_y  v_x  - u_x v_y) \beta \\
+v_y x - v_x y = (v_y  u_x  - v_x u_y) \alpha
+\end{cases}
+\end{align*}
+Now the linear independence of $\mathbf{u}$ and $\mathbf{v}$ means that the term in parentheses, $u_y  v_x  - u_x v_y$, is not zero. Why? Because if it was zero we would have
+\begin{align*}
+u_y  v_x = u_x v_y.
+\end{align*}
+We have some cases to consider here. If $v_y=0$, then either $u_y=0$ or $v_x=0$ (or both). 
+\begin{itemize}
+	\item If $v_x = 0$ then $\mathbf{v}=(0,0)=0\mathbf{u}$ and we have contradicted the assumption of linear independence. So we can't have $v_x = 0$.
+	\item If $u_y=0$ then the two vectors become $\mathbf{u}=(u_x,0)$ and $\mathbf{v}=(v_x,0)$. Since $v_x$ cannot be zero we can write $\mathbf{u}=\dfrac{u_x}{v_x}\mathbf{v}$ and we have contradicted the assumption of linear independence. So we can't have $u_y=0$ . 
+\end{itemize}
+Since both outcomes are contradictions, we cannot have $v_y=0$. That is, we know $v_y\neq 0$. With that the equation $u_y  v_x = u_x v_y$ implies that neither $u_y$ nor $v_x$ can be zero and we can write
+\begin{align*}
+\frac{u_x}{u_y} = \frac{v_x}{v_y}.
+\end{align*}
+Then 
+\begin{align*}
+(u_x,u_y) &= u_y\left(\frac{u_x}{u_y},1\right) \\
+          &= u_y\left(\frac{v_x}{v_y},1\right) \\
+          &= \frac{u_y}{v_y}(v_x,v_y)
+\end{align*}
+and this contradicts the linear independence. So we simply can't have that $u_y  v_x  - u_x v_y=0$. All of that just so we can divide by this term, all the way back a long way to our system of equations to solve them for $\alpha$ and $\beta$:
+\begin{align*}
+ \alpha &= \frac{v_y x - v_x y}{v_y  u_x  - v_x u_y} \\
+  \beta &= \frac{u_y x - u_x y}{u_y  v_x  - u_x v_y} 
+\end{align*}
+Now we can finally write any double in terms of $\mathbf{u}$ and $\mathbf{v}$:
+\begin{align*}
+(x,y) = \frac{v_y x - v_x y}{v_y  u_x  - v_x u_y}\mathbf{u} + \frac{u_y x - u_x y}{u_y  v_x  - u_x v_y} \mathbf{v}
+\end{align*}
+This shows that $\mathbb{R}^2 \subset \text{SPAN}(\mathbf{u},\mathbf{v})$. The other direction is automatic, and so we have proven that $\mathcal{B}=\{ \mathbf{u},\,\mathbf{v} \}$ is a basis of $\mathbb{R}^2$.
+\end{proof}
+
+\example{A basis of degree 1 polynomials}{
+
+\noindent Consider a set of polynomial vectors $\mathcal{B}=\{ 1+x, \, 1-x \}$. Show that $\mathcal{B}$ is a basis of the vector space of polynomials with degree up to one, $\mathcal{P}_1$. \\
+
+\noindent Let's start by showing the two vectors $\mathbf{b}_1 = 1+x$ and $\mathbf{b}_2=1-x$ are linearly independent. Assume
+\begin{align*}
+& \alpha \mathbf{b}_1 + \beta \mathbf{b}_2 = \mathbf{0} \\
+\implies & \alpha (1+x) + \beta (1-x) = 0 \\
+\implies & (\alpha + \beta)1 + (\alpha - \beta)x = (0)1 + (0)x
+\end{align*}
+which gives the system of equations
+\begin{align*}
+\begin{cases}
+\alpha + \beta = 0 \\
+\alpha - \beta = 0
+\end{cases}
+\end{align*}
+Adding the equations gives $2\alpha = 0$ and subtracting gives $2\beta = 0$. So we have $\alpha=\beta=0$ and therefore $\mathbf{b}_1$ and $\mathbf{b}_2$ are linearly independent. Now let's prove that $\mathcal{P}_1 = \text{SPAN}(\mathbf{b}_1,\mathbf{b}_2)$. $\text{SPAN}(\mathbf{b}_1,\mathbf{b}_2) \subset \mathcal{P}_1$ is automatic. For the other direction, let $\mathbf{p}=(a)1+(b)x \in \mathcal{P}_1$ for some $a$, $b \in \mathbb{R}$. Then we want to find some $\alpha$, $\beta \in \mathbb{R}$ such that
+\begin{align*}
+\mathbf{p} &= \alpha\mathbf{b}_1+\beta\mathbf{b}_2 \\
+\implies (a)1+(b)x &= \alpha (1+x) + \beta (1-x) \\
+&= (\alpha + \beta)1 + (\alpha - \beta)x
+\end{align*} 
+and so
+\begin{align*}
+& \begin{cases}
+a = \alpha + \beta \\
+b = \alpha - \beta
+\end{cases}
+\\
+\implies &
+\begin{cases}
+a+b = 2\alpha\\
+a-b = 2\beta
+\end{cases}
+\\
+\implies &
+\begin{cases}
+\alpha = \dfrac{a+b}{2} \\
+\beta = \dfrac{a-b}{2} 
+\end{cases}
+\end{align*}
+So we can write any polynomial of degree up to 1 in terms of the vectors in $\mathcal{B}$:
+\begin{align*}
+(a)1+(b)x = \frac{a+b}{2}\mathbf{b}_1 + \frac{a-b}{2}\mathbf{b}_2
+\end{align*}
+Therefore $ \mathcal{P}_1 \subset \text{SPAN}(\mathbf{b}_1,\mathbf{b}_2)$. We have therefore shown the two results
+\begin{itemize}
+\item $\mathcal{B}$ is a set of linearly independent vectors.
+\item $\mathcal{B}$ spans $\mathcal{P}_1$.
+\end{itemize}
+which proves that $\mathcal{B}$ is a basis of $\mathcal{P}_1$.
+}
+
+
+\example{Basis of $\mathbb{R}^3$}{
+
+\noindent Consider the set of 3 vectors in $\mathbb{R}^3$, $\mathcal{B}=\{\mathbf{u}, \, \mathbf{v}, \, \mathbf{w} \}$, with
+\begin{align*}
+\mathbf{u}=(1,-2,2), \quad \mathbf{v}=(2,1,0), \quad \mathbf{w}=(1,1,2).
+\end{align*}
+Is the set $\mathcal{B}$ a basis of $\mathbb{R}^3$? \\
+
+\noindent We first check the linear independence of these vectors. Let $\alpha \mathbf{u} +  \beta \mathbf{v} + \gamma \mathbf{w} = \mathbf{0}_{\mathbb{R}^3}$. That is
+\begin{align*}
+& (\alpha + 2\beta + \gamma, \, -2\alpha + \beta + \gamma, \, 2\alpha + 2\gamma) = (0,0,0) \\
+%
+%
+& \implies  \begin{cases}
+\alpha + 2\beta + \gamma = 0 \\
+-2\alpha + \beta + \gamma = 0 \\
+2\alpha + 2\gamma = 0 
+\end{cases}
+\begin{matrix}
+\, \\
+L_2 \to L_2 + 2L_1 \\
+L_3 \to L_3 - 2L_1 
+\end{matrix} \\
+%
+%
+& \implies  \begin{cases}
+\alpha + 2\beta + \gamma = 0 \\
+5\beta + 3\gamma = 0 \\
+-4\beta = 0 
+\end{cases} \\
+%
+%
+& \implies \beta = 0 \\
+& \implies \gamma = 0 \\
+& \implies \alpha = 0
+\end{align*}
+Hence the set is linearly independent. 
+
+\noindent Now we need to show that $\mathcal{B}$ spans $\mathbb{R}^3$, that is $\mathbb{R}^3 = \text{SPAN}(\mathcal{B})$. To do this we start with an arbitrary vector $(x,y,z)\in\mathbb{R}^3$. Let
+\begin{align*}
+(x,y,z) &= \alpha \mathbf{u} +  \beta \mathbf{v} + \gamma \mathbf{w}
+\end{align*}
+Now the goal is figure out what $\alpha$, $\beta$ and $\gamma$ have to be as functions of $x$, $y$ and $z$ if it is possible. So we develop the relation
+\begin{align*}
+&(x,y,z) = (\alpha + 2\beta + \gamma, \, -2\alpha + \beta + \gamma, \, 2\alpha + 2\gamma) \\
+%
+%
+& \implies  \begin{cases}
+\alpha + 2\beta + \gamma = x \\
+-2\alpha + \beta + \gamma = y \\
+2\alpha + 2\gamma = z 
+\end{cases}
+\begin{matrix}
+\, \\
+L_2 \to L_2 + 2L_1 \\
+L_3 \to L_3 - 2L_1 
+\end{matrix} \\
+%
+%
+& \implies  \begin{cases}
+\alpha + 2\beta + \gamma = x \\
+5\beta + 3\gamma = y+2x \\
+-4\beta = z-2x
+\end{cases} \\
+%
+%
+& \implies \beta = \frac{x}{2} - \frac{z}{4} \\
+& \implies \gamma = \frac{y+2x-5\beta}{5} = -\frac{1}{10}x + \frac{1}{5}y+\frac{1}{4}z \\
+& \implies \alpha = x - 2\beta - \gamma = \frac{1}{10}x - \frac{1}{5}y+\frac{1}{4}z
+\end{align*}
+So we can represent every vector in $\mathbb{R}^3$ as a linear combination of vectors in $\mathcal{B}$:
+\begin{align*}
+(x,y,z) = \left(\frac{1}{10}x - \frac{1}{5}y+\frac{1}{4}z\right) \mathbf{u} +  \left(\frac{1}{2}x - \frac{1}{4}z\right) \mathbf{v} + \left(-\frac{1}{10}x + \frac{1}{5}y+\frac{1}{4}z\right)\mathbf{w}
+\end{align*}
+and hence $\mathcal{B}$ spans $\mathbb{R}^3$.
+
+\noindent We have therefore shown that $\mathcal{B}$ is a set of linearly independent vectors and it spans $\mathbb{R}^3$, so it is a basis of $\mathbb{R}^3$.
+}
+
+\definition{Dimension}{
+The dimension of a vector space is the number of elements in a basis for that vector space. For a vector space $V$ we denote its dimension $\dim(V)$.
+}
+
+
+
+\example{Dimension of an intersection of Euclidean subspaces}{
+
+\noindent Let $A=\text{SPAN}((1,1,0),\,(1,2,-1))$ and $B=\text{SPAN}((0,2,-1),\,(-1,1,-2))$ be two vector subspaces of $\mathbb{R}^3$. What is the dimension of $A \cap B$? \\
+
+\noindent We first convert these two span representations of $A$ and $B$ into Cartesian form. For $A$, let $(x,y,z)=\alpha(1,1,0) + \beta(1,2,-1)$ for some $\alpha$, $\beta \in \mathbb{R}$, giving the system of equations
+\begin{align*}
+&\begin{cases}
+x = \alpha + \beta \\
+y = \alpha + 2\beta \\
+z = -\beta
+\end{cases}
+\implies & y-x = \beta = -z
+\implies & A = \left\{ (x,y,z)\in\mathbb{R}^3 \, | \, x - y - z = 0\right\}
+\end{align*}
+For $B$, let $(x,y,z)=\alpha(0,2,-1) + \beta(-1,1,-2)$ for some $\alpha$, $\beta \in \mathbb{R}$, giving the system of equations
+\begin{align*}
+&\begin{cases}
+x = -\beta \\
+y = 2\alpha + \beta \\
+z = -\alpha - 2\beta
+\end{cases}
+\implies & y+2z = -3\beta = 3x
+\implies & B = \left\{ (x,y,z)\in\mathbb{R}^3 \, | \, 3x - y - 2z = 0\right\}
+\end{align*}
+Now the intersection of $A$ and $B$ has Cartesian form with both defining equations of $A$ and $B$ simultaneously true
+\begin{align*}
+A \cap B \left\{ (x,y,z)\in\mathbb{R}^3 \, | \, x - y - z = 0, \, 3x - y - 2z = 0\right\}
+\end{align*}
+Subtracting the first equation from the second eliminates $y$, and subtracting 3 of the first from the second eliminates $x$, giving
+\begin{align*}
+\begin{cases}
+2x - z = 0 \, \implies x = \dfrac{z}{2} \\
+2y + z = 0 \, \implies y = -\dfrac{z}{2}
+\end{cases}
+\end{align*}
+As we can write $x$ and $y$ in terms of $z$, let's make it a free variable $z=t\in\mathbb{R}$. So we have that any vector in $A\cap B$ can be written $(x,y,z)=(t/2,\,-t/2,\,t)=(1/2,\,-1/2,\,1)t$. This shows us that we have a span of this vector $\mathbf{v}=\left( 1/2,\,-1/2,\,1 \right)$. The intersection space is then
+\begin{align*}
+A \cap B = \left\{ \left( x,y,z \right) \in \mathbb{R}^3 \, | \, 2x-z = 0, \, 2y + z =0 \right\} = \text{SPAN}\left( \, \left( \frac{1}{2},\,-\frac{1}{2},\,1 \right) \, \right)
+\end{align*}
+Since this vector $\mathbf{v}$ spans the intersection, and a single vector always forms a linearly independent set, we automatically have a basis of $A \cap B$:
+\begin{align*}
+\mathcal{B} = \left\{ \left( 1/2,\,-1/2,\,1 \right)\right\}
+\end{align*}
+Since this basis has one member, $\dim(A \cap B)=1$. This should be obvious geometrically. $A$ and $B$ are each spans of 2 (independent) vectors, which means they are both planes. The intersection of two planes is a line unless the planes are the same, and lines are one dimensional geometric objects! Another way to understand the dimension is that we only require one changing parameter, $t$, to generate the space.
+}
+
+\theorem{Dimension of Euclidean vector spaces}{
+The Euclidean vector space $\mathbb{R}^n$ has dimension $n$.
+}
+
+\definition{Canonical basis of $\mathbb{R}^n$}{
+The \textit{canonical basis} of the vector space of real $n$-tuples, $\mathbb{R}^n$, is the ordered set of $n$ $n$-tuples with $k^{th}$ element, $\mathbf{c}_k=(\alpha_1, \dots, \alpha_n)$ such that 
+\begin{align*}
+\alpha_j = 
+\begin{cases} 
+1 & \text{for } j= k, \\
+0 & \text{for } j\neq k.
+\end{cases}
+\end{align*}
+That is, as a set the canonical basis is
+\begin{align*}
+\mathcal{C}_n=\{ 
+(1, 0, \dots, 0 ), \,
+(0, 1, \dots, 0 ), \,
+\dots, \,
+\underbrace{(0, 0, \dots, 0, \overbrace{1}^{k^{th} \text{ place}}, 0, \dots, 0 )}_{k^{th} \text{ tuple}}, \,
+\dots, \,
+(0, 0, \dots, 1)
+\}.
+\end{align*}
+}
+
+
+\theorem{Dimension of polynomial vector spaces}{
+The vector space of polynomials with degree up to $n$, $\mathcal{P}_n$, has dimension $n+1$.
+}
+\definition{Canonical basis of $\mathcal{P}_n$}{
+The \textit{canonical basis} of the vector space of polynomials with degree up to $n$, $\mathcal{P}_n$, is the ordered set of $n$ polynomials with $k^{th}$ element, $\mathbf{c}_k= x^k$. That is, as a set the canonical basis is
+\begin{align*}
+\mathcal{C}_n=\{ 
+1, \,
+x, \,
+x^2, \,
+\dots, \,
+x^n
+\}.
+\end{align*}
+}
+
+\theorem{Basis demonstration with dimension}{
+Let $V$ be a vector space and $\mathcal{B}$ be set of vectors in $V$. Then $\mathcal{B}$ forms a basis of $V$ if its vectors are linearly independent and the number of vectors in $\mathcal{B}$ equals the dimension of $V$.
+}
+
+\noindent Note that this theorem merely results from the definition of dimension. It seems circular, but if you can use your geometrical intuition to find the dimension of a space (for example we can know that a planar equation will define a 2 dimensional vector space) without finding the basis first, then it cuts the work in half.
+
+\theorem{Dimension of the sum of vector subspaces}{
+Let $A$ and $B$ be vector subspaces of a vector space $V$. The dimension of the sum space of $A$ and $B$ is given by
+\begin{align*}
+\dim(A+B) = \dim(A) + \dim(B) - \dim(A \cap B).
+\end{align*}
+}
+
+
+\subsection*{Vector coordinates}
+%%% this lets us "geometrize" any vector space. any vector space can be represented as euclidean vectors, and we can use our geometrical intuition or results to calculate "something" more easily
+
+\definition{Coordinates of a vector}{
+Let $\mathbf{v}$ be a vector in a vector space $V$. The coordinates of $\mathbf{v}$ \textit{with respect to a given basis} $\mathcal{B}$, denoted $\left[\mathbf{v}\right]_\mathcal{B}$, is a column of the unique set of coefficients in the linear combination of $\mathbf{v}$ in terms of the basis vectors.
+
+\noindent \textit{Note}: bases are sometimes called ``coordinate systems'' exactly because of this concept.
+}
+
+\example{Coordinates of a Euclidean vector}{
+
+\noindent For the Euclidean vector
+\begin{align*}
+\mathbf{v} = (2, \, -1, \, 8) \in \mathbb{R}^3
+\end{align*}
+(implicitly written in the canonical basis) and basis of $\mathbb{R}^3$
+\begin{align*}
+\mathcal{B} =
+\left\{ 
+\mathbf{b}_1, \,
+\mathbf{b}_2, \,
+\mathbf{b}_3
+\right\}
+=
+\left\{ 
+( 2, \, 0, \, 0 ), \,
+( 0, \, 1, \, -2 ), \,
+( 0, \, 0, \, 2 )
+\right\}
+\end{align*}
+what are the coordinates of $\mathbf{v}$ in the basis $\mathcal{B}$? \\
+
+\noindent The vector $\mathbf{v}$ can be written in terms of the basis vectors as $\mathbf{v} = 1 \mathbf{b}_1 - 2 \mathbf{b}_2 + 2 \mathbf{b}_3$ and hence its coordinates with respect to $\mathcal{B}$ are
+\begin{align*}
+\left[\mathbf{v}\right]_\mathcal{B} = \begin{pmatrix} 1 \\ -2 \\ 2 \end{pmatrix}
+\end{align*}
+}
+
+\example{Coordinates of a polynomial vector}{
+
+\noindent For a polynomial vector
+\begin{align*}
+\mathbf{v} = 3 - x + 2x^2 \in \mathcal{P}_2[\mathbb{R}]
+\end{align*}
+and basis of $\mathcal{P}_2[\mathbb{R}]$
+\begin{align*}
+\mathcal{B} =
+\left\{ 
+\mathbf{b}_1, \,
+\mathbf{b}_2, \,
+\mathbf{b}_3
+\right\}
+=
+\left\{ 
+1-x, \,
+1+x, \,
+x-x^2
+\right\}
+\end{align*}
+we express the vector $\mathbf{v}$ as a linear combination of the basis vectors $\mathbf{v} = \alpha \mathbf{b}_1 + \beta \mathbf{b}_2 + \gamma \mathbf{b}_3$ and our goal is to determine the constants $\alpha$, $\beta$ and $\gamma$. Develop the linear combination
+\begin{align*}
+\mathbf{v}  &= \alpha(1-x) + \beta(1+x) + \gamma(x-x^2) \\
+3 - x + 2x^2 &= (\alpha + \beta)1 + (-\alpha + \beta + \gamma)x + (-\gamma)x^2.
+\end{align*}
+By equating polynomial terms we get the system
+\begin{align*}
+\begin{cases}
+\alpha + \beta = 3 \\
+-\alpha + \beta + \gamma = -1 \\
+-\gamma = 2
+\end{cases}
+\implies
+\begin{cases}
+\alpha + \beta = 3 \\
+-\alpha + \beta  = 1 \\
+\gamma = -2
+\end{cases}
+\implies
+\begin{cases}
+2\alpha = 2 \\
+2\beta  = 4 \\
+\gamma = -2
+\end{cases}
+\end{align*}
+Hence $3 - x + 2x^2 = \mathbf{b}_1 + 2\mathbf{b}_2 - 2 \mathbf{b}_3$ so that the coordinates of the vector are
+\begin{align*}
+\left[\mathbf{v}\right]_\mathcal{B} = \begin{pmatrix} 1 \\ 2 \\ -2 \end{pmatrix}
+\end{align*}
+}
+
+\theorem{Coordinates of a linear combination}{
+Let $\mathbf{v}$ and $\mathbf{w}$ be 2 vectors in a vector space $V$ with basis $\mathcal{B}$. Then the coordinates of any linear combination of $\mathbf{v}$ and $\mathbf{w}$ in the basis $\mathcal{B}$ is the same linear combination of the coordinates $\mathbf{v}$ and $\mathbf{w}$ in the basis $\mathcal{B}$. That is
+\begin{align*}
+[\alpha \mathbf{v} + \beta \mathbf{w}]_\mathcal{B} = \alpha [\mathbf{v}]_\mathcal{B} + \beta [\mathbf{w}]_\mathcal{B}
+\end{align*}
+for any $\alpha, \, \beta \in \mathbb{R}$.
+}

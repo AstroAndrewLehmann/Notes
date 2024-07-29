@@ -1,0 +1,53 @@
+\chapter{Orthogonal matrices} \label{ch:orthogonal}
+
+
+\definition{Orthogonal matrix}{
+A square matrix $A$ is orthogonal if and only if its inverse is its transpose. That is, if and only if $A A^T = A^T A = I$.
+}
+
+\definition{Properties of orthogonal matrices}{
+If $A$ is an orthogonal matrix of size $n$, then
+\begin{itemize}
+	\item its columns are pair-wise orthogonal,
+	\item its columns are unit length,
+	\item its columns (considered as $n$-tuples) form an orthonormal basis of $\mathbb{R}^n$,
+	\item its rows (considered as $n$-tuples) form an orthonormal basis of $\mathbb{R}^n$,
+	\item it has determinant $\pm 1$.
+\end{itemize}
+}
+
+
+\definition{Orthogonally diagonalizable matrix}{
+A square matrix $A$ is orthogonally diagonalizable if there exists a diagonal matrix $D$ and orthogonal matrix $Q$ such that
+\begin{align*}
+A = Q D Q^T.
+\end{align*}
+}
+
+
+\definition{Quadratic form}{
+Let $A$ be an $n \times n$ matrix and $\mathbf{v} \in \mathbf{R}^n$ \textit{considered as a column}. Then a quadratic form is a multiplication of the form $\mathbf{v}^T A  \mathbf{v}$ resulting in a real number.
+}
+
+\definition{Definite matrix}{
+Let $A$ be an $n \times n$ symmetric real matrix. By considering the sign of quadratic forms with $A$ we can define several cases. $A$ is
+\begin{itemize}
+ \item \textit{positive definite} if an only if $\mathbf{v}^T A \mathbf{v} > 0$ for every $\mathbf{v}\in\mathbb{R}^n$,
+ \item \textit{positive semi-definite} if an only if $\mathbf{v}^T A \mathbf{v} \geq 0$ for every $\mathbf{v}\in\mathbb{R}^n$,
+ \item \textit{negative definite} if an only if $\mathbf{v}^T A \mathbf{v} < 0$ for every $\mathbf{v}\in\mathbb{R}^n$,
+ \item \textit{negative semi-definite} if an only if $\mathbf{v}^T A \mathbf{v} \leq 0$ for every $\mathbf{v}\in\mathbb{R}^n$.
+\end{itemize}
+If the matrix does not satisfy any of these (e.g. if we can find a positive and a negative quadratic form) then the matrix is called \textit{indefinite}.
+}
+
+
+\definition{Eigenvalues of a definite matrix}{
+Let $A$ be an $n \times n$ symmetric real matrix. Then all eigenvalues of $A$ are real numbers. Furthermore, $A$ is
+\begin{itemize}
+ \item \textit{positive definite} if an only if every eigenvalue is strictly positive,
+ \item \textit{positive semi-definite} if an only if every eigenvalue is non-negative,
+ \item \textit{negative definite} if an only if every eigenvalue is strictly negative,
+ \item \textit{negative semi-definite} if an only if every eigenvalue is strictly non-positive.
+\end{itemize}
+}
+

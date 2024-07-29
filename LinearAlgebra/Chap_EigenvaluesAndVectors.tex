@@ -1,0 +1,1166 @@
+\chapter{Eigenvalues and Eigenvectors} \label{ch:eigens}
+
+
+
+\section{Basic definitions}
+
+\definition{Eigenvalues and eigenvectors of a linear map}{
+Consider an endomorphism $f:V \to V$ and a vector $\mathbf{v}\in V$. We call a number $\lambda \neq 0$ an eigenvalue of $f$ if there exists a non-zero vector $\mathbf{v}$ satisfying the relation
+\begin{align*}
+f(\mathbf{v}) = \lambda \mathbf{v}.
+\end{align*}
+We say that $\mathbf{v}$ is an eigenvector of $f$ \textit{corresponding} or \textit{associated} to the eigenvalue $\lambda$.
+}
+
+\example{Eigenvalue of a linear map}{
+
+\noindent Consider an endomporphism $f:\mathbb{R}^2 \to \mathbb{R}^2$ defined by
+\begin{align*}
+f(x,y) = (y,x)
+\end{align*}
+Can you find any eigenvalues and corresponding eigenvectors?
+
+\noindent As this map just switches coordinates around, it's pretty clear that any input vector with equal $x$ and $y$ components will remain unchanged. That is, for example,
+\begin{align*}
+f(3,3) = (3,3)
+\end{align*}
+and hence $\lambda=1$ is an eigenvalue with corresponding eigenvector $(3,3)$. In fact every vector of the form $(k,k)$ corresponds to this eigenvalue, showing you that eigenvectors are not unique.
+}
+
+We will develop a technique for systematically finding eigenvalues and eigenvectors that works on the matrix representation of an endomorphism. As such, it will be typical that we instead refer to eigenvalues and eigenvectors \textit{of a matrix}, forgetting that there is an associated endomorphism behind the scenes. To reduce notational baggage, we will also stop referring explicitly to the coordinates of a vector in some basis, i.e. $[\mathbf{v}]_\mathcal{B}$, and instead just talk about a vector \textit{as though it is its coordinates}: $[\mathbf{v}]_\mathcal{B} \to \mathbf{v}$. So let's give this alternative definition which is equivalent.
+
+\definition{Eigenvectors and eigenvalues of a matrix}{
+For a square matrix $A$, an eigenvector of $A$ is a non-zero vector, $\mathbf{v}$, that satisfies the matrix equation
+\begin{align*}
+A\mathbf{v} = \lambda \mathbf{v}
+\end{align*}
+where $\lambda$ is called an eigenvalue of $A$. We say that $\mathbf{v}$ is an eigenvector of $A$ \textit{corresponding} or \textit{associated} to the eigenvalue $\lambda$.
+}
+
+\example{Eigenvalue of a matrix}{
+
+\noindent Consider the matrix
+\begin{align*}
+A
+=
+\begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix}
+\end{align*}
+which is the matrix of the endomorphism of the previous example in the canonical bases. Show that the vector
+\begin{align*}
+\mathbf{v}= 
+\begin{pmatrix}
+2\\
+2
+\end{pmatrix}
+\end{align*}
+is an eigenvector and find the associated eigenvalue. \\
+
+\noindent Hit the vector with the matrix and look at the result:
+\begin{align*}
+A\mathbf{v} &= 
+\begin{pmatrix}
+0 & 1 \\
+1 & 0
+\end{pmatrix}
+\begin{pmatrix}
+2\\
+2
+\end{pmatrix} \\
+&= 
+\begin{pmatrix}
+2\\
+2
+\end{pmatrix} \\
+&= 1 \mathbf{v}
+\end{align*}
+This shows that $A\mathbf{v} = 1\mathbf{v}$, so that $\mathbf{v}$ is an eigenvector, associated to the same eigenvalue $\lambda=1$ as we found in the previous example.
+}
+
+What is really going on here with these eigenvectors? Well, if you think geometrically, the multiplication $A\mathbf{v}$ represents a transformation of an arrow in $\mathbb{R}^n$ to give another arrow in $\mathbb{R}^n$ (because $A$ represents an endomorphism the input and output spaces are the same). An eigenvector is a special direction that just so happens to transform under $A$ merely by scaling. The equation $A\mathbf{v} = \lambda\mathbf{v}$ means the action of $A$ on the eigenvector is to maintain it in the same direction, but to change its length only. Ok, now lets start to develop the systematic search for eigenvalues.
+
+We start with a rearrangement of the fundamental equation
+\begin{align*}
+A\mathbf{v} = \lambda\mathbf{v} \implies A\mathbf{v} - \lambda\mathbf{v} = \mathbf{0}.
+\end{align*}
+Now it looks like $\mathbf{v}$ is a common factor that can be factorised. But we must be careful not to write nonsense: $A-\lambda$ would be a matrix subtracted by a real number. Thankfully this isn't a problem:
+\begin{align*}
+A\mathbf{v} - \lambda\mathbf{v} = \mathbf{0} \\
+A\mathbf{v} - \lambda I\mathbf{v} = \mathbf{0} \\
+\left(A - \lambda I\right)\mathbf{v} = \mathbf{0}
+\end{align*}
+where $I$ is the identity matrix of the same size as $A$. This means that $A - \lambda I$ is a matrix, where $\lambda I$ is a matrix with only $\lambda$ along the diagonal and zeros everywhere else. Let's consider this matrix closely, first by naming its determinant.
+
+\definition{Characteristic polynomial of a matrix}{
+For a square matrix $A$, the \textit{characteristic polynomial} is the given by
+\begin{align*}
+P(\lambda) = \det ( A - \lambda I)
+\end{align*}
+where $I$ is the identity matrix with the same size as $A$ and $\lambda$ is the variable of the polynomial. The degree of this polynomial is always the same as the size of the matrix $A$.
+}
+
+\noindent Why is this polynomial important? Well we want the equation
+\begin{align*}
+\left(A - \lambda I\right)\mathbf{v} = \mathbf{0}
+\end{align*}
+to be true, while also requiring that the vector $\mathbf{v}$ be non-zero. Now if $A - \lambda I$ was an invertible matrix, we could simply multiply both sides by its inverse and determine that $\mathbf{v}=\mathbf{0}$. This means we require that $A - \lambda I$ be non-invertible, which implies that its determinant is zero. So we can require that eigenvalues are such that the characteristic polynomial is zero. That is the beginning of our systematic technique, defined below.
+
+\definition{Eigenspectrum}{
+The eigenvalues of a square matrix $A$ are roots of the characteristic polynomial of $A$. That is, eigenvalues are solutions of
+\begin{align*}
+ \det ( A - \lambda I) = 0.
+\end{align*} 
+There can be multiple distinct eigenvalues of $A$, and are conventionally denoted $\lambda_1$, $\lambda_2$, \dots etc. The set of these eigenvalues, $\{\lambda_1, \, \lambda_2, \dots \}$, is called the \textit{eigenspectrum} of $A$.
+}
+
+\example{Eigenspectrum of a 3 by 3 matrix}{
+
+\noindent Consider the matrix
+\begin{align*}
+A
+=
+\begin{pmatrix}
+ -2 &  2 &  3 \\
+  1 &  0 & -1 \\
+  0 &  3 &  1
+\end{pmatrix}
+\end{align*}
+Give its characteristic polynomial and hence determine the eigenvalues. \\
+
+\noindent The characteristic polynomial is the determinant
+\begin{align*}
+P(\lambda) &= |A - \lambda I| 
+= \left| 
+\begin{pmatrix}
+ -2 &  2 &  3 \\
+  1 &  0 & -1 \\
+  0 &  3 &  1
+\end{pmatrix}
+-
+\begin{pmatrix}
+ \lambda &  0 &  0 \\
+  0 &  \lambda & 0 \\
+  0 &  0 & \lambda
+\end{pmatrix}
+\right|
+= \left| 
+\begin{matrix}
+ -2-\lambda &  2 &  3 \\
+  1 &  -\lambda & -1 \\
+  0 &  3 &  1-\lambda
+\end{matrix}
+\right| \\
+%%
+%%
+%%
+&= 
+(-2-\lambda) \left| 
+\begin{matrix}
+    -\lambda & -1 \\
+    3 &  1-\lambda
+\end{matrix}
+\right|
+-
+1 \left| 
+\begin{matrix}
+    2 & 3 \\
+    3 &  1-\lambda
+\end{matrix}
+\right| \\
+%%
+%%
+%%
+&= 
+(-2-\lambda) \left( \lambda^2 + 3\right) - \left(2-2\lambda - 9\right) \\
+&= -\lambda^3 - \lambda^2 + \lambda + 1
+\end{align*}
+By inspection we have $P(1)=0$, and so $\lambda-1$ is a factor of $P(\lambda)$. With long division we find the other factor is $-\lambda^2 - 2 \lambda - 1 = -(\lambda + 1)^2$ and so the characteristic polynomial is
+\begin{align*}
+P(\lambda) = (1-\lambda)(1+\lambda)^2
+\end{align*}
+The roots of $P(\lambda)$ give the eigenspectrum: $\{1, -1\}$.
+}
+
+\theorem{Number of eigenvalues up to the size of the matrix}{
+A square matrix of size $n$ has up to $n$ distinct eigenvalues.
+}
+
+
+\noindent Consider the matrix
+\begin{align*}
+A = 
+\begin{pmatrix}
+  1 & -2 & -2 \\
+ -2 &  1 & -1 \\
+ -1 & -1 &  2
+\end{pmatrix}.
+\end{align*}
+You should verify, but consider the following multiplications
+\begin{align*}
+A \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} = 3 \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} \quad \text{and} \quad
+A \begin{pmatrix} -1 \\ 0 \\ 1 \end{pmatrix} = 3 \begin{pmatrix} -1 \\ 0 \\ 1 \end{pmatrix}.
+\end{align*}
+This shows that there can be multiple eigenvectors associated to the same eigenvalue. In fact there are always infinite vectors, because we can use the linearity of matrix multiplication to show, for example,
+\begin{align*}
+A \left( \alpha \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} +
+\beta \begin{pmatrix} -1 \\ 0 \\ 1 \end{pmatrix} \right) &= \left( \alpha A\begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} +
+\beta A\begin{pmatrix} -1 \\ 0 \\ 1 \end{pmatrix} \right) \\ 
+&= \left( \alpha 3\begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} +
+\beta 3\begin{pmatrix} -1 \\ 0 \\ 1 \end{pmatrix} \right) \\
+&= 3\left( \alpha \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} +
+\beta \begin{pmatrix} -1 \\ 0 \\ 1 \end{pmatrix} \right)
+\end{align*}
+meaning that any linear combination of eigenvectors is also an eigenvector. That inspires us to consider instead a \textit{space of eigenvectors} associated to an eigenvalue.
+
+\definition{Eigenspace}{
+For any eigenvalue $\lambda_k$ of an $n \times n$ matrix $A$, the eigenspace corresponding to $\lambda_k$, denoted $E_{\lambda_k}$, is the set of all eigenvectors corresponding to $\lambda_k$. This can be written as the set of linear combinations of linearly independent eigenvectors corresponding to $\lambda_k$:
+\begin{gather*}
+E_{\lambda_k} = \{ \alpha_1 \mathbf{v}_1 + \cdots + \alpha_m \mathbf{v}_m \, | \, \forall j \, A \mathbf{v}_j = \lambda_k \mathbf{v}_j, \, \alpha_j \in \mathbb{R} \} = \text{SPAN}(\mathbf{v}_1, \cdots, \mathbf{v}_m) \\
+\text{for maximum number of eigenvectors such that} \\
+\alpha_1 \mathbf{v}_1 + \cdots + \alpha_m \mathbf{v}_m = \mathbf{0} \implies  \alpha_1 =  \alpha_2 = \cdots = \alpha_m = 0.
+\end{gather*}
+As the set $\{\mathbf{v}_1, \cdots, \mathbf{v}_m\}$ generates $E_{\lambda_k}$ and the vectors are linearly independent, the set forms a basis and therefore gives the dimension $E_{\lambda_k}$.
+
+The eigenspace can also be written like a \textit{kernel}
+\begin{align*}
+E_{\lambda_k} = \{ \mathbf{v} \in \mathbb{R}^n \, | \, \left( A - \lambda_k I \right) \mathbf{v}= \mathbf{0} \}.
+\end{align*}
+}
+
+\example{Eigenspace}{
+\label{ex:espaces-degen}
+
+\noindent Take the matrix of the previous example
+\begin{align*}
+A
+=
+\begin{pmatrix}
+ -2 &  2 &  3 \\
+  1 &  0 & -1 \\
+  0 &  3 &  1
+\end{pmatrix}
+\end{align*}
+Determine the eigenspaces of all eigenvalues of $A$. \\
+
+\noindent We showed that $\lambda_1=1$ and $\lambda_2=-1$ are two eigenvalues of $A$. So we are looking for two vector spaces
+\begin{align*}
+E_{\lambda_1} = \{ \mathbf{v} \in \mathbb{R}^3 \, | \, \left( A -  I \right) \mathbf{v}=0 \} \quad \text{and} \quad E_{\lambda_2} = \{ \mathbf{v} \in \mathbb{R}^3 \, | \, \left( A +  I \right) \mathbf{v}= \mathbf{0} \}
+\end{align*}
+For $\lambda_1$ we are therefore looking for all the triples that satisfy $\left( A -  I \right) \mathbf{v}$. Let the undetermined eigenvector be written
+\begin{align*}
+\mathbf{v} = \begin{pmatrix} x \\ y \\ z \end{pmatrix}.
+\end{align*}
+Our goal is to find all possible $x$, $y$ and $z$ such that
+\begin{align*}
+& \left( A -  I \right) \mathbf{v}= \mathbf{0} \\
+%%
+%%
+%%
+\implies &
+\left(
+\begin{pmatrix}
+ -2 &  2 &  3 \\
+  1 &  0 & -1 \\
+  0 &  3 &  1
+\end{pmatrix}
+-
+\begin{pmatrix}
+  1 &  0 &  0 \\
+  0 &  1 &  0 \\
+  0 &  0 &  1
+\end{pmatrix}
+\right) 
+\begin{pmatrix} x \\ y \\ z \end{pmatrix}
+= 
+\begin{pmatrix}
+  0 \\
+  0  \\
+  0 
+\end{pmatrix}
+\\
+%%
+%%
+%%
+\implies &
+\begin{pmatrix}
+ -3 &  2 &  3 \\
+  1 & -1 & -1 \\
+  0 &  3 &  0
+\end{pmatrix}
+\begin{pmatrix} x \\ y \\ z \end{pmatrix}
+= 
+\begin{pmatrix}
+  0 \\
+  0 \\
+  0 
+\end{pmatrix}
+\end{align*}
+This is a regular matrix equation that we solve with the techniques of linear systems (see appendix...). So we perform Gaussian reduction on an augmented matrix
+\begin{align*}
+\left(
+	\begin{matrix}
+ -3 &  2 &  3 \\
+  1 & -1 & -1 \\
+  0 &  3 &  0
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+  0 \\
+  0 \\
+  0 
+	\end{matrix}
+  \right.
+\right)
+\to
+\left(
+	\begin{matrix}
+  1 &  0 & -1 \\
+  0 &  1 &  0 \\
+  0 &  0 &  0
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+	  0 \\
+	  0 \\
+	  0 
+    \end{matrix}
+  \right.
+\right)
+\end{align*}
+Unpacking this last matrix gives the equations
+\begin{align*}
+& x - z = 0 \\
+& y=0
+\end{align*}
+And so any eigenvector associated with $\lambda_1=1$ must have the form
+\begin{align*}
+\mathbf{v} = \begin{pmatrix} z \\ 0 \\ z \end{pmatrix}
+= z\begin{pmatrix} 1 \\ 0 \\ 1 \end{pmatrix}.
+\end{align*}
+As $z$ is a free variable, this says all multiples of $(1,\,0,\,1)$ will satisfy $(A-I)\mathbf{v}=\mathbf{0}$. So we can write the eigenspace associated with this eigenvalue
+\begin{align*}
+E_{\lambda_1} = \{ k(1,\,0,\,1) \, | \, k \in \mathbb{R} \} = \text{SPAN} \left((1,\,0,\,1)\right).
+\end{align*}
+
+For $\lambda_2=-1$ we look for all the triples that satisfy $\left( A +  I \right) \mathbf{v}$. Let the undetermined eigenvector be written
+\begin{align*}
+\mathbf{v} = \begin{pmatrix} x \\ y \\ z \end{pmatrix}.
+\end{align*}
+The eigenvector therefore equation gives
+\begin{align*}
+& \begin{pmatrix}
+ -1 &  2 &  3 \\
+  1 &  1 & -1 \\
+  0 &  3 &  2
+\end{pmatrix}
+\begin{pmatrix} x \\ y \\ z \end{pmatrix}
+= 
+\begin{pmatrix}
+  0 \\
+  0  \\
+  0 
+\end{pmatrix}
+\\
+%%
+%%
+%%
+\implies &
+\left(
+	\begin{matrix}
+ -1 &  2 &  3 \\
+  1 &  1 & -1 \\
+  0 &  3 &  2
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+  0 \\
+  0 \\
+  0 
+	\end{matrix}
+  \right.
+\right)
+\to
+\left(
+	\begin{matrix}
+  1 &  0 & -5/3 \\
+  0 &  1 &  2/3 \\
+  0 &  0 &  0
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+	  0 \\
+	  0 \\
+	  0 
+    \end{matrix}
+  \right.
+\right)
+\end{align*}
+Unpacking this last matrix gives the equations
+\begin{align*}
+& x - (5/3)z = 0 \\
+& y + (2/3)z = 0
+\end{align*}
+And so any eigenvector associated with $\lambda_1=1$ must have the form
+\begin{align*}
+\mathbf{v} = \begin{pmatrix} (5/3)z \\ -(2/3)z \\ z \end{pmatrix}
+= \frac{z}{3}\begin{pmatrix} 5 \\ -2 \\ 3 \end{pmatrix}.
+\end{align*}
+As $z$ is arbitrary, $z/3$ is also arbitrary. Note that I took this out of the triple as $z/3$ only to force a triple of integers. It's not necessary and I could have written $(5/3, \, 2/3, \, 1)$. So all multiples of $(5,\,2,\,3)$ will satisfy $(A+I)\mathbf{v}=\mathbf{0}$ and we can write the eigenspace associated with this eigenvalue
+\begin{align*}
+E_{\lambda_2} = \{ k(5,\,-2,\,3) \, | \, k \in \mathbb{R} \} = \text{SPAN} \left((5,\,-2,\,3)\right).
+\end{align*}
+We can verify, for example, that the vector $(15,-6,9)$ is an eigenvector with eigenvalue $-1$ with a quick multiplication
+\begin{align*}
+\begin{pmatrix}
+ -2 &  2 &  3 \\
+  1 &  0 & -1 \\
+  0 &  3 &  1
+\end{pmatrix}
+\begin{pmatrix}
+ 15 \\ -6 \\ 9
+\end{pmatrix}
+=
+\begin{pmatrix}
+ -30 - 12 + 27 \\ 15 - 9 \\ -18 + 9
+\end{pmatrix}
+=
+\begin{pmatrix}
+ -15 \\ 6 \\ -9
+\end{pmatrix}
+=
+-1
+\begin{pmatrix}
+ 15 \\ -6 \\ 9
+\end{pmatrix}
+\end{align*}
+}
+
+\definition{Algebraic and geometric multiplicity of an eigenvalue}{
+For an $n \times n$ matrix with characteristic polynomial
+\begin{align*}
+P(\lambda) = C(\lambda - \lambda_1)^{m_1} \times \cdot \times (\lambda - \lambda_k)^{m_k}\times  \cdot \times (\lambda - \lambda_p)^{m_p}
+\end{align*}
+for some constant $C$, there can be up to $n$ distinct eigenvalues ($p \leq n$). The exponent $m_k$ is called the \textcolor{airforceblue}{\textit{algebraic} multiplicity} of the eigenvalue $\lambda_k$. The \textit{dimension} of the eigenspace corresponding to $\lambda_k$ is its \textcolor{brightmaroon}{\textit{geometric} multiplicity}.
+}
+
+
+\noindent For the matrix of the previous example
+\begin{align*}
+A
+=
+\begin{pmatrix}
+ -2 &  2 &  3 \\
+  1 &  0 & -1 \\
+  0 &  3 &  1
+\end{pmatrix}
+\end{align*}
+we found that the characteristic polynomial was $P(\lambda) = -(\lambda - 1)(\lambda - (-1))^2$ giving the eigenspectrum $\{\lambda_1, \lambda_2\}=\{1, -1\}$ and eigenspaces
+\begin{align*}
+E_{\lambda_1} = \{ k(1,\,0,\,1) \, | \, k \in \mathbb{R} \} \quad \text{and} \quad E_{\lambda_2} = \{ k(5,\,-2,\,3) \, | \, k \in \mathbb{R} \}.
+\end{align*}
+This means that the geometric multiplicity of both eigenvalues is 1, while the algebraic multiplicity of $\lambda_2$ is 2. The lesson here is that the two types of multiplicity are not necessarily equal. Let's take another example.
+
+\example{Eigenvalue multiplicity}{
+
+\noindent Consider the matrix
+\begin{align*}
+A =
+\begin{pmatrix}
+  1 & -1 &  0 \\
+  0 &  2 &  0 \\
+ -1 & -1 &  2
+\end{pmatrix}
+\end{align*}
+The characteristic polynomial is $P(\lambda)=-(\lambda-1)(\lambda-2)^2$. Determine the eigenspaces of $A$ and therefore the geometric multiplicities of its eigenvalues. \\
+
+\noindent For eigenvalue $\lambda_1=1$, of algebraic multiplicity 1, we search for triples $(x,y,z)$ such that
+\begin{align*}
+&
+\left(\begin{pmatrix}
+  1 & -1 &  0 \\
+  0 &  2 &  0 \\
+ -1 & -1 &  2
+\end{pmatrix}
+-
+1
+\begin{pmatrix}
+  1 &  0 &  0 \\
+  0 &  1 &  0 \\
+  0 &  0 &  1
+\end{pmatrix}\right)
+\begin{pmatrix}
+  x \\
+  y \\
+  z
+\end{pmatrix}
+=
+\begin{pmatrix}
+  0 \\
+  0 \\
+  0
+\end{pmatrix} \\
+%%
+%%
+%%
+\implies &
+\left(
+	\begin{matrix}
+  0 & -1 &  0 \\
+  0 &  1 &  0 \\
+ -1 & -1 &  1
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+  0 \\
+  0 \\
+  0 
+	\end{matrix}
+  \right.
+\right)
+\to
+\left(
+	\begin{matrix}
+ -1 &  0 &  1 \\
+  0 &  1 &  0 \\
+  0 &  0 &  0 \\
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+	  0 \\
+	  0 \\
+	  0 
+    \end{matrix}
+  \right.
+\right)
+\end{align*}
+So we have $y=0$ and $x=z$. The eigenspace is therefore
+\begin{align*}
+E_{\lambda_1} = \{ k(1,0,1) \, | \, k\in\mathbb{R} \, \} = \text{SPAN}((1,0,1))
+\end{align*}
+As this is a 1 dimensional space, $\lambda_1$ has geometric multiplicity 1.
+
+For eigenvalue $\lambda_1=2$, of algebraic multiplicity 2, we search for triples $(x,y,z)$ such that
+\begin{align*}
+&
+\left(\begin{pmatrix}
+  1 & -1 &  0 \\
+  0 &  2 &  0 \\
+ -1 & -1 &  2
+\end{pmatrix}
+-
+2
+\begin{pmatrix}
+  1 &  0 &  0 \\
+  0 &  1 &  0 \\
+  0 &  0 &  1
+\end{pmatrix}\right)
+\begin{pmatrix}
+  x \\
+  y \\
+  z
+\end{pmatrix}
+=
+\begin{pmatrix}
+  0 \\
+  0 \\
+  0
+\end{pmatrix} \\
+%%
+%%
+%%
+\implies &
+\left(
+	\begin{matrix}
+ -1 & -1 &  0 \\
+  0 &  0 &  0 \\
+ -1 & -1 &  0
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+  0 \\
+  0 \\
+  0 
+	\end{matrix}
+  \right.
+\right)
+\to
+\left(
+	\begin{matrix}
+  1 &  1 &  0 \\
+  0 &  0 &  0 \\
+  0 &  0 &  0 \\
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+	  0 \\
+	  0 \\
+	  0 
+    \end{matrix}
+  \right.
+\right)
+\end{align*}
+So we have free variables $z$ and $y$, with $x=-y$. The triple can therefore be written
+\begin{align*}
+(x,y,z) = (-y,y,z) = y(-1,1,0) + z(0,0,1).
+\end{align*}
+The eigenspace is therefore
+\begin{align*}
+E_{\lambda_2} = \{ (x,y,z)\in\mathbb{R}^2 \, | \, x=-y \} = \text{SPAN}((-1,1,0), \, (0,0,1)).
+\end{align*}
+As this is a 2 dimensional space, $\lambda_2$ has geometric multiplicity 2.
+}
+
+\theorem{Linear independence of eigenvectors}{
+Eigenvectors from different eigenspaces are linearly independent.
+}
+
+
+\definition{Eigenbasis}{
+Consider a square matrix $A$ of size $n$. If the dimensions of its eigenspaces add up to $n$, then there exist $n$ linearly independent eigenvectors of $A$. These eigenvectors form a basis of $\mathbb{R}^n$ called an \textit{eigenbasis}.
+}
+
+\noindent In the previous example, for matrix
+\begin{align*}
+A =
+\begin{pmatrix}
+  1 & -1 &  0 \\
+  0 &  2 &  0 \\
+ -1 & -1 &  2
+\end{pmatrix}
+\end{align*}
+we found eigenspaces 
+\begin{align*}
+E_{\lambda_1} = \text{SPAN}((1,0,1)) \quad \text{and} \quad
+E_{\lambda_2} = \text{SPAN}((-1,1,0), \, (0,0,1)).
+\end{align*}
+with dimensions adding up to the same size as the matrix. So we can form an eigenbasis of $\mathbb{R}^3$ out of eigenvectors:
+\begin{align*}
+\mathcal{E} = \{ (1,0,1), \, (-1,1,0), \, (0,0,1) \}.
+\end{align*}
+Note that this eigenbasis is \textit{not unique}. $E_{\lambda_2}$ is a plane, and so any 2 independent vectors in this plane will work. So for example we can write another eigenbasis
+\begin{align*}
+\mathcal{E}' = \{ (3,0,3), \, (2,-2,1), \, (0,0,-3) \}.
+\end{align*}
+
+\section{Eigenvalue diagonalization}
+
+
+In the previous chapter we saw that the matrix representation of linear map, $f:U\to V$, depends on the chosen bases. In Theorem~\ref{thm:map_diff_bases} we showed how to relate different matrix representations of the same map by using transition matrices:
+\begin{align*}
+\mathcal{M}(f,\mathcal{A}',\mathcal{B}') = P_{\mathcal{B}\to\mathcal{B}'} \, \mathcal{M}(f,\mathcal{A},\mathcal{B}) \, P_{\mathcal{A}'\to\mathcal{A}}
+\end{align*}
+where $\mathcal{A}$ and $\mathcal{A}'$ are bases of $U$ and $\mathcal{B}$ and $\mathcal{B}'$ are bases of $V$. For an endomorphism the input and output vector spaces are the same, and so we only have two bases to consider, for example $\mathcal{A}$ and $\mathcal{A}'$:
+\begin{align*}
+\mathcal{M}(f,\mathcal{A}') = P_{\mathcal{A}\to\mathcal{A}'} \, \mathcal{M}(f,\mathcal{A}) \, P_{\mathcal{A}'\to\mathcal{A}}
+\end{align*}
+We also saw that the inverse of a transition matrices is simply a transition matrix in the reverse direction of bases. So we can in fact write
+\begin{align*}
+\mathcal{M}(f,\mathcal{A}') = P \, \mathcal{M}(f,\mathcal{A}) \, P^{-1}
+\end{align*}
+where $P=P_{\mathcal{A}\to\mathcal{A}'}$. As stated previously, we are going to abstract away from linear maps, and just consider all these results acting on matrices only, and pretty much forget that there is some associated linear map underneath it all. So we abstract away this form by introducing the following definition.
+
+\definition{Similar matrices}{
+Two matrices $A$ and $B$ are similar if there exists an invertible matrix $P$ such that
+\begin{align*}
+B = P A P^{-1}.
+\end{align*}
+}
+
+Why is this property interesting? Well for one thing it possibly simplifies the calculation of powers of a matrix. If $A$ and $B$ are similar matrices, then
+\begin{align*}
+B^n &= (P A P^{-1})^n = (P A P^{-1})\times (P A P^{-1})\times  \cdots \times (P A P^{-1})(P A P^{-1}) \\
+&=  P A (P^{-1}P) A (P^{-1}\times  \cdots \times P) A( P^{-1} P) A P^{-1} \\
+&=  P A A \times  \cdots \times P) A A P^{-1} \\
+&=  P A^n P^{-1}.
+\end{align*}
+What this shows is that we can transfer the difficulty of a calculation of powers of a matrix $B$ towards another matrix $A$, hoping that it might be easier. Of course we will find ways to find very nice $A$ matrices. Note that taking powers of diagonal matrices are particularly nice
+\begin{align*}
+\begin{pmatrix}
+ a_{11} &   0    & \dots  &   0 \\
+   0    & a_{22} & \dots  &   0 \\
+ \vdots & \vdots & \ddots & \vdots \\
+   0    &   0    & \cdots & a_{nn}
+\end{pmatrix}^k
+=
+\begin{pmatrix}
+ a_{11}^k &   0    & \dots  &   0 \\
+   0    & a_{22}^k & \dots  &   0 \\
+ \vdots & \vdots & \ddots & \vdots \\
+   0    &   0    & \cdots & a_{nn}^k
+\end{pmatrix}
+\end{align*}
+so it would be nice to find out that a given matrix is similar to a diagonal matrix, eh?
+
+
+\definition{Diagonalizable linear map}{
+Let $f:V\to V$ be an endomorphism. $f$ is called \textit{diagonalizable} if there exists a basis, $\mathcal{B}$, of $V$ such that the matrix representation of $f$ in $\mathcal{B}$ is diagonal:
+\begin{align*}
+(\mathcal{M}(f,\mathcal{B}))_{ij} = 0 \quad \text{whenever } \, i \neq j.
+\end{align*}
+}
+
+\noindent As we've done again and again this chapter, we will instead transfer this property over to a matrix and forget about the linear map.
+
+
+\definition{Diagonalizable matrix}{
+A square matrix $A$ is \textit{diagonalizable} if and only if there exists an invertible matrix $P$ and diagonal matrix $D$ such that
+\begin{align*}
+A = P D P^{-1}.
+\end{align*}
+Alternative: A square matrix $A$ is \textit{diagonalizable} if and only if it is \textit{similar} to a diagonal matrix $D$. 
+}
+
+\noindent Now we bring eigenvalues into the picture, because they can sometimes give us a particularly simple technique for diagonalizing a matrix.
+
+
+\theorem{Eigenvalue diagonalization}{
+A square matrix $A$ of size $n$ is diagonalizable if and only if there exists an eigenbasis of $\mathbb{R}^n$. We can then define a diagonal matrix consisting of the eigenvalues of $A$, $\lambda_1, \, \dots, \, \lambda_m$ with $m \leq n$ along the diagonal. In this case we write
+\begin{align*}
+A = P D P^{-1}
+\end{align*}
+where $P$ consists of eigenvectors of $A$ as columns \textit{in the order that corresponds to their eigenvalue placement in $D$}. The matrix $P$ is the transition matrix from the eigenbasis, $\mathcal{E}$, to the canonical basis of $\mathbb{R}^n$: $P_{\mathcal{E}\to \mathcal{C}_n}$.
+}
+
+\example{Eigenvalue diagonalization}{
+
+\noindent Consider an endomorphism $f:\mathbb{R}^3 \to \mathbb{R}^3$ with matrix in the canonical bases given by
+\begin{align*}
+A = \mathcal{M}(f,\mathcal{C}_3) = 
+\begin{pmatrix}
+  1 & -3 & -1 \\
+ -3 &  2 & -3 \\
+  1 &  0 &  3
+\end{pmatrix}.
+\end{align*}
+Diagonalize $A$ using its eigenvalues. \\
+
+\noindent First we find the characteristic polynomial of $A$:
+\begin{align*}
+P(\lambda) &= |A - \lambda I| =
+\left|
+\begin{matrix}
+  1-\lambda & -3 & -1 \\
+ -3 &  2-\lambda & -3 \\
+  1 &  0 &  3-\lambda
+\end{matrix}
+\right| =
+1
+\left|
+\begin{matrix}
+  -3 & -1 \\
+   2-\lambda & -3 
+\end{matrix}
+\right|
++(3-\lambda)
+\left|
+\begin{matrix}
+  1-\lambda & -3 \\
+ -3 &  2-\lambda
+\end{matrix}
+\right| \\
+%%
+%%
+%%
+&= - \lambda^3 + 6\lambda^2 -3\lambda-10
+\end{align*}
+By inspection $P(-1)=0$ and so $(\lambda + 1)$ is a factor. With long division we find
+\begin{align*}
+P(\lambda) = (\lambda + 1)(-\lambda^2 + 7 \lambda - 10) = -(\lambda + 1)(\lambda-2)(\lambda-5).
+\end{align*}
+Hence the eigenspectrum is $\{\lambda_1, \, \lambda_2, \, \lambda_3 \} = \{-1,\,2,\,5\}$.
+
+\noindent For $\lambda_1=-1$ we need to solve
+\begin{align*}
+& \begin{pmatrix}
+  2 & -3 & -1 \\
+ -3 &  3 & -3 \\
+  1 &  0 &  4
+\end{pmatrix}
+\begin{pmatrix} x \\ y \\ z \end{pmatrix}
+= 
+\begin{pmatrix}
+  0 \\
+  0  \\
+  0 
+\end{pmatrix}
+\\
+%%
+%%
+%%
+\implies &
+\left(
+	\begin{matrix}
+  2 & -3 & -1 \\
+ -3 &  3 & -3 \\
+  1 &  0 &  4
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+  0 \\
+  0 \\
+  0 
+	\end{matrix}
+  \right.
+\right)
+\to
+\left(
+	\begin{matrix}
+  1 &  0 &  4 \\
+  0 &  1 &  3 \\
+  0 &  0 &  0
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+	  0 \\
+	  0 \\
+	  0 
+    \end{matrix}
+  \right.
+\right)
+\end{align*}
+Giving constraints $x=-4z$ and $y=-3z$ so that the eigenspace is given by
+\begin{align*}
+E_{\lambda_1} = \text{SPAN}((4,\,3,\,-1)).
+\end{align*}
+
+\noindent For $\lambda_2=2$ we need to solve
+\begin{align*}
+& \begin{pmatrix}
+ -1 & -3 & -1 \\
+ -3 &  0 & -3 \\
+  1 &  0 &  1
+\end{pmatrix}
+\begin{pmatrix} x \\ y \\ z \end{pmatrix}
+= 
+\begin{pmatrix}
+  0 \\
+  0  \\
+  0 
+\end{pmatrix}
+\\
+%%
+%%
+%%
+\implies &
+\left(
+	\begin{matrix}
+ -1 & -3 & -1 \\
+ -3 &  0 & -3 \\
+  1 &  0 &  1
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+  0 \\
+  0 \\
+  0 
+	\end{matrix}
+  \right.
+\right)
+\to
+\left(
+	\begin{matrix}
+  1 &  0 &  1 \\
+  0 & -3 &  0 \\
+  0 &  0 &  0
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+	  0 \\
+	  0 \\
+	  0 
+    \end{matrix}
+  \right.
+\right)
+\end{align*}
+Giving constraints $x=-z$ and $y=0$ so that the eigenspace is given by
+\begin{align*}
+E_{\lambda_2} = \text{SPAN}((1,\,0,\,-1)).
+\end{align*}
+
+\noindent For $\lambda_3=5$ we need to solve
+\begin{align*}
+& \begin{pmatrix}
+ -4 & -3 & -1 \\
+ -3 & -3 & -3 \\
+  1 &  0 & -2
+\end{pmatrix}
+\begin{pmatrix} x \\ y \\ z \end{pmatrix}
+= 
+\begin{pmatrix}
+  0 \\
+  0  \\
+  0 
+\end{pmatrix}
+\\
+%%
+%%
+%%
+\implies &
+\left(
+	\begin{matrix}
+ -4 & -3 & -1 \\
+ -3 & -3 & -3 \\
+  1 &  0 & -2
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+  0 \\
+  0 \\
+  0 
+	\end{matrix}
+  \right.
+\right)
+\to
+\left(
+	\begin{matrix}
+  1 &  0 & -2 \\
+  0 &  1 &  3 \\
+  0 &  0 &  0
+	\end{matrix}
+  \left| \, 
+	\begin{matrix}
+	  0 \\
+	  0 \\
+	  0 
+    \end{matrix}
+  \right.
+\right)
+\end{align*}
+Giving constraints $x=2z$ and $y=-3z$ so that the eigenspace is given by
+\begin{align*}
+E_{\lambda_2} = \text{SPAN}((2,\,-3,\,1)).
+\end{align*}
+So we can write the diagonal matrix $D$ using the eigenvalues
+\begin{align*}
+D = 
+ \begin{pmatrix}
+ -1 &  0 &  0 \\
+  0 &  2 &  0 \\
+  0 &  0 &  5
+ \end{pmatrix}
+\end{align*}
+and the matrix $P$ with eigenvectors as columns \textit{in an order so that the eigenvector columns correspond to the eigenvalue order in $D$}:
+\begin{align*}
+P = 
+ \begin{pmatrix}
+  4 &  1 &  2 \\
+  3 &  0 & -3 \\
+ -1 & -1 &  1
+ \end{pmatrix}
+\end{align*}
+Recall, this is the transition matrix from the eigenbasis, $\mathcal{E} = \{(4,\,3,\,-1),\, (1,\,0,\,-1),\, (2,\,-3,\,1) \} = \{\mathbf{e}_1,\, \mathbf{e}_2,\, \mathbf{e}_3 \}$, to the canonical basis of $\mathbb{R}^3$. Why is that? Because the transition matrix from $\mathcal{E}$ to $\mathcal{C}_3$ has columns made up from the coordinates of basis vectors of $\mathcal{E}$ in the basis $\mathcal{C}_3$. That is:
+\begin{align*}
+P_{\mathcal{E}\to\mathcal{C}_3} = 
+ \begin{pmatrix}
+  | &  | &  | \\
+  [\mathbf{e}_1]_{\mathcal{C}_3} & [\mathbf{e}_2]_{\mathcal{C}_3} & [\mathbf{e}_3]_{\mathcal{C}_3} \\
+  | &  | &  |
+ \end{pmatrix}
+ =P
+\end{align*}
+Note this is always the easy matrix to write, because expressing vector coordinates in the canonical basis is automatic! The inverse transition matrix is where all the work needs to be done. Using the cofactor method, the inverse of $P$ is given by
+\begin{align*}
+P^{-1} &=
+\frac{1}{\det(P)} 
+ \begin{pmatrix}
+ 	\left|\begin{matrix}
+  		 0 &  -3 \\
+  	    -1 &   1
+ 	\end{matrix}\right|
+  &
+ 	-\left|\begin{matrix}
+  		 3 &  -3 \\
+  	    -1 &   1
+ 	\end{matrix}\right|
+  & 
+ 	\left|\begin{matrix}
+  		 3 &   0 \\
+  	    -1 &  -1
+ 	\end{matrix}\right|
+  \\
+ 	-\left|\begin{matrix}
+  		 1 &   2 \\
+  	    -1 &   1
+ 	\end{matrix}\right|
+  &
+ 	\left|\begin{matrix}
+  		 4 &   2 \\
+  	    -1 &   1
+ 	\end{matrix}\right|
+  & 
+ 	-\left|\begin{matrix}
+  		 4 &   1 \\
+  	    -1 &  -1
+ 	\end{matrix}\right|
+  \\
+ 	\left|\begin{matrix}
+  		 1 &   2 \\
+  	     0 &  -3
+ 	\end{matrix}\right|
+  &
+ 	-\left|\begin{matrix}
+  		 4 &   2 \\
+  	     3 &  -3
+ 	\end{matrix}\right|
+  & 
+ 	\left|\begin{matrix}
+  		 4 &   1 \\
+  	     3 &   0
+ 	\end{matrix}\right|
+ \end{pmatrix}^T \\
+%
+%
+%
+&=
+\frac{1}{-18} 
+ \begin{pmatrix}
+ -3 &  0 & -3 \\
+ -3 &  6 &  3 \\
+ -3 & 18 & -3
+ \end{pmatrix}^T \\
+%
+%
+%
+&=
+\frac{1}{6} 
+ \begin{pmatrix}
+  1 &  1 &  1 \\
+  0 & -2 & -6 \\
+  1 & -1 &  1
+ \end{pmatrix}
+\end{align*}
+Hence we can finally write the eigenvalue diagonalization of $A$
+\begin{align*}
+\underbrace{
+\begin{pmatrix}
+  1 & -3 & -1 \\
+ -3 &  2 & -3 \\
+  1 &  0 &  3
+\end{pmatrix}}_A
+=
+\underbrace{
+ \begin{pmatrix}
+  4 &  1 &  2 \\
+  3 &  0 & -3 \\
+ -1 & -1 &  1
+ \end{pmatrix}}_{P_{\mathcal{E}\to\mathcal{C}_3}}
+\underbrace{
+ \begin{pmatrix}
+ -1 &  0 &  0 \\
+  0 &  2 &  0 \\
+  0 &  0 &  5
+ \end{pmatrix}}_D
+\underbrace{
+ \begin{pmatrix}
+  1/6 &  1/6 &  1/6 \\
+  0 & -1/3 & -1 \\
+  1/6 & -1/6 &  1/6
+ \end{pmatrix}}_{P_{\mathcal{C}_3\to\mathcal{E}}}
+\end{align*}
+}
+
+\noindent Now note that in the definition of eigenvalue diagonalization that I said we can \textit{sometimes} do this. When does this work and when does it fail? Well the diagonalizing form involves an inverse: $A = P D P^{-1}$. In example~\ref{ex:espaces-degen} [fix example labelling], we showed that the matrix
+\begin{align*}
+A
+=
+\begin{pmatrix}
+ -2 &  2 &  3 \\
+  1 &  0 & -1 \\
+  0 &  3 &  1
+\end{pmatrix}
+\end{align*}
+has eigenspaces
+\begin{align*}
+E_{\lambda_1=1} = \{ k(1,\,0,\,1) \, | \, k \in \mathbb{R} \} \quad \text{and} \quad E_{\lambda_2=-1} = \{ k(5,\,-2,\,3) \, | \, k \in \mathbb{R} \}.
+\end{align*}
+Which means we have 2 eigenvectors. If we try to diagonalize as we did in the previous example, we would define matrices
+\begin{align*}
+D=
+\begin{pmatrix}
+  1 &  0 &  0 \\
+  0 & -1 &  0 \\
+  0 &  0 &  0
+\end{pmatrix}
+\quad \text{and} \quad
+P=
+\begin{pmatrix}
+  1 &  5 &  0 \\
+  0 & -2 &  0 \\
+  1 &  3 &  0
+\end{pmatrix}
+\end{align*}
+where we don't have a 3rd eigenvector to put in the 3rd column of $P$. Since we have a column of zeros, $P$ is not invertible and we cannot write $A = P D P^{-1}$. So, hopefully you can see that whether the eigenvalue diagonalization can work or not has something to do with algebraic and geometric multiplicities. You should see that we need enough eigenvectors to fill the $P$ matrix. Or otherwise said, we need to have an eigenbasis. Here's one way to formalise this condition.
+
+\theorem{Conditions for diagonalization}{
+A matrix $A$ is diagonalizable if and only if the algebraic multiplicity of each of its eigenvalues is equal to the corresponding geometric multiplicity.
+}
+
+\noindent In a previous example, we showed that the matrix
+\begin{align*}
+A =
+\begin{pmatrix}
+  1 & -1 &  0 \\
+  0 &  2 &  0 \\
+ -1 & -1 &  2
+\end{pmatrix}
+\end{align*}
+has eigenvalue $\lambda_1=1$ of algebraic multiplicity 1 with a 1 dimensional eigenspace
+\begin{align*}
+E_{\lambda_1} = \text{SPAN}((1,0,1)),
+\end{align*}
+and eigenvalue $\lambda_2=-1$ of algebraic multiplicity 2 with a 2 dimensional eigenspace
+\begin{align*}
+E_{\lambda_2} = \text{SPAN}((-1,1,0), \, (0,0,1)).
+\end{align*}
+Since the algebraic and geometric multiplicity is equal for all eigenvalues of $A$, it is diagonalizable using eigenvalues:
+\begin{align*}
+\begin{pmatrix}
+  1 & -1 &  0 \\
+  0 &  2 &  0 \\
+ -1 & -1 &  2
+\end{pmatrix}
+=
+\begin{pmatrix}
+  1 & -1 &  0 \\
+  0 &  1 &  0 \\
+  1 &  0 &  1
+\end{pmatrix}
+\begin{pmatrix}
+  1 &  0 &  0 \\
+  0 & -1 &  0 \\
+  0 &  0 & -1
+\end{pmatrix}
+\begin{pmatrix}
+  1 & -1 &  0 \\
+  0 &  1 &  0 \\
+  1 &  0 &  1
+\end{pmatrix}^{-1}
+\end{align*} 
+To emphasise the non-uniqueness of the eigenvalue diagonalization, we could equally write
+\begin{align*}
+\begin{pmatrix}
+  1 & -1 &  0 \\
+  0 &  2 &  0 \\
+ -1 & -1 &  2
+\end{pmatrix}
+=
+\begin{pmatrix}
+  2 &  1 &  0 \\
+ -2 &  0 &  0 \\
+  0 &  1 &  3
+\end{pmatrix}
+\begin{pmatrix}
+ -1 &  0 &  0 \\
+  0 &  1 &  0 \\
+  0 &  0 & -1
+\end{pmatrix}
+\begin{pmatrix}
+  2 &  1 &  0 \\
+ -2 &  0 &  0 \\
+  0 &  1 &  3
+\end{pmatrix}^{-1}
+\end{align*}
+You only have to make sure that the order of the eigenvalues in $D$ correspond to the correct columns of $P$.
+

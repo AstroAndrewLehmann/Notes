@@ -1,0 +1,83 @@
+\chapter{Inner product spaces} \label{ch:innerproducts}
+
+
+
+
+\definition{Inner product}{
+An inner product is a mapping that takes any two vectors of a vector space, $V$, to a scalar, $f:~V\times~V~\to~\mathbb{R}$ but often denoted with angle brackets $f(\mathbf{u},\mathbf{v})=\langle \mathbf{u},\mathbf{v} \rangle$, satisfying the following properties:
+\begin{align*}
+& \forall \, \mathbf{u},\, \mathbf{v}, \, \mathbf{w} \in V \quad \text{and} \quad  \forall \, k \in \mathbb{R} & \\
+(IP1) & \quad \langle \mathbf{u},\mathbf{v} \rangle = \langle \mathbf{v},\mathbf{u} \rangle & (\text{commutativity}) \\
+%
+(IP2) & \quad \langle \mathbf{u},\mathbf{v}+\mathbf{w} \rangle = \langle \mathbf{u},\mathbf{v} \rangle + \langle \mathbf{u},\mathbf{w} \rangle & (\text{linearity over vector addition}) \\
+%
+(IP3) & \quad \langle k\mathbf{u},\mathbf{v} \rangle = k\langle \mathbf{u},\mathbf{v} \rangle & (\text{linearity over scalar multiplication}) \\
+%
+(IP4) & \quad \langle \mathbf{u},\mathbf{u} \rangle \geq 0 & (\text{positive definite})
+\end{align*}
+}
+
+\definition{Euclidean dot product}{
+The \textit{Euclidean dot product} is the canonical inner product defined on the vector space of real $n$-tuples, $\mathbb{R}^n$. Given two vectors $\mathbf{u}=(u_1, \dots, u_n)$ and $\mathbf{v}=(v_1, \dots, v_n)$, their dot product is defined by
+\begin{align*}
+\mathbf{u} \cdot \mathbf{v} = u_1 v_1 + \cdots + u_n v_n = \sum_{i=1}^n u_i v_i.
+\end{align*}
+}
+
+\definition{Inner product of functions}{
+Let $\mathcal{C}([a,b])$ be the vector space of real functions that are continuous on the interval $[a,b]$. We can define an inner product on any functions $f,g \in \mathcal{C}([a,b])$
+\begin{align*}
+\langle f,g \rangle = \int_a^b f(x)g(x) dx.
+\end{align*}
+You should verify that this definition satisfies the 4 properties of inner products.
+}
+
+\definition{Inner product space}{
+An \textit{inner product space} is a vector space and a definition of an inner product considered as a pair $(V,\langle,\rangle)$. We say that $V$ is \textit{equipped} with the inner product.
+}
+
+\definition{Euclidean inner product space}{
+A \textit{Euclidean inner product space} is the vector space of real $n$-tuples equipped with the euclidean dot product: $(\mathbb{R}^n, \cdot)$.
+}
+
+\definition{Orthogonal vectors}{
+Two vectors $\mathbf{u}$ and $\mathbf{v}$ of an inner product space $(V,\langle,\rangle)$ are \textit{orthogonal} if and only if their inner product is zero: $\langle \mathbf{u},\mathbf{v} \rangle = 0$.
+}
+
+\definition{Norm}{
+A vector $\mathbf{v}$ in an inner product space $(V,\langle,\rangle)$ has \textit{norm}
+\begin{align*}
+\lVert \mathbf{v} \rVert = \sqrt{\langle \mathbf{v},\mathbf{v} \rangle}.
+\end{align*}
+The Euclidean norm is therefore
+\begin{align*}
+\lVert (v_1, \dots, v_n) \rVert = \sqrt{v_1^2 + \cdots + v_n^2}.
+\end{align*}
+If a vector has norm equal to 1 we say it is a \textit{unit vector} or has \textit{unit length}. If we divide a vector by its norm we say that is has been \textit{normalised}.
+}
+
+\definition{To normalise a vector}{
+Consider a vector $\mathbf{v}$ in an inner product space $(V,\langle,\rangle)$. We say we ``normalise'' this vector by dividing it by its norm. That is, $\mathbf{v}'$ is the normalised $\mathbf{v}$ if
+\begin{align*}
+\mathbf{v}' = \frac{\mathbf{v}}{\lVert \mathbf{v} \rVert}.
+\end{align*}
+}
+
+\noindent When we normalise a vector we guarantee that it has length 1:
+\begin{align*}
+\lVert  \frac{\mathbf{v}}{\lVert \mathbf{v} \rVert} \rVert =  \frac{\lVert \mathbf{v} \rVert}{\lVert \mathbf{v} \rVert} = 1
+\end{align*}
+
+
+\definition{Orthonormal basis}{
+An \textit{orthonormal basis} of an inner product space $(V,\langle,\rangle)$ is a set of vectors 
+$\mathcal{B} = \{\mathbf{v}_1, \dots, \mathbf{v}_n\}$ each having norm of 1 and that are pairwise orthogonal:
+\begin{align*}
+\langle \mathbf{v}_i, \mathbf{v}_j \rangle 
+=  
+\begin{cases}
+1 & \text{whenever } \, i = j, \\
+0 & \text{whenever } \, i \neq j.
+\end{cases}
+\end{align*}
+}

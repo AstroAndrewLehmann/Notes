@@ -1,0 +1,74 @@
+\chapter{Linear Maps} \label{ch:linearmaps}
+
+\definition{Linear map}{
+A mapping, $f$, from a vector space $V$ to a vector space $W$, denoted $f:V \to W$, is called a \textit{linear map} if it satisfies the following property:
+\begin{align*}
+& \forall \mathbf{u}, \, \mathbf{v} \in V, \, \forall \alpha,\beta \in \mathbb{R} \\
+& f(\alpha\mathbf{u} + \beta\mathbf{v}) = \alpha f(\mathbf{u}) + \beta f(\mathbf{v}).
+\end{align*}
+We say that a linear map \textit{preserves linear combinations}.
+}
+
+
+\definition{Image}{
+The \textit{image of a linear map} $f: V \to W$, denoted $\text{im}(f)$, is the set of all possible ``output'' vectors of the map:
+\begin{align*}
+\text{im}(f) = \{ \mathbf{w} \in W \,\, | \,\, \exists \mathbf{v}\in V\, f(\mathbf{v}) = \mathbf{w} \} \subseteq W.
+\end{align*}
+}
+
+
+\definition{Rank}{
+The \textit{rank of a linear map} is the dimension of its image: $\text{rank}(f)=\dim(\text{im}(f))$.
+}
+
+
+\definition{Kernel}{
+The \textit{kernel of a linear map}  $f: V \to W$, denoted $\ker(f)$, is the set of vectors that $f$ maps to the zero vector, $\mathbf{0}_W$, of $W$. That is,
+\begin{align*}
+\ker(f) = \{\mathbf{v} \in V \,\, | \,\, f(\mathbf{v}) = \mathbf{0}_W \}.
+\end{align*}
+}
+
+
+\definition{Nullity}{
+The \textit{nullity of a linear map} is the dimension of its kernel: $\text{nullity}(f)=\dim(\ker(f))$.
+}
+
+
+
+
+
+\definition{Injectivity}{
+Let $f:V\to W$ be a linear map. We say $f$ is injective if no two vectors of $V$ are mapped to the same vector of $W$. In symbols we have two equivalent expressions
+\begin{gather*}
+\forall \, \mathbf{x},\mathbf{y}\in V, \quad \left(f(\mathbf{x})=f(\mathbf{y}) \implies \mathbf{x}=\mathbf{y}\right) \\
+%
+\text{or} \\
+%
+\forall \, \mathbf{x},\mathbf{y}\in V, \quad \left( \mathbf{x} \neq \mathbf{y} \implies f(\mathbf{x}) \neq f(\mathbf{y})\right)  
+\end{gather*}
+}
+
+\definition{Surjectivity}{
+Let $f:V\to W$ be a linear map. We say that $f$ is surjective if every vector in the output space has a corresponding input vector. In symbols
+\begin{align*}
+\forall \, \mathbf{w} \in W \quad \exists \mathbf{v}\in V \, \text{such that} \, f(\mathbf{v})=\mathbf{w}.
+\end{align*}
+}
+
+\definition{Categories of linear maps}{
+Let $f:V\to W$ be a linear map.
+\begin{itemize}
+\item If $W=V$ we call $f$ an \textit{endomorphism}.
+\item If $f$ is both injective and surjective then we say it is bijective and we call it an \textit{isomorphism}.
+\item If $f$ is both an isomorphism and an endomorphism we call it an \textit{automorphism}.
+\end{itemize}
+}
+
+\definition{Composition of linear maps}{
+Composition of linear maps works exactly as you would expect if you remember the composition of regular functions. We must have a coherence between the output of one linear map and the input of another. So, two linear maps $f:A\to B$ and $g:U\to V$ can be composed as a well defined linear map $g\circ f$ (``$g$ of $f$'') if and only if the output space of $f$ is the input space of $g$: $U=B$. For any $\mathbf{u}\in A$ the composition is written
+\begin{align*}
+g\circ f: A \to V \quad \text{and} \quad (g\circ f)(\mathbf{u}) = g(f(\mathbf{u})).
+\end{align*}
+}

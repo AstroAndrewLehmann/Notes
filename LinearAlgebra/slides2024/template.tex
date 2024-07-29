@@ -1,0 +1,200 @@
+\documentclass[usenames,dvipsnames,aspectratio=169,10pt]{beamer}
+%\usetheme{default}
+\usetheme[progressbar=frametitle]{metropolis}
+
+%\documentclass[12pt]{book}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[authoryear]{natbib}
+%\usepackage[margin=2.5cm]{geometry}
+%\usepackage{hyperref}
+\usepackage[font=footnotesize]{caption}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{setspace}
+\usepackage{cleveref}
+\usepackage{lscape}
+\usepackage{multirow}
+\usepackage{nicematrix}
+
+% for tikz
+\usepackage{tikz}
+\usetikzlibrary{angles, arrows.meta, calc, quotes}
+\usetikzlibrary{decorations.pathreplacing,calligraphy}
+\usetikzlibrary{patterns}
+\usetikzlibrary{bending,matrix,positioning}
+\usetikzlibrary{arrows, fit, shapes, backgrounds}
+
+\usepackage{tikz-3dplot}
+\usepackage{xcolor,colortbl}
+
+
+% for red line canceling diagonally
+\usepackage{cancel}
+\renewcommand{\CancelColor}{\color{red}}
+
+\captionsetup{font=small,labelfont=bf,singlelinecheck=off,margin=2cm,justification=justified}
+\numberwithin{equation}{section}
+
+\newcommand{\defbox}[3]
+	{
+		\vspace{0.5cm} 
+		\noindent \fbox{\begin{minipage}{\linewidth}
+		\textbf{{#1}DEFINITION{#2}} #3
+		\end{minipage}}
+		\vspace{0.5cm}
+	}
+	
+	
+\newcommand{\defnobox}[3]
+	{
+		\vspace{0.5cm} 
+		\noindent \begin{minipage}{\linewidth}
+		\textbf{{#1}DEFINITION{#2}} #3
+		\end{minipage}
+		\vspace{0.5cm}
+	}
+	
+%%%% To get a nice colourful box around an equation
+\newcommand*{\colourboxed}{}
+\def\colourboxed#1#{%
+  \colourboxedAux{#1}%
+}
+\newcommand*{\colourboxedAux}[3]{%
+  % #1: optional argument for color model
+  % #2: color specification
+  % #3: formula
+  \begingroup
+    \colorlet{cb@saved}{.}%
+    \color#1{#2}%
+    \boxed{%
+      \color{cb@saved}%
+      #3%
+    }%
+  \endgroup
+}
+
+
+%%%%%% COLOURS %%%%%%%%%%
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+\definecolor{battleshipgrey}{rgb}{0.52, 0.52, 0.51}
+\definecolor{brightmaroon}{rgb}{0.76, 0.13, 0.28}
+\definecolor{nicegreen}{RGB}{133, 204, 111}
+
+% isep colours
+\definecolor{isepblue1}{RGB}{0, 97, 161}      % teinte à 100%
+\definecolor{isepblue2}{RGB}{77, 144, 189}    % teinte à 70%
+\definecolor{isepblue3}{RGB}{179, 208, 227}   % teinte à 30%
+\definecolor{iseporange1}{RGB}{244, 161, 0}   % teinte à 100%
+\definecolor{iseporange2}{RGB}{234, 189, 100} % teinte à 70%
+\definecolor{iseporange3}{RGB}{252, 227, 179} % teinte à 30%
+%%%%%%%%%%%%%%%%
+
+% beamer stuff
+\setbeamertemplate{navigation symbols}{}
+\setbeamersize{text margin left=1.0cm,text margin right=1.0cm}
+\setbeamercolor{background canvas}{bg=white}
+%%%% ISEP COLOURS %%%%
+%\setbeamercolor{frametitle}{bg=isepblue1, fg=white}
+%\setbeamercolor{progress bar}{fg=iseporange1}
+%\setbeamercolor{itemize item}{fg=iseporange1,bg=iseporange1}
+%%%%%%%%%%%%%%%%%%%%%%
+\setbeamerfont{frametitle}{family=\fontfamily{qag}\selectfont} % choose font for frame titles
+\setbeamerfont{title}{family=\fontfamily{qag}\selectfont} % choose font for title
+\setbeamerfont{subtitle}{family=\fontfamily{qag}\selectfont} % choose font for subtitle
+\setbeamerfont{section title}{family=\fontfamily{qag}\selectfont} % choose font for titles
+%\fontfamily{qag}\selectfont %choose font for main text % put after begin{document}
+
+% to make the progress bar a little thicker
+\makeatletter
+\setlength{\metropolis@titleseparator@linewidth}{1.5pt}
+\setlength{\metropolis@progressonsectionpage@linewidth}{1.5pt}
+\setlength{\metropolis@progressinheadfoot@linewidth}{1.5pt}
+\makeatother
+
+\begin{document}
+
+\title{Linear Algebra}
+\subtitle{Title of Chapter}
+\author{Andrew Lehmann}
+%\institute{\'{E}cole d'ing\'{e}nieurs du num\'{e}rique}
+\date{\textit{Last updated: \today}}
+
+% logo of university
+%\titlegraphic{\includegraphics[width=3cm]{/home/andrew/Dropbox/ISEP/admin/logo-isep-2023.png} }
+
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+
+
+\section{section}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{title of slide}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Definition - }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Properties - }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Theorem - }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{title}
+\fontsize{9pt}{10pt}\selectfont
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%% COLOUR CHOICES
+% \textcolor{MidnightBlue}{}
+% \textcolor{Maroon}{}
+% \textcolor{Purple}{matrix}
+% \textcolor{BurntOrange}{}
+% \textcolor{MidnightBlue}{}
+% \textcolor{Mahogany}{}
+% \textcolor{ForestGreen}{}

@@ -1,0 +1,130 @@
+\documentclass[12pt]{book}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amssymb} 
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[shortlabels]{enumitem}
+\usepackage{float}
+\usepackage{relsize} % for \mathlarger
+\usepackage{tikz}
+
+
+% version
+\def \version{1} % = 0 everything
+                 % = 1 hide exercises
+
+% for red line canceling diagonally
+\usepackage{cancel}
+\renewcommand{\CancelColor}{\color{red}}
+
+
+%% for augmented matrices, modify amsmath
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+
+%%% new commands
+%*************************************************
+% for versions
+\newcommand{\exercises}[1]{\ifnum \version=0 #1 \fi} % show exercises if version 0
+
+
+%*************************************************
+% for use in the \exemple command. usually #1 will be \upline and #3 will be \downline
+\newcommand{\haline}
+	{
+	\noindent\hfill\rule{0.5\linewidth}{0.4pt}\hfill
+	}	
+\newcommand{\upline}
+	{
+	\vspace{0.5cm} \haline \vspace{0.1cm}
+	}
+	
+\newcommand{\downline}
+	{
+	\vspace{0.5cm} \haline \vspace{0.1cm}
+	}
+%*************************************************
+%Pour la numérotation des exemples
+\newcounter{num_exemple}
+\newcommand{\exemple}[3]
+	{  \par
+        \stepcounter{num_exemple} #1 \\
+        \noindent
+        \textbf{Example \arabic{num_exemple}} \\ 
+        \noindent #2 \\
+        #3
+    }
+%*************************************************
+%Pour la numérotation des exercices
+\newcounter{num_exercice}
+\newcommand{\exercice}
+    {   \par
+        \stepcounter{num_exercice}%
+        \noindent
+        \textbf{Exercise \arabic{num_exercice}}:
+        \quad
+    }
+%*************************************************
+\newcommand{\theorem}[3]
+	{
+		\vspace{0.5cm} 
+		\noindent \fbox{\begin{minipage}{\linewidth}
+		\textbf{{#1}THEOREM{#2}.} #3
+		\end{minipage}}
+		\vspace{0.5cm}
+	}
+%*************************************************
+\newcommand{\textcircle}[1]
+	{
+		\large \textcircled{\small #1} 
+	}
+%*************************************************
+
+\begin{document}
+
+% testing area
+%\input{Ch1_SquareRoot2.tex}
+%\input{Ch2_RootFinding.tex}
+%\input{Ch3_PolynomialInterpolation.tex} % complete 28/06/22
+%\input{Ch4_LeastSquares.tex}
+%\input{Ch5_IntegrationAndDifferentiation.tex}
+%\input{Ch6_DifferentialEquations.tex}
+%\input{Ch7_MatrixMethods.tex}
+%\end{document}
+
+\pagenumbering{roman}
+
+
+\input{TitlePage.tex}
+
+\onehalfspacing
+
+
+
+\cleardoublepage
+\addcontentsline{toc}{chapter}{\bf Contents}
+\tableofcontents
+
+\clearpage
+\pagenumbering{arabic}
+\input{Ch1_SquareRoot2.tex}
+\input{Ch2_RootFinding.tex}
+\input{Ch3_PolynomialInterpolation.tex} % complete 28/06/22
+\input{Ch4_LeastSquares.tex}
+\input{Ch5_IntegrationAndDifferentiation.tex}
+\input{Ch6_DifferentialEquations.tex}
+\input{Ch7_MatrixMethods.tex}
+
+
+\end{document}

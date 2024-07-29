@@ -1,0 +1,1462 @@
+\documentclass[usenames,dvipsnames,aspectratio=169,10pt]{beamer}
+%\usetheme{default}
+\usetheme[progressbar=frametitle]{metropolis}
+
+\def \EXAMPLEVERSION {1} % 1 for examples, 2 to hide examples (they are in textbook), 3 to hide examples but leave blank slide
+
+\def \SCHOOLVERSION {1} % 1 for neutral, 2 for ISEP
+
+%\documentclass[12pt]{book}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[authoryear]{natbib}
+%\usepackage[margin=2.5cm]{geometry}
+%\usepackage{hyperref}
+\usepackage[font=footnotesize]{caption}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{setspace}
+\usepackage{cleveref}
+\usepackage{lscape}
+\usepackage{multirow}
+\usepackage{nicematrix}
+\usepackage{mathtools}
+
+% for tikz
+\usepackage{tikz}
+\usetikzlibrary{angles, arrows.meta, calc, quotes}
+\usetikzlibrary{decorations.pathreplacing,calligraphy}
+\usetikzlibrary{patterns}
+\usetikzlibrary{bending,matrix,positioning}
+\usetikzlibrary{arrows, fit, shapes, backgrounds}
+
+\usepackage{tikz-3dplot}
+\usepackage{xcolor,colortbl}
+
+
+% for red line canceling diagonally
+\usepackage{cancel}
+\renewcommand{\CancelColor}{\color{red}}
+
+\captionsetup{font=small,labelfont=bf,singlelinecheck=off,margin=2cm,justification=justified}
+\numberwithin{equation}{section}
+
+\newcommand{\defbox}[3]
+	{
+		\vspace{0.5cm} 
+		\noindent \fbox{\begin{minipage}{\linewidth}
+		\textbf{{#1}DEFINITION{#2}} #3
+		\end{minipage}}
+		\vspace{0.5cm}
+	}
+	
+	
+\newcommand{\defnobox}[3]
+	{
+		\vspace{0.5cm} 
+		\noindent \begin{minipage}{\linewidth}
+		\textbf{{#1}DEFINITION{#2}} #3
+		\end{minipage}
+		\vspace{0.5cm}
+	}
+	
+%%%% To get a nice colourful box around an equation
+\newcommand*{\colourboxed}{}
+\def\colourboxed#1#{%
+  \colourboxedAux{#1}%
+}
+\newcommand*{\colourboxedAux}[3]{%
+  % #1: optional argument for color model
+  % #2: color specification
+  % #3: formula
+  \begingroup
+    \colorlet{cb@saved}{.}%
+    \color#1{#2}%
+    \boxed{%
+      \color{cb@saved}%
+      #3%
+    }%
+  \endgroup
+}
+
+
+%%%%%% COLOURS %%%%%%%%%%
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+\definecolor{battleshipgrey}{rgb}{0.52, 0.52, 0.51}
+\definecolor{brightmaroon}{rgb}{0.76, 0.13, 0.28}
+\definecolor{nicegreen}{RGB}{133, 204, 111}
+
+% isep colours
+\definecolor{isepblue1}{RGB}{0, 97, 161}      % teinte à 100%
+\definecolor{isepblue2}{RGB}{77, 144, 189}    % teinte à 70%
+\definecolor{isepblue3}{RGB}{179, 208, 227}   % teinte à 30%
+\definecolor{iseporange1}{RGB}{244, 161, 0}   % teinte à 100%
+\definecolor{iseporange2}{RGB}{234, 189, 100} % teinte à 70%
+\definecolor{iseporange3}{RGB}{252, 227, 179} % teinte à 30%
+%%%%%%%%%%%%%%%%
+
+% beamer stuff
+\setbeamertemplate{navigation symbols}{}
+\setbeamersize{text margin left=1.0cm,text margin right=1.0cm}
+\setbeamercolor{background canvas}{bg=white}
+
+
+\ifnum \SCHOOLVERSION = 2
+	%%%% ISEP COLOURS %%%%
+	\setbeamercolor{frametitle}{bg=isepblue1, fg=white}
+	\setbeamercolor{progress bar}{fg=iseporange1}
+	\setbeamercolor{itemize item}{fg=iseporange1,bg=iseporange1}
+	%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+\setbeamerfont{frametitle}{family=\fontfamily{qag}\selectfont} % choose font for frame titles
+\setbeamerfont{title}{family=\fontfamily{qag}\selectfont} % choose font for title
+\setbeamerfont{subtitle}{family=\fontfamily{qag}\selectfont} % choose font for subtitle
+\setbeamerfont{section title}{family=\fontfamily{qag}\selectfont} % choose font for titles
+%\fontfamily{qag}\selectfont %choose font for main text % put after begin{document}
+
+% to make the progress bar a little thicker
+\makeatletter
+\setlength{\metropolis@titleseparator@linewidth}{1.5pt}
+\setlength{\metropolis@progressonsectionpage@linewidth}{1.5pt}
+\setlength{\metropolis@progressinheadfoot@linewidth}{1.5pt}
+\makeatother
+
+\begin{document}
+
+\title{Linear Algebra}
+\subtitle{Linear Algebra - Vector Spaces}
+\author{Andrew Lehmann}
+\ifnum \SCHOOLVERSION = 2
+	\institute{\'{E}cole d'ing\'{e}nieurs du num\'{e}rique}
+\fi
+\date{\textit{Last updated: \today}}
+
+% logo of university
+\ifnum \SCHOOLVERSION = 2
+	\titlegraphic{\includegraphics[width=3cm]{/home/andrew/Dropbox/ISEP/admin/logo-isep-2023.png} }
+\fi
+
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+
+
+\ifnum \EXAMPLEVERSION = 1
+\section{Foundational Concepts}
+\fi
+
+
+\ifnum \EXAMPLEVERSION = 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example}
+
+Consider the set $\mathbb{R}^2$ of tuples $(x,y)$. With the usual definition of addition of tuples and scalar multiplication, these objects satisfy the following properties. For every tuple $\vec{u},\vec{v},\vec{w} \in \mathbb{R}^2$ and every scalar $a,b\in\mathbb{R}$ we have:
+
+\begin{minipage}{0.57\textwidth}
+\begin{itemize}
+\item $\vec{u}+\vec{v} \in \mathbb{R}^2$
+\item $\left(\vec{u}+\vec{v}\right) +\vec{w} = \vec{u}+\left(\vec{v} +\vec{w}\right)$
+\item $\exists \vec{0}\in\mathbb{R}^2$ such that $\vec{u}+\vec{0}=\vec{0}+\vec{u}=\vec{0}$
+\item $\vec{u}+(-\vec{u})=\vec{0}$
+\item $\vec{u}+\vec{v} = \vec{v}+\vec{u}$
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}{0.43\textwidth}
+\begin{itemize}
+\item $a\vec{u} \in \mathbb{R}^2$
+\item $a\left(\vec{u}+\vec{v}\right) = a\vec{u}+a\vec{v}$
+\item $\left(a+b\right)\vec{u} = a\vec{u}+b\vec{u}$
+\item $\left(ab\right)\vec{u} = a\left(b\vec{u}\right)$
+\item $1\vec{u}=\vec{u}$
+\end{itemize}
+\end{minipage}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example}
+
+Consider the set $\mathcal{F}$ of functions of the form $f:\mathbb{R}\to\mathbb{R}$. Define addition of functions $(f+g)(x)=f(x)+g(x)$ and scalar multiplication $(af)(x)=af(x)$. For every function $f,g,h \in \mathcal{F}$ and every scalar $a,b\in\mathbb{R}$ we have:
+
+\begin{minipage}{0.57\textwidth}
+\begin{itemize}
+\item $f+g \in \mathcal{F}$
+\item $\left(f+g\right) +h = f+\left(g +h\right)$
+\item $\exists 0(x)\in\mathcal{F}$ such that $f+0(x)=0(x)+f=0(x)$
+\item $f+(-f)= 0(x)$
+\item $f+g = g+f$
+\end{itemize}
+\end{minipage}\hfill
+\begin{minipage}{0.43\textwidth}
+\begin{itemize}
+\item $af \in \mathcal{F}$
+\item $a\left(f+g\right) = af+ag$
+\item $\left(a+b\right)f = af+bf$
+\item $\left(ab\right)f = a\left(bf\right)$
+\item $1f=f$
+\end{itemize}
+\end{minipage}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+
+\ifnum \EXAMPLEVERSION = 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Tuples in $\mathbb{R}^2$}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Set of functions}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Definition - Vector Space}
+A \textbf{vector space} $\mathcal{V}$ over a field $\mathbb{K}$ (e.g. $\mathbb{R}$ or $\mathbb{C}$) is a set of objects we call vectors, together with a definition for vector addition, $+$, and scalar multiplication of vectors by elements of the field, which satisfy the following properties. For every vector $\textbf{u},\textbf{v},\textbf{w} \in \mathcal{V}$ and every scalar $a,b\in\mathbb{K}$ we have:
+
+\hspace{0.5cm}\begin{minipage}{0.60\textwidth}
+\begin{itemize}
+\item[(VA1)] $\textbf{u}+\textbf{v} \in \mathcal{V}$
+\item[(VA2)] $\left(\textbf{u}+\textbf{v}\right) +\textbf{w} = \textbf{u}+\left(\textbf{v} +\textbf{w}\right)$
+\item[(VA3)] $\exists \textbf{0}_\mathcal{V}\in\mathcal{V}$ such that $\textbf{u}+\textbf{0}_\mathcal{V}=\textbf{0}_\mathcal{V}+\textbf{u}=\textbf{0}_\mathcal{V}$
+\item[(VA4)] $\textbf{u}+(-\textbf{u})=\textbf{0}_\mathcal{V}$
+\item[(VA5)] $\textbf{u}+\textbf{v} = \textbf{v}+\textbf{u}$
+\end{itemize}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+\begin{itemize}
+\item[(SM1)] $a\textbf{u} \in \mathcal{V}$
+\item[(SM2)] $a\left(\textbf{u}+\textbf{v}\right) = a\textbf{u}+a\textbf{v}$
+\item[(SM3)] $\left(a+b\right)\textbf{u} = a\textbf{u}+b\textbf{u}$
+\item[(SM4)] $\left(ab\right)\textbf{u} = a\left(b\textbf{u}\right)$
+\item[(SM5)] $1\textbf{u}=\textbf{u}$
+\end{itemize}
+\end{minipage}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\ifnum \EXAMPLEVERSION = 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Examples}
+We have abstracted the word vector away from the familiar arrows. Now a \textbf{vector} is just a member of any vector space. For example, a vector $\textbf{v}$ could be:
+\begin{table}
+\begin{tabular}{ll}
+A tuple &  $\textbf{v} = (3, \, 4, \, -1, \, 10)$ \\
+A polynomial &  $\textbf{v} = 2x^3 - 0.1$ \\
+A function &  $\textbf{v} = 2\sin(x)$ \\
+A solution to an equation &  $\textbf{v} = (1, \,3)$ satisfying $y=2x+1$ \\
+A matrix &  $\textbf{v} = \begin{pmatrix}3 & 1 \\ 0 & -2/3 \end{pmatrix}$
+\end{tabular}
+\end{table}
+
+As long as it belongs to a set with a well-defined notion of how to add any two vectors and how to multiply vectors by scalars satisfying the previous page of properties.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Matrices}
+
+Consider the set of 2x2 matrices, $\mathcal{M}_{2,2}(\mathbb{R})$.
+
+Does adding two 2x2 matrices result in another 2x2 matrix?
+
+What is the zero element of this vector space?
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Matrices (cont.)}
+
+First we note the usual definitions of matrix addition and scalar multiplication
+\begin{align*}
+&
+\begin{pmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{pmatrix}
++
+\begin{pmatrix}
+b_{11} & b_{12} \\
+b_{21} & b_{22}
+\end{pmatrix}
+=
+\begin{pmatrix}
+a_{11}+b_{11} & a_{12}+b_{12} \\
+a_{21}+b_{21} & a_{22}+b_{22}
+\end{pmatrix}
+\\
+& k
+\begin{pmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{pmatrix}
+=
+\begin{pmatrix}
+ka_{11} & ka_{12} \\
+ka_{21} & ka_{22}
+\end{pmatrix}
+\end{align*}
+Since the results are themselves also 2x2 matrices, these two definitions demonstrate axioms VA1 and SM1. Matrices follow the other rules quite simply (though tedious to show), noting that the zero \textit{vector} is the matrix of zeros:
+\begin{align*}
+\textbf{0}
+=
+\begin{pmatrix}
+0 & 0 \\
+0 & 0
+\end{pmatrix}
+\end{align*}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Points on a line}
+The set of points that satisfy $y=x/2$ is a vector space with addition defined by $(a,b)+(c,d)=(a+c,b+d)$ and scalar multiplication defined by $k(a,b)=(ka,kb)$. Let's verify that it is \textit{closed under vector addition} (VA1) and \textit{closed under scalar multiplication} (SM1).
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Points on a line (cont.)}
+Let $S$ be ``the set of points that satisfy $y=x/2$''. Let $\textbf{u}$ and $\textbf{v}$ be two abritrary vectors of $S$. That is, we have the two pairs
+\begin{align*}
+\textbf{u} &= (u_x, \, u_y) \\
+\textbf{v} &= (v_x, \, v_y)
+\end{align*}
+which must satisfy $u_y = u_x/2$ and $v_y =  v_x/2$. The addition of the tuples gives $\textbf{u}+\textbf{v} = (u_x + v_x, \, u_y +  v_y) = (a,b)$. We know that $u_y +  v_y = u_x/2 +  v_x/2 = (u_x +  v_x)/2$. This says the components of the addition are related by $b=a/2$. 
+
+Therefore $\textbf{u}+\textbf{v}\in S$ and VA1 is verified.
+ 
+For any constant $k$ we have $k\textbf{u}=(ku_x,ku_y)$ and $ku_y = k\times u_x/2 = (ku_x)/2$. 
+
+Therefore $k\textbf{u}\in S$ and SM1 is verified.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Points on a line (cont.)}
+With tedious effort, all of the other vector properties can be shown for ``the set of points that satisfy $y=x/2$. This vector space represents a straight line
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[> = Triangle]
+	% coordinate axes
+	\draw[->] (-1, 0) -- (3,0) node[right] {$x$};
+	\draw[->] (0, -0.5) -- (0,2) node[right] {$y$};
+
+
+	\coordinate (O) at (0,0); 
+	
+		
+	% straight line y=x/2
+	\draw[-,nicegreen,line width = 0.6mm] (-1,-0.5)--(3,1.5) node[right,black] {$y=x/2$};
+	
+	% vectors u=(1,0.5) and v=(2,1)
+	\draw[->,red,line width = 0.5mm] (O)--(2,1) node[above left,black] {$\textbf{u}=(u_x,u_y)$};
+	\draw[->,airforceblue,line width = 0.5mm] (O)--(1.2,0.6) node[below right,black] {$\textbf{v}=(v_x,v_y)$};
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{tikzpicture}
+\end{figure}
+It shouldn't be too difficult to see that adding arrows on this line gives new arrows still on the line. Commonly this kind of vector space is denoted in set form:
+\begin{align*}
+S = \left\{ (x,y)\in \mathbb{R}^2 \, | \, x-2y = 0\right\}
+\end{align*}
+In words: all the paris of points, $(x,y)$, in the plane ($\mathbb{R}^2$) such that $x-2y=0$.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+
+\ifnum \EXAMPLEVERSION = 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Various vectors}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Matrices as vectors}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Points on a line}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+\section{Vector subspaces}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Definition - Subspace}
+
+Suppose that $\mathcal{V}$ is a vector space and $\mathcal{W}$ is a subset of $\mathcal{V}$. We call $\mathcal{W}$ a \textcolor{MidnightBlue}{\textit{vector subspace}} of $\mathcal{V}$ if it forms a vector space under the same vector addition and scalar multiplication defined for $\mathcal{V}$.
+\vspace{-0.4cm}\begin{center} \textcolor{airforceblue}{\rule{0.7\textwidth}{0.3mm}} \end{center}\vspace{-0.2cm}
+
+To demonstrate that $\mathcal{W}$ is a vector subspace of $\mathcal{V}$, it suffices to prove three properties:
+\begin{enumerate}
+\item $\mathcal{W}$ is a non-empty set. (There is at least one vector in $\mathcal{W}$.)
+
+\item Closure under vector addition: for every $\textbf{u},\textbf{v}\in \mathcal{W}$ we have 
+\begin{align*}
+\textbf{u} + \textbf{v} \in \mathcal{W}
+\end{align*}
+
+\item Closure under scalar multiplication: for every $\textbf{u}\in\mathcal{W}$ and $k\in\mathbb{R}$ we have
+\begin{align*}
+k\textbf{u} \in \mathcal{W}
+\end{align*}
+\end{enumerate}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\ifnum \EXAMPLEVERSION = 1
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Planar vector subspace}
+Consider the set of triples
+\begin{align*}
+F = \left\{ (x,y,z)\in\mathbb{R}^3 \, | \, 2x + 3y + 4z = 0 \right\}
+\end{align*}
+Let's show that $F$ is a vector subspace of $\mathbb{R}^3$.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Planar vector subspace (cont.)}
+\vspace{-0.7cm}
+\begin{align*}
+F = \left\{ (x,y,z)\in\mathbb{R}^3 \, | \, 2x + 3y + 4z = 0 \right\}
+\end{align*}
+
+\vspace{-0.8cm}\begin{center} \textcolor{airforceblue}{\rule{0.7\textwidth}{0.3mm}} \end{center}\vspace{-0.2cm}
+
+We need to show only those 3 properties.
+\begin{enumerate}
+\item Is $F$ non-empty? Well it's not so hard to see that $(x,y,z)=(0,0,0)$ is a solution to $2x + 3y + 4z = 0$, and so $(0,0,0)\in F$. Hence $F$ is not an empty set. (Can also use any obvious member, e.g. $(1,1,-5/4)$ or $(2,0,-1)$ etc).
+
+\item Do the addition of two arbitrary members give another member? Let $A=(a,b,c)$ and $B=(\alpha,\beta,\gamma)$. The addition is
+\begin{align*}
+A+B = (a+\alpha, b+\beta, c+\gamma).
+\end{align*}
+We want to know if this vector is made of components that satisfy the defining equation. That is, we want to check the value of $2(a+\alpha) + 3(b+\beta) + 4(c+\gamma)$. If it is zero, then $A+B\in F$. If it is not necessarily zero, then $F$ is not a vector subspace.
+\end{enumerate}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Planar vector subspace (cont.)}
+\vspace{-0.7cm}
+\begin{align*}
+2(a+\alpha) + 3(b+\beta) + 4(c+\gamma) &= 2a+2\alpha + 3b+3\beta + 4c+4\gamma \\
+&= \left(2a+3b+4c\right) + \left(2\alpha + 3\beta + 4\gamma\right) \\
+&= 0
+\end{align*}
+Because we know that $A\in F$ and $B\in F$. This tells us that $A+B \in F$ and hence the set $F$ is closed under vector addition.
+
+3) Does the scalar multiplication of arbitrary members give another member? Let $k\in\mathbb{R}$. The scalar multiplication on $A$ is
+\begin{align*}
+kA = k(a,b,c)=(ka,kb,kc) \quad\text{and}\quad 2(ka)+3(kb)+4(kc) = k(2a+3b+4c)=0
+\end{align*}
+Hence $F$ is closed under scalar multiplication.
+
+We have shown the 3 properties, so $F$ is a vector subspace of $\mathbb{R}^3$.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+
+\ifnum \EXAMPLEVERSION = 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Planar vector subspace}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Planar vector subspace}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Exercises}
+Which of the following are vector subspaces?
+\begin{itemize}
+\item $A= \left\{ (x,y,z)\in\mathbb{R}^3 \, | \, 9x - 3y + 2z = 0 \right\}$, subspace of $\mathbb{R}^3$?
+\item $B= \left\{ (x,y)\in\mathbb{R}^2 \, | \, y = 2x + 1 \right\}$, subspace of $\mathbb{R}^2$?
+\item $C= \left\{ (x,y)\in\mathbb{R}^3 \, | \, y = 2x \right\}$, subspace of $\mathbb{R}^3$?
+\end{itemize}
+(advanced)
+
+\begin{itemize}
+\item $D= \left\{ k X^2 \, | \forall k\in\mathbb{R} \right\}$, subspace of all order 2 polynomials?
+\item $E=$ theset of upper triangular $3\times 3$ matrices, subspace of $\mathcal{M}_{3\times 3}(\mathbb{R})$?
+\item $F= \left\{ k \sin(x) \, | \forall k\in\mathbb{R} \right\}$, subspace of all functions of the form $f:\mathbb{R}\to\mathbb{R}$?
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Definition - Linear Combination}
+Let \{$\textbf{v}_1$, \dots, $\textbf{v}_n$\} be a set of vectors in a vector space $V$. A \textcolor{MidnightBlue}{\textit{linear combination}} of these vectors is a new vector, $\textbf{w}\in V$, of the form
+\begin{align*}
+\textbf{w} = \alpha_1 \textbf{v}_1 + \cdots + \alpha_n \textbf{v}_n
+\end{align*}
+where the $\alpha_k$ are real numbers.
+\vspace{-0.5cm}\begin{center} \textcolor{airforceblue}{\rule{0.7\textwidth}{0.3mm}} \end{center}\vspace{-0.2cm}
+
+\textit{Note}: In the demonstration of vector subspaces by proving 3 properties, the two properties of closure under vector addition and scalar multiplication can be combined into 1 step by proving closure under linear combinations.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Definition - Span}
+Given a vector space $\mathcal{V}$, we wish to create the ``smallest'' vector subspace that contains a given subset of $\mathcal{V}$.
+
+Let $\left\{ \textbf{v}_1, \textbf{v}_2, \dots, \textbf{v}_n\right\}$ be a finite set of vectors of $\mathcal{V}$. Then:
+\begin{itemize}
+\item The set of all linear combinations of these vectors forms a vector subspace of $\mathcal{V}$.
+\item This set is the smallest vector subspace of $\mathcal{V}$ containing $\left\{ \textbf{v}_1, \textbf{v}_2, \dots, \textbf{v}_n\right\}$.
+\end{itemize}
+This vector subspace is called \textcolor{MidnightBlue}{\textit{the span}} of $\left\{ \textbf{v}_1, \textbf{v}_2, \dots, \textbf{v}_n\right\}$ and is denoted
+\begin{align*}
+\text{SPAN}(\textbf{v}_1, \textbf{v}_2, \dots, \textbf{v}_n)
+\end{align*}
+
+\textit{Note}: symbolically, we can say $\textbf{u} \in \text{SPAN}(\textbf{v}_1, \textbf{v}_2, \dots, \textbf{v}_n) \implies \exists \alpha_1, \dots, \alpha_n \in \mathbb{R}$ such that $\textbf{u} = \alpha_1 \textbf{v}_1 + \dots + \alpha_n \textbf{v}_n$
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\ifnum \EXAMPLEVERSION = 1
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Examples - Span of 1 vector}
+Suppose we have a vector space $\mathcal{V}$. For any single arbitrary vector of $\mathcal{V}$ we can form the span subspace:
+\begin{align*}
+\textbf{v} \in \mathcal{V} \quad\implies\quad \text{SPAN}(\textbf{v}) = \{k \textbf{v} \, | \, k\in\mathbb{R} \}
+\end{align*}
+
+\begin{minipage}{0.45\textwidth}
+A geometrical version of this span is the line given by the arrow $\textbf{v}$:
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[> = Triangle]
+	% coordinate axes
+	\draw[->] (-1, 0) -- (3,0) node[right] {$x$};
+	\draw[->] (0, -1) -- (0,2) node[left] {$y$};
+
+	\coordinate (O) at (0,0); 
+		
+	% straight line y=x/2
+	\draw[-,nicegreen,line width = 0.6mm] (-1,-0.5)--(3,1.5) node[left=10pt] {$\text{SPAN}(\textbf{v})$};
+	
+	% vectors u=(1,0.5) and v=(2,1)
+	\draw[->,airforceblue,line width = 0.5mm] (O)--(1.2,0.6) node[below right,black] {$\textbf{v}=(x,y)$};
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{tikzpicture}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+A functional version of this span is a set of constant multiples of a function:
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[> = Triangle]
+	% coordinate axes
+	\draw[->] (-1, 0) -- (3,0) node[right] {$x$};
+	\draw[->] (0, -1) -- (0,2) node[left] {$y$};
+
+
+	\coordinate (O) at (0,0); 
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,nicegreen,line width=0.3mm] plot({\x},{-0.7*(\x+0.6)*\x*(\x-2)});
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,nicegreen,line width=0.3mm] plot({\x},{-0.3*(\x+0.6)*\x*(\x-2)});
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,nicegreen,line width=0.3mm] plot({\x},{-0.1*(\x+0.6)*\x*(\x-2)});
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,nicegreen,line width=0.3mm] plot({\x},{+0.1*(\x+0.6)*\x*(\x-2)});
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,nicegreen,line width=0.3mm] plot({\x},{+0.3*(\x+0.6)*\x*(\x-2)});
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,nicegreen,line width=0.3mm] plot({\x},{+0.5*(\x+0.6)*\x*(\x-2)});
+	\draw[smooth,variable=\x,samples=100,domain=-1:2.2,airforceblue,line width=0.5mm] plot({\x},{-0.5*(\x+0.6)*\x*(\x-2)}) node[right] {$y=f(x)$};
+	
+	\node[black,left] at (-0.1,1.2) {$\textbf{v}=f(x)$};
+	\node[nicegreen,right] at (1.5,1.5) {$\text{SPAN}(\textbf{v})$};
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{tikzpicture}
+\end{figure}
+\end{minipage}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Span of 2 vectors}
+Suppose we have a vector space $\mathcal{V}$. For any two arbitrary vectors in $\mathcal{V}$ we have
+\begin{align*}
+\textbf{v},\textbf{u} \in \mathcal{V} \quad\implies\quad \text{SPAN}(\textbf{v},\textbf{u}) = \{a \textbf{v} + b\textbf{u} \, | \, a,b\in\mathbb{R} \}
+\end{align*}
+
+\begin{minipage}{0.45\textwidth}
+The 2d geometrical version of this span gives the entire 2d plane:
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[> = Triangle]
+	% coordinate axes
+	\draw[->] (-1, 0) -- (3,0) node[right] {$x$};
+	\draw[->] (0, -0.5) -- (0,2) node[left] {$y$};
+
+	\coordinate (O) at (0,0); 
+		
+	\draw[->,airforceblue,line width = 0.5mm] (O)--(1.2,0.6) node[below right,black, pos=0.7] {$\textbf{v}$};
+	\draw[->,Maroon,line width = 0.5mm] (O)--(-0.5,0.8) node[left,black] {$\textbf{u}$};
+	\draw[->,dashed,black,line width = 0.2mm] (1.2,0.6)--(0.7,1.4) node[right,black,pos=0.5] {$\textbf{u}$};
+	\draw[->,black,line width = 0.5mm] (O)--(0.7,1.4) node[above,black,pos=0.9] {$\textbf{v}+\textbf{u}$};
+	\draw[->,black,line width = 0.5mm] (O)--(2.7,-0.54) node[left=15pt,black,pos=0.9] {$1.5\textbf{v}-1.8\textbf{u}$};
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{tikzpicture}
+\end{figure}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+In 3d space, the span of any 2 vectors forms a planar vector subspace:
+\begin{figure}[H]
+\centering
+\tdplotsetmaincoords{105}{-30}
+\begin{tikzpicture}[tdplot_main_coords,font=\sffamily,scale=0.6]
+  \tdplotsetrotatedcoords{00}{30}{0}
+  \begin{scope}[tdplot_rotated_coords]
+  \begin{scope}[canvas is xy plane at z=0]
+    \fill[blue,fill opacity=0.1] (-3.5,-5) rectangle (2,4); 
+    \path (-150:2) coordinate (H) (-1.5,0) coordinate(X);
+   
+    \coordinate (O) at (0,0);
+    \coordinate (a) at (-1,1.8);
+    \coordinate (b) at (-2,-1);
+    \draw [->,red] (O) --($(a)$) node[pos=0.6,below=1pt] {$\textbf{v}$};
+    \draw [->,red] (O) --($(b)$) node[pos=0.6,right=1pt] {$\textbf{u}$};
+    
+    \draw [->] (O) --($(a)+(b)$) node[pos=1,above=1pt] {$\textbf{v}+\textbf{u}$};
+    \draw [->,blue] ($(a)+0.05*(b)$) --($(a)+0.9*(b)$) node[pos=0.5,left=1pt] {$\textbf{u}$};
+    
+    \draw [->] (O) --($(b)-2*(a)$) node[pos=1,right=1pt] {$\textbf{u}-2\textbf{v}$};
+    \draw [->,blue] ($(a)-0.1*1.2*(b)$) --($(a)-0.9*1.2*(b)$) node[pos=0.8,left=1pt] {$-1.2\textbf{u}$};
+    
+    \draw [->] (O) --($(a)-1.2*(b)$) node[pos=1,right=1pt] {$\textbf{v}-1.2\textbf{u}$};
+    \draw [->,blue] ($(b)-0.1*2*(a)$) --($(b)-0.9*2*(a)$) node[pos=0.7,above=1pt] {$-2\textbf{v}$};
+   
+   \pgflowlevelsynccm
+  \end{scope} 
+ \end{scope}
+ \pgfmathsetmacro{\Radius}{1.5}
+ 
+ 
+ \draw[-stealth] (O)-- (2.5*\Radius,0,0) node[pos=1.15] {$y$};
+ \draw[-stealth] (O) -- (0,3.5*\Radius,0) node[pos=1.15] {$x$};
+ \draw[-stealth] (O) -- (0,0,2.5*\Radius) node[pos=1.05] {$z$};
+\end{tikzpicture}
+\end{figure}
+\end{minipage}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example}
+
+Consider the vector space $V=\text{SPAN}(\textbf{u},\textbf{v})$ for vectors
+\begin{align*}
+\textbf{u}=(1,1,2) \quad\text{and}\quad \textbf{v}=(0,3,1).
+\end{align*}
+Does the vector $\textbf{w}=(1,-5,0)$ belong to $V$?
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example (cont.)}
+To answer this quesiton, we want to know if it is possible to write $\textbf{w}$ as a linear combination of $\textbf{u}$ and $\textbf{v}$. That is, can we find constants $\alpha$ and $\beta$ to let us write $\textbf{w} = \alpha \textbf{u} + \beta \textbf{v}?$
+
+This equation, written fully, is
+\begin{align*}
+(1,-5,0) = \alpha(1,1,2) +\beta(0,3,1) = (\alpha,\alpha+3\beta,2\alpha+\beta).
+\end{align*}
+\begin{minipage}{0.4\textwidth}
+This can be unpacked into a system of 3 equations:
+\begin{align*}
+  1 &= \alpha \\
+ -5 &= \alpha+3\beta\\
+  0 &= 2\alpha+\beta
+\end{align*}
+\end{minipage}\hspace{0.5cm}
+\begin{minipage}{0.5\textwidth}
+$\implies$ The last equation gives $\beta = -2\alpha = -2$. Importantly $(\alpha,\beta)=(1,-2)$ does not contradict the second equation. So we have found that $\textbf{w} = \textbf{u} -2 \textbf{v} \in \text{SPAN}(\textbf{u},\textbf{v})$.
+\end{minipage}
+
+\vspace{0.5cm}
+\textit{Note}: If we had shown that $\alpha$ and $\beta$ were impossible to exist, then this would mean $\textbf{w} \notin V$.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+
+
+\ifnum \EXAMPLEVERSION = 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Span of 1 vector}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Span of 2 vectors}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Belonging to a span}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Definition - Cartesian form}
+Euclidean vector sub spaces can always be written as a set with some defining equations, called the Cartesian form:
+\begin{align*}
+\left\{ (x_1,\dots,x_n) \in \mathbb{R}^n \, | \, \text{equations relating the } x_k \right\}.
+\end{align*}
+For example, the general form of planar vector subspaces of $\mathbb{R}^3$ is
+\begin{align*}
+V_P = \left\{ (x,y,z)\in \mathbb{R}^3 \, | \, ax + by + cz = 0\right\}
+\end{align*}
+where $a$, $b$ and $c$ are some given constants. This set is read aloud as ``all the triples $(x,y,z)$ such that $ax + by + cz = 0$''.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Examples - Cartesian form}
+
+\begin{table}
+\begin{tabular}{ccc}
+{\Large \textcolor{Maroon}{Span} form} & &  {\Large \textcolor{MidnightBlue}{Cartesian} form} \\ \\
+SPAN($(4,2)$) & $\xleftrightarrow{\text{straight line in the plane}}$ & $\{(x,y)\in\mathbb{R}^2 \, | \, x - 2y = 0 \}$ \\ \\
+SPAN($(1,1,1)$) & $\xleftrightarrow{\text{straight line in 3d space}}$ & $\{(x,y,z)\in\mathbb{R}^3 \, | \, x = y = z \}$ \\ \\
+SPAN($(1,0,1),\, (2,1,0)$) & $\xleftrightarrow{\text{plane in 3d space}}$ & $\{(x,y,z)\in\mathbb{R}^3 \, | \, x - 2y - z = 0 \}$
+\end{tabular}
+\end{table}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\ifnum \EXAMPLEVERSION = 1
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - From span form to Cartesian form}
+
+Given the vectors
+\begin{align*}
+\textbf{v}_1 = (3,-1,1) \quad\text{and}\quad \textbf{v}_2 = (1,2,0)
+\end{align*}
+what is the Cartesian form of the span of these vectors, SPAN($\textbf{v}_1,\textbf{v}_2$)?
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - From span form to Cartesian form (cont.)}
+
+Cartesian form of the span vector space $V=\text{SPAN}((3,-1,1),(1,2,0))$.
+
+\vspace{-0.5cm}\begin{center} \textcolor{airforceblue}{\rule{0.7\textwidth}{0.3mm}} \end{center}\vspace{-0.2cm}
+
+Consider an arbitrary triple in this space: let $(x,y,z) \in V$.
+
+To be in this span means to be a linear combination: $(x,y,z) = \alpha\textbf{v}_1 + \beta\textbf{v}_2$ for constants $\alpha, \beta$.
+
+This can be developed $(x,y,z) = \alpha(3,-1,1) + \beta(1,2,0) = (3\alpha + \beta,-\alpha + 2\beta,\alpha)$ to give the system of equations
+\begin{align*}
+\begin{cases}
+x = 3\alpha + \beta \\
+y = -\alpha + 2\beta \\
+z = \alpha 
+\end{cases}
+\quad\implies\quad
+2x - y - 7z = 0
+\end{align*}
+Which finally means that we have the Cartesian form
+\begin{align*}
+\left\{(x,y,z)\in\mathbb{R}^3 \, | \, 2x - y - 7z = 0\right\} = \text{SPAN}((3,-1,1),(1,2,0))
+\end{align*}
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - From Cartesian form to span form}
+Given the Cartesian form of a vector space
+\begin{align*}
+A = \left\{(x,y,z)\in\mathbb{R}^3 \, | \, x + 2y - 3z = 0\right\}
+\end{align*}
+write $A$ in the form of a span of vectors.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - From Cartesian form to span form (cont.)}
+\vspace{-0.5cm}
+\begin{align*}
+A = \left\{(x,y,z)\in\mathbb{R}^3 \, | \, x + 2y - 3z = 0\right\}
+\end{align*}
+\vspace{-1cm}\begin{center} \textcolor{airforceblue}{\rule{0.7\textwidth}{0.3mm}} \end{center}\vspace{-0.2cm}
+
+We can rearrange the equation to $x=3z-2y$. So, every vector in $A$ can be written
+\begin{align*}
+(x,y,z) &= (3z-2y, y, z) \\
+&= (-2y, y, 0) + (3z, 0, z) \\
+&= y(-2, 1, 0) + z(3, 0, 1)
+\end{align*}
+With no further equations relating $y$ and $z$ to each other, they are free variables. Meaning they can take on any value. This means every triple $(x,y,z)\in A$ can be written as some linear combination of the vectors $\textbf{v}=(-2,1,0)$ and $\textbf{u}=(3,0,1)$. So we have the span form
+\begin{align*}
+A = \text{SPAN}( \, (-2,1,0), \, (3,0,1) \, )
+\end{align*}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+
+
+\ifnum \EXAMPLEVERSION = 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Span form to Cartesian form}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Cartesian form to span form}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+
+
+\section{Intersection, union and the sum of subspaces}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Theorem - Intersection of vector subspaces is a vector subspace}
+
+Suppose $V$ is a vector space. If $U$ and $W$ are two vector subspaces of $V$, then their intersection $U \cap W$ is also a vector subspace of $V$.
+\vspace{-0.3cm}\begin{center} \textcolor{airforceblue}{\rule{0.7\textwidth}{0.3mm}} \end{center}\vspace{-0.2cm}
+
+\begin{proof}
+1) Non-empty - $U$ and $W$ must both contain the zero vector of $V$. Hence their intersection also contains the zero vector, and is thus a non-empty subset of $V$.
+
+2) Closure under linear combinations - Let $\textbf{a}, \textbf{b} \in U \cap W$ and $\alpha, \beta \in \mathbb{R}$. Then $\textbf{a}, \textbf{b} \in U$, which is closed under linear combinations by being a vector space, and so $\alpha\textbf{a}+\beta\textbf{b} \in U$. But $\textbf{a}, \textbf{b} \in W$ also, which is closed under linear combinations, and so $\alpha\textbf{a}+\beta\textbf{b} \in W$. Hence
+\begin{align*}
+\alpha\textbf{a}+\beta\textbf{b} \in U\cap W
+\end{align*}
+and we have that the intersection is a vector subspace.
+\end{proof} 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Theorem - Union of vector subspaces}
+
+Theorem: Suppose $V$ is a vector space. If we have 2 subspaces $U$ and $W$, then either
+\begin{enumerate}
+\item $U$ is a subspace of $W$
+\item $W$ is a subspace of $U$
+\item The union of $U$ and $W$ is NOT a subspace of $V$.
+\end{enumerate}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Visualisation}
+For visual examples of the two previous theorems, consider instersecting planes in $\mathbb{R}^3$ or intersecting lines in $\mathbb{R}^2$.
+
+\noindent \begin{minipage}{0.45\textwidth}
+\begin{figure}
+    \begin{tikzpicture}[line cap=round, line join=round, >=Triangle,scale=1]
+
+		% coordinate system
+		\coordinate (O) at (0,0);
+		\draw [->,black] (O)--(-1.5,-1.5) node[right] {$x$}; % x-axis
+		\draw [->,black] (O)--(+2.5,+0.0) node[right] {$y$}; % y-axis
+		\draw [->,black] (O)--(+0.0,+2.0) node[left] {$z$}; % z-axis
+    
+	    % plane 1 vertices positions
+    	\coordinate (A1) at (-1.03,-1.2);
+    	\coordinate (B1) at (-0.73,+1.5);
+    	\coordinate (C1) at (+1.83,+1.9);
+    	\coordinate (D1) at (+1.43,-1.0);
+    	
+	    % plane 2 vertices positions
+    	\coordinate (A2) at (-1.5,-0.8);
+    	\coordinate (B2) at (-0.5,+0.8);
+    	\coordinate (C2) at (+2.3,+1.1);
+    	\coordinate (D2) at (+1.3,-0.7);
+    	
+		\draw [-,nicegreen,line width=1.2pt] (A1)--(B1);
+		\draw [-,nicegreen,line width=1.2pt] (B1)--(C1) node[right,black,pos=1,scale=1.5] {$U$};
+		\draw [-,nicegreen,line width=1.2pt] (C1)--(D1);
+		\draw [-,nicegreen,line width=1.2pt] (D1)--(A1);
+    	
+		\draw [-,airforceblue,line width=1.2pt] (A2)--(B2)node[left=3pt,black,pos=0,scale=1.5] {$W$};
+		\draw [-,airforceblue,line width=1.2pt] (B2)--(C2);
+		\draw [-,airforceblue,line width=1.2pt] (C2)--(D2);
+		\draw [-,airforceblue,line width=1.2pt] (D2)--(A2);
+
+		% vectors
+		\coordinate (u) at (0.5,-0.1);
+		\coordinate (w) at ($1.5*(u)$);
+		\draw [dashed,black,line width=1.1pt] ($-2.5*(u)$)--($4*(u)$);
+		\draw [->,brightmaroon,line width=1.25pt] (O)--($(u)+(w)$) node[below,black,pos=0.75] {\textbf{u}+\textbf{w}};
+		\draw [->,airforceblue,line width=1.25pt] (O)--(w) node[above=3pt,black,pos=0.9] {\textbf{w}};
+		\draw [->,nicegreen,line width=1.25pt] (O)--(u) node[below,black,pos=0.4] {\textbf{u}};
+    \end{tikzpicture}
+\end{figure}
+{\scriptsize The two planes must cross through $(0,0,0)$ to be subspaces (why?). The line of intersection will be a new subspace of $\mathbb{R}^3$. Of course any two vectors on this line will add up to a new vector still on the line.}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+\begin{figure}
+    \begin{tikzpicture}[line cap=round, line join=round, >=Triangle,scale=1]
+		% coordinate system
+		\coordinate (O) at (0,0);
+		\draw [->,black] (-1.5,0)--(+2.5,0) node[right] {$x$}; % x-axis
+		\draw [->,black] (0,-0.5)--(0,+3) node[right] {$y$}; % y-axis
+		
+    	\coordinate (u) at (-0.5,+0.5);
+    	\coordinate (w) at (1,0.8);
+    	
+		\draw [-,nicegreen,line width=1pt] ($-0.8*(u)$)--($2*(u)$) node[above,black,pos=1,scale=1.5] {$U$};
+    	\draw [-,airforceblue,line width=1pt] ($-0.5*(w)$)--($2*(w)$) node[above,black,pos=1,scale=1.5] {$W$};
+		
+		\draw [->,nicegreen,line width=1.25pt] (O)--(u) node[left,black,pos=0.4] {\textbf{u}};
+		\draw [->,airforceblue,line width=1.25pt] (O)--(w) node[right,black,pos=0.6] {\textbf{w}};
+    	\draw [->,brightmaroon,line width=1.25pt] (O)--($(u)+(w)$) node[above,black] {\textbf{u}+\textbf{w}};
+    	\draw [->,dashed,nicegreen,line width=1.0pt] (w)--($(u)+(w)$) node[right,black,pos=0.5] {$\textbf{u}$};
+
+    \end{tikzpicture}
+\end{figure}
+{\scriptsize The two lines must cross through $(0,0)$ to be subspaces. The union of vectors on these lines will not be a new subspace of $\mathbb{R}^2$. We see an example of the lack of closure of the union.}
+\end{minipage}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Definition - Sum of subspaces (sum space)}
+
+Suppose we have a vector space $V$ with vector subspaces $F$ and $G$. We define the \textcolor{Purple}{\textit{sum of subspaces}} (or sum space) as a new set denoted
+\begin{align*}
+F + G = \left\{ \textbf{f} + \textbf{g} \, | \, \textbf{f}\in F, \, \textbf{g}\in G\right\}
+\end{align*}
+
+\textit{Note}: The sum space is a \textit{subset} of the parent vector space: $F+G \subset V$.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Theorem - Sum space is a vector subspace}
+Let $F$ and $G$ be vector subspaces of $V$. The sum space $F+G$ is also a vector subspace of $V$.
+\vspace{-0.3cm}\begin{center} \textcolor{airforceblue}{\rule{0.7\textwidth}{0.3mm}} \end{center}\vspace{-0.2cm}
+
+\begin{proof}
+Closure - Let $\textbf{v}$, $\textbf{w} \in F+G$ and $\alpha,\beta \in \mathbb{R}$. By definition the vectors can be written as the sum of vectors in $F$ and $G$: $\textbf{v}=\textbf{f}_1+\textbf{g}_1$ and $\textbf{w}=\textbf{f}_2+\textbf{g}_2$. The linear combination is thus
+\begin{align*}
+\alpha \textbf{v} + \beta \textbf{w} = \alpha\textbf{f}_1+\beta\textbf{f}_2+\alpha\textbf{g}_1+\beta\textbf{g}_2
+\end{align*}
+As $F$ and $G$ are vector spaces, they are closed under linear combinations. So $\alpha\textbf{f}_1+\beta\textbf{f}_2\in F$ and $\alpha\textbf{g}_1+\beta\textbf{g}_2 \in G$. Hence $\alpha \textbf{v} + \beta \textbf{w} = \textbf{f} + \textbf{g}$ for some $\textbf{f}\in F$ and $\textbf{g}\in G$, and thus $\alpha \textbf{v} + \beta \textbf{w} \in F+G$.
+
+Non-empty - the zero vector is in $F+G$.
+\end{proof}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Visualisation}
+For a visual example of the sum of two subspaces. Consider two lines in $\mathbb{R}^2$ that pass through the origin. As we saw earlier that their union is not a vector subspace. But the sum of the two subspaces ($U$ and $W$ in the picture) includes all the possible vectors that can be reached by a sum of a vector belonging to each line:
+
+\begin{figure}
+    \begin{tikzpicture}[line cap=round, line join=round, >=Triangle,scale=1]
+		% coordinate system
+		\coordinate (O) at (0,0);
+		\draw [->,black] (-1.5,0)--(+2.5,0) node[right] {$x$}; % x-axis
+		\draw [->,black] (0,-0.5)--(0,+3) node[right] {$y$}; % y-axis
+		
+    	\coordinate (u) at (-0.5,+0.5);
+    	\coordinate (w) at (1,0.8);
+    	
+		\draw [-,nicegreen,line width=1pt] ($-0.8*(u)$)--($2*(u)$) node[above,black,pos=1,scale=1.5] {$U$};
+    	\draw [-,airforceblue,line width=1pt] ($-0.5*(w)$)--($2.5*(w)$) node[above,black,pos=1,scale=1.5] {$W$};
+		
+		\draw [->,nicegreen,line width=1.25pt] (O)--(u) node[left,black,pos=0.4] {$\textbf{u}$};
+		\draw [->,airforceblue,line width=1.25pt] (O)--(w) node[left,black,pos=0.8] {$\textbf{w}$};
+    	\draw [->,brightmaroon,line width=1.25pt] (O)--($(u)+(w)$) node[above,black] {\textbf{u}+\textbf{w}};
+    	\draw [->,dashed,nicegreen,line width=1.0pt] (w)--($(u)+(w)$) node[right,black,pos=0.5] {$\textbf{u}$};
+    	\draw [->,dashed,nicegreen,line width=1.0pt] ($2*(w)$)--($-1*(u)+2*(w)$) node[right,black,pos=0.3] {$-\textbf{u}$};
+    	\draw [->,brightmaroon,line width=1.25pt] (O)--($-1*(u)+2*(w)$) node[right,black] {$2\textbf{w}-\textbf{u}$};
+
+    \end{tikzpicture}
+\end{figure}
+
+Incidentally, in this example, the vector space $U + W$ is equal to all $\mathbb{R}^2$.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Smallest Subspace Theorem}
+
+Let $F$ and $G$ be vector subspaces of a vector space $V$. Then $F+G$ is the smallest vector subspace of $V$ that contains the union $F \cup G$.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Properties of sum spaces}
+
+Let $F$, $G$, and $H$ be vector subspaces of a vector space $V$. The sum space satisfies the following properties:
+\begin{itemize}
+\item Associativity: $F + (G + H) = (F + G) + H$
+\item Commutativity: $F + G = G + F$
+\item Null element: $F + \{\textbf{0}_V\} = F$
+\end{itemize}
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Definition - Direct sum}
+
+Let $F$ and $G$ be two vector subspaces of a vector space $V$ and let $E=F+G$ be the sum space. We say $E$ is a \textcolor{Purple}{\textit{direct sum}} of $F$ and $G$ if each element of $E$ has a \textit{unique} decomposition as a sum of vectors in $F$ and vectors in $G$. That is, for every $\textbf{v}\in E$, there exists unique vectors $\textbf{f}\in F$ and $\textbf{g}\in G$ such that $\textbf{v} = \textbf{f} + \textbf{g}$. We denote this direct sum with a new symbol
+\begin{align*}
+E = F \oplus G
+\end{align*}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\ifnum \EXAMPLEVERSION = 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Negative Example}
+Lets start with an example of a sum space that is not a direct sum. Consider the following two vector subspaces of $\mathbb{R}^3$
+\begin{align*}
+A = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x+y+z=0  \right\} \quad\text{and}\quad
+B = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x-y+z=0  \right\}.
+\end{align*}
+Let $\textbf{v}$ be an arbitrary vector in the sum space $A+B$. Then we have
+\begin{align*}
+\textbf{v}= (x,y,z) = \textbf{a} + \textbf{b}
+\end{align*}
+for some $\textbf{a}=(a_x,a_y,a_z)\in A$ and $\textbf{b}=(b_x,b_y,b_z)\in B$. So we can write the system of 5 equations with 6 unknowns 
+\begin{align*}
+x &= a_x + b_x &\quad a_x + a_y + a_z = 0\\
+y &= a_y + b_y &\quad b_x - b_y + b_z = 0 \\
+z &= a_z + b_z
+\end{align*}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Negative Example (cont.)}
+Now the goal would be to invert these equations to find $a_x$, $a_y$, $a_z$, $b_x$, $b_y$ and $b_z$ as functions of $x$, $y$ and $z$. We don't have enough equations to do this, so we end up with a free variable. There are infinite ways to write this, but lets look at the solution if we let $b_z=t$ for some $t\in \mathbb{R}$:
+\begin{align*}
+a_x &= \dfrac{x-y-z+2t}{2}, &\quad a_y &= \dfrac{-x+y-z}{2}, &\quad a_z &= z-t  \\
+b_x &= \dfrac{x+y+z-2t}{2}, &\quad b_y &= \dfrac{x+y+z}{2},  &\quad b_z &= t
+\end{align*}
+Let's consider the triple $(1,1,1)$. If we let $t=0$ and $t=1$ we have
+\begin{align*}
+(1,1,1) &= (-1/2,-1/2,1) + (3/2,3/2,0) & [t=0] \\
+(1,1,1) &= (1/2,-1/2,0) + (1/2,3/2,1)  & [t=1] 
+\end{align*}
+This shows we have 2 different addition representations of $(1,1,1)$.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+
+
+\ifnum \EXAMPLEVERSION = 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Negative example}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Theorem - Direct sum demonstration}
+
+Let $F$ and $G$ be two vector subspaces of $V$. Then $E=F+G$ is a direct sum of $F$ and $G$ if and only if the intersection of $F$ and $G$ contains only the zero vector:
+\begin{align*}
+F \cap G = \{\textbf{0}_V \}.
+\end{align*}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ifnum \EXAMPLEVERSION = 1
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Intersection of two planes}
+Consider again the previous two vector subspaces of $\mathbb{R}^3$
+\begin{align*}
+A = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x+y+z=0  \right\} \quad\text{and}\quad
+B = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x-y+z=0  \right\}.
+\end{align*}
+The defining equations of these sets are both planar equations. Thinking geometrically, the intersection of two planes is a line. So it's trivial to know $A \cap B \neq \{ (0,0,0)\}$. Let's show in detail exactly what this intersection set is.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Intersection of two planes (cont.)}
+\begin{align*}
+A &= \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x+y+z=0  \right\} \quad\text{and}\quad
+B = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x-y+z=0  \right\} \\
+&\implies A \cap B = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x+y+z=0, \, x-y+z=0 \right\}
+\end{align*}
+These two equations as a system will have to be reduced. Adding them gives $x+z=0 \implies z = -x$. Subtracting them gives $y=0$. So every triple can be written $(x,y,z)=(x,0,-x)=(1,0,-1)x$ for arbitrary $x$. Thus the intersection is
+\begin{align*}
+A \cap B = \left\{ (1,0,-1)t \in\mathbb{R}^3 \, | \, \forall t\in \mathbb{R} \right\}= \text{SPAN}( \, (1,0,-1) \, )
+\end{align*}
+This set represents a straight line in the direction of $(1,0,-1)$. We expected a straight line when we take the intersection of two planes.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Intersection of a plane and a line}
+Let's consider the sum space of the following two vector subspaces of $\mathbb{R}^3$
+\begin{align*}
+F = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x+2y-z=0  \right\} \quad\text{and}\quad
+G = \text{SPAN}( \, (2,0,1) \, ).
+\end{align*}
+First we have to convert $G$ from span form into Cartesian form (left as an exercise): \vspace{-0.2cm} 
+\begin{align*}
+G = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, y=0, \, x=2z \right\}
+\end{align*}
+Which gives the first representation of the intersection set \vspace{-0.2cm} 
+\begin{align*}
+F \cap G = \left\{ (x,y,z) \in\mathbb{R}^3 \, | \, x+2y-z=0, \, y=0, \, x=2z \right\}
+\end{align*} 
+Now we reduce the system of equations \vspace{-0.2cm} 
+\begin{align*}
+\begin{cases}
+x+2y-z=0 \\ y=0 \\ x=2z 
+\end{cases}
+\implies
+\begin{cases}
+x-z=0  \\ y=0 \\ x=2z 
+\end{cases}
+\implies
+\begin{cases}
+x=z \\ y=0  \\ x=2z 
+\end{cases}
+\end{align*}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Intersection of a plane and a line (cont.)}
+
+The two equations $x=z$ and $x=2z$ imply $x=0$ and $z=0$. So we have shown that all 3 variables are necessarily zero. Hence
+\begin{align*}
+F \cap G = \left\{ (0,0,0)  \right\} = \left\{ \textbf{0}_{\mathbb{R}^3} \right\}
+\end{align*} 
+Let's now show that $F+G=\mathbb{R}^3$. Let $(x,y,z)\in \mathbb{R}^3$. We have to show that it is possible to write
+\begin{align*}
+(x,y,z) = (\alpha,\beta,\gamma) + (a,b,c)
+\end{align*}
+where $(\alpha,\beta,\gamma)\in F$ and $(a,b,c)\in G$. Expanding we get the equations
+\begin{align*}
+x = \alpha + a, \quad y = \beta + b, \quad z = \gamma + c \\
+\alpha+2\beta-\gamma=0, \quad  b=0, \quad a=2c
+\end{align*}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Intersection of a plane and a line (cont.)}
+We want to rearrange these equations to know what $\alpha$, $\beta$, $\gamma$, $a$, $b$ and $c$ must be for a given triple $x$, $y$ and $z$.
+\begin{align*}
+\begin{cases}
+x = \alpha + 2c \\
+y = \beta \\
+z = \gamma + c
+\end{cases}
+\implies
+\begin{cases}
+x + 2y - z =  \alpha + 2c + 2\beta - \gamma - c = c\\
+x - 2z = \alpha - 2\gamma = \alpha - 2(\alpha+2\beta) = -\alpha-4y
+\end{cases}
+\end{align*}
+So we have \vspace{-0.3cm}
+\begin{align*}
+\alpha = -x-4y + 2z, \quad \beta=y, \quad \gamma=-x-2y + 2z \\
+a = 2x+4y-2z, \quad b=0, \quad c=x+2y-z
+\end{align*}
+and hence we can write any triple as the addition of vectors from $F$ and $G$
+\begin{align*}
+(x,y,z) = \underbrace{(-x-4y + 2z, \, y, \, -x-2y + 2z )}_{\in F} + \underbrace{(2x+4y-2z, \, 0, \, x+2y-z)}_{\in G}
+\end{align*}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Intersection of a plane and a line (cont.)}
+So we have shown that $F+G=\mathbb{R}^3$ and that $F \cap G  = \left\{ \textbf{0}_{\mathbb{R}^3} \right\}$. Therefore $\mathbb{R}^3$ is a direct sum of $F$ and $G$: $\mathbb{R}^3=F \oplus G$.
+
+\textit{Note}: the definition of the direct sum was about the sum space having \textit{unique} representations of the parent space. If you go through the proof closely, you can understand that the expression we derived:
+\begin{align*}
+(x,y,z) = (-x-4y + 2z, \, y, \, -x-2y + 2z ) + (2x+4y-2z, \, 0, \, x+2y-z)
+\end{align*}
+is the only possibly expression for this sum space. So it means every triple has this \textit{unique} addition of a vector in $F$ with a vector in $G$.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+
+
+
+\ifnum \EXAMPLEVERSION = 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Intersection of two planes}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Intersection of a plane and a line}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - Intersection of a plane and a line (cont.)}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Definition - Complementary vector subspaces}
+
+Let $F$ and $G$ be two vector subspaces of $V$. $F$ and $G$ are called \textcolor{Purple}{\textit{complementary}} if $V$ is a direct sum of $F$ and $G$. That is, if and only if
+\begin{itemize}
+\item $V = F+G$, and
+\item $F \cap G = \{\textbf{0}_V \}$
+\end{itemize}
+
+Two examples will reveal the subtlety of this definition:
+\begin{itemize}
+\item For $A=\{ (x,y,z)\in \mathbb{R}^3 \, | \, y=2x \}$ and $B=\{ (x,y,z)\in \mathbb{R}^3 \, | \, y=-x \}$ we do not have the direct sum $\mathbb{R}^3=A \oplus B$ despite the intersection being only the zero vector.
+
+\item For $A=\{ (x,y)\in \mathbb{R}^2 \, | \, y=2x \}$ and $B=\{ (x,y)\in \mathbb{R}^2 \, | \, y=-x \}$ we do have the direct sum $\mathbb{R}^2=A \oplus B$.
+\end{itemize}
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Definition - }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Properties - }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Theorem - }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Example - }
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{title}
+\fontsize{9pt}{10pt}\selectfont
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%% COLOUR CHOICES
+% \textcolor{MidnightBlue}{}
+% \textcolor{Maroon}{}
+% \textcolor{Purple}{}
+% \textcolor{BurntOrange}{}
+% \textcolor{MidnightBlue}{}
+% \textcolor{Mahogany}{}
+% \textcolor{ForestGreen}{}

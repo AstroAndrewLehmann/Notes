@@ -1,0 +1,1700 @@
+\chapter{Linear Maps} \label{ch:linearmaps}
+
+
+\section{Basic properties}
+Let's build the concept of a function, call it $f$, taking vectors as inputs and giving vectors as outputs. We therefore write $f:V \to W$ for vector spaces $V$ and $W$. For example, imagine a function that takes any Euclidean vector in $\mathbb{R}^2$ and rotates it by $45^\circ$ anti-clockwise, keeping the length of the vector fixed. We could write $f(\mathbf{v})=\mathbf{w}$ for $\mathbf{v}, \mathbf{w}\in \mathbb{R}^2$. Below we sketch a couple of examples.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[% styles used in image code
+         > = Straight Barb, % defined in "arrows.meta
+dot/.style = {circle, fill,
+              minimum size=2mm, inner sep=0pt, outer sep=0pt,
+              node contents={}},
+box/.style = {draw, thin, minimum  width=2mm, minimum height=4mm,
+              inner sep=0pt, outer sep=0pt,
+              node contents={}, sloped},
+my angle/.style args = {#1/#2}{draw,->,
+                               angle radius=#1,
+                               angle eccentricity=#2,
+                               } % angle label position!
+                        ]
+	% 1st coordinate axis
+	\coordinate (O1) at (0,0);
+	\draw[->] (-1, 0)   -- (5,0) node[below left] {$x$};
+	\draw[->] ( 0,-0.5) -- (0,4) node[below left] {$y$};
+	
+	% 2nd coordinate axis
+	\coordinate (O2) at (10,0);
+	\draw[->] ($(O2)-(1,0)$)   -- ($(O2)+(5,0)$) node[below left] {$x$};
+	\draw[->] ($(O2)-(0,0.5)$) -- ($(O2)+(0,4)$) node[below left] {$y$};
+	
+	
+    \draw[->,ultra thick] (4,2.5) to[bend left] node[pos=0.5,above] {$f$}  (7,3);
+
+	\coordinate (v1) at (3,1);
+	\coordinate (v2) at (1,2);
+	
+	\coordinate (w1) at (1.414,2.828);
+	\coordinate (w2) at (-2.121,2.121);
+	
+	\draw (O1) node[below left] {$\mathcal{O}$};
+	\draw [->,blue,very thick] (O1) --(v1) node[above right,black] {$(3,1)$};
+	\draw [->,red,very thick] (O1) --(v2) node[above right,black] {$(1,2)$};
+	
+	\draw [->,blue,very thick] (O2) --($(O2) + (w1)$) node[above right,black] {$f(3,1)$};
+	\draw [->,red,very thick] (O2) --($(O2) + (w2)$) node[above right,black] {$f(1,2)$};
+\end{tikzpicture}
+\end{figure}
+
+\noindent For an arbitrary vector $\mathbf{v}=(x,y)$, $f$ maps $\mathbf{v}$ to the coordinates $(x/\sqrt{2}-y/\sqrt{2}, \, x/\sqrt{2}+y/\sqrt{2})$. We then ask the question, if we have two arbitrary vectors $\mathbf{v}=(x,y)$ and $\mathbf{u}=(s,t)$ which add to the third vector $\mathbf{w} = \mathbf{v} + \mathbf{u}$, where does $f$ map the addition $\mathbf{w}$ to? Do we get the same answer as if we first rotate $\mathbf{v}$ and $\mathbf{u}$ and then add the rotated vectors together? Let's see
+\begin{align*}
+f(\mathbf{v}+\mathbf{u}) &= f(x+s, \, y+t) \\
+&= \frac{1}{\sqrt{2}}(x+s - y-t, \, x+s+y+t) \\
+&= \frac{1}{\sqrt{2}}(x-y, \, x+y) + \frac{1}{\sqrt{2}}(s-t, \, s+t) \\
+&= f(x,y) + f(s,t)\\
+&= f(\mathbf{v}) + f(\mathbf{u})
+\end{align*}
+
+\noindent We have indeed that we can rotate $\mathbf{v}$ and $\mathbf{u}$ and then add up the result, or we can add $\mathbf{v}$ and $\mathbf{u}$ and then rotate the result to get the same outcome. 
+
+This lack of importance in the order of the application of the function is not necessarily true for any function we could think of. Consider a function, $g$, that takes a vector in $\mathbb{R}^2$ and gives another vector in the same direction with length equal to the square of the original vector's length. This would be represented by
+\begin{align*}
+g(x,y) = \sqrt{x^2 + y^2} (x,y).
+\end{align*}
+Now, for example, take two vectors $\mathbf{v}=(2,0)$ and $\mathbf{u}=(0,2)$. We have $g(\mathbf{v})=(4,0)$, $g(\mathbf{u})=(0,4)$ and $g(\mathbf{v}+\mathbf{u}) = g(2,2) = (4\sqrt{2},4\sqrt{2})$. So for this function, we have $g(\mathbf{v}+\mathbf{u}) \neq g(\mathbf{v})+g(\mathbf{u})$. The order matters. In linear algebra we study functions of the first type and not the second. These functions are called \textit{linear maps}, defined below:
+
+\definition{Linear map}{
+A mapping, $f$, from a vector space $V$ to a vector space $W$, denoted $f:V \to W$, is called a \textit{linear map} if it satisfies the following property:
+\begin{align*}
+& \forall \mathbf{u}, \, \mathbf{v} \in V, \, \forall \alpha,\beta \in \mathbb{R} \\
+& f(\alpha\mathbf{u} + \beta\mathbf{v}) = \alpha f(\mathbf{u}) + \beta f(\mathbf{v}).
+\end{align*}
+We say that a linear map \textit{preserves linear combinations}.
+}
+
+\example{Differentiation as a linear map}{Let's define a mapping $f: \mathcal{P}_n \to \mathcal{P}_{n-1}$ that takes a polynomial of degree up to $n$ (a member of the vector space of polynomials of degree up to $n$) and differentiates it. For example
+\begin{align*}
+f(1 + 3x^2) &= 6x \\
+f(3) &= 0 \\
+f(2x + x^2) &= 2 + 2x 
+\end{align*}
+and you get the idea. Consider two arbitrary vectors
+\begin{align*}
+\mathbf{u} &= \alpha_0 + \alpha_1 x + \alpha_2 x^2 + \cdots + \alpha_n x^n \\
+\mathbf{v} &= \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_n x^n.
+\end{align*}
+We consider, separately, the action of $f$ on these vectors and on their addition
+\begin{align*}
+f(\mathbf{u}) &= \alpha_1 + 2\alpha_2 x + \cdots + n\alpha_n x^{n-1} \\
+f(\mathbf{v}) &= \beta_1 + 2\beta_2 x + \cdots + n\beta_n x^{n-1} \\
+f(\mathbf{u} + \mathbf{v}) &= f\left((\alpha_0+\beta_0) + (\alpha_1 + \beta_1) x + (\alpha_2 + \beta_2) x^2 + \cdots + (\alpha_n + \beta_n) x^{n} \right) \\
+&= (\alpha_1 + \beta_1) + 2(\alpha_2 + \beta_2) x + \cdots + n(\alpha_n + \beta_n) x^{n-1}
+\end{align*}
+This last expression can be split by collecting alphas and betas
+\begin{align*}
+(\alpha_1 + 2\alpha_2 x + \cdots + n\alpha_n x^{n-1}) + (\beta_1+ 2\beta_2 x + \cdots + n\beta_nx^{n-1}) = f(\mathbf{u}) + f(\mathbf{v})
+\end{align*}
+showing that the derivative of the addition is the addition of the derivatives. Hence we can consider differentiation of polynomials as a linear map.
+}
+
+\theorem{A linear map conserves the zero vector}{
+For any linear map, $f:V \to W$, we have
+\begin{align*}
+f(\mathbf{0}_V) = \mathbf{0}_W
+\end{align*}
+where $\mathbf{0}_V$ is the zero vector of $V$ and $\mathbf{0}_W$ is the zero vector of $W$.
+}
+
+\noindent \textbf{Proof}. By the definition of a linear map, we can choose $\alpha=\beta=0 \in \mathbb{R}$ and we must have for any $\mathbf{u}, \, \mathbf{v} \in V$ the following
+\begin{align*}
+f(0\mathbf{u} + 0\mathbf{v}) = 0f(\mathbf{u}) + 0f(\mathbf{v}).
+\end{align*}
+We proved that the number 0 multiplied by any vector gives the zero vector in that space. Hence
+\begin{align*}
+0\mathbf{u} + 0\mathbf{v} = \mathbf{0}_V+ \mathbf{0}_V =\mathbf{0}_V \quad\text{and}\quad 0f(\mathbf{u}) + 0f(\mathbf{v}) = \mathbf{0}_W + \mathbf{0}_W =\mathbf{0}_W
+\end{align*}
+and so we have proved
+\begin{align*}
+f(\mathbf{0}_V) = \mathbf{0}_W.
+\end{align*}
+
+\definition{Image}{
+The \textit{image of a linear map} $f: V \to W$, denoted $\text{im}(f)$, is the set of all possible ``output'' vectors of the map:
+\begin{align*}
+\text{im}(f) = \{ \mathbf{w} \in W \,\, | \,\, \exists \mathbf{v}\in V\, f(\mathbf{v}) = \mathbf{w} \} \subseteq W.
+\end{align*}
+}
+
+\noindent This can be understood pictorially as so:
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+	\coordinate (v) at (0,-1.45);
+	\coordinate (w) at (5.5,-1.3);
+	
+	% domain set V
+	\fill[pattern=north west lines, pattern color=blue,opacity=.5,draw] 
+  (0,0) ellipse (1.5cm and 2.5cm);
+    \draw[very thick,blue] (0,0) ellipse (1.5cm and 2.5cm);
+    \node[align=left,scale=3] at (-2.5,0) {$V$};
+    \fill[draw] (0,-1.5) circle (0.1cm and 0.1cm);
+    \node[above,scale=1] at (v) {$\mathbf{v}$};
+    
+	% image set f(V) inside W
+	\fill[pattern=north west lines, pattern color=blue,opacity=.5,draw] 
+  (6,-1) ellipse (1.5cm and 1cm);
+    \draw[thick] (6,-1) ellipse (1.5cm and 1cm);
+    \node[align=left,scale=1.5] at (6,-0.7) {$\text{im}(f)$};
+  
+	% codomain set W
+    \draw[very thick] (6,0) ellipse (2cm and 2.7cm);
+    \node[align=right,scale=3] at (9,0) {$W$};
+    \fill[draw] (5.5,-1.3) circle (0.1cm and 0.1cm);
+    \node[right,scale=1] at (w) {$\mathbf{w}$};
+    
+    % mapping lines
+	\draw[->, thick, blue, dashed] (0,2.5) to[bend left] node[pos=0.5,above, black,scale=1] {$f$}  (6,0);
+	\draw[->, thick, blue, dashed] (0,-2.5) to[bend right] (6,-2);
+	\draw[->, thick, blue] (v) to[bend right] node[pos=0.5,above, black,scale=1] {$f(\mathbf{v})$}  ($(w)-(0.1,0.1)$);
+\end{tikzpicture}
+\end{figure}
+
+\noindent The image is a vector subspace of $W$. Let's prove this. Firstly, we previously showed that any linear map takes the zero vector of $V$ to the zero vector of $W$. So $\mathbf{0}_W \in \text{im}(f)$ and hence it is not an empty set. Let $\mathbf{u}$, $\mathbf{v}\in \text{im}(f)$ and $\alpha$, $\beta \in \mathbb{R}$. There must exist corresponding vectors in $V$, $\mathbf{u}'$ and $\mathbf{v}'$ such that $f(\mathbf{u}')=\mathbf{u}$ and $f(\mathbf{v}')=\mathbf{v}$. Hence
+\begin{align*}
+\alpha \mathbf{u} + \beta \mathbf{v} = \alpha f(\mathbf{u}') + \beta f(\mathbf{v}') = f(\alpha \mathbf{u}' + \beta \mathbf{v}')
+\end{align*}
+where we have used the definition of a linear map in the last step. This shows that for any linear combination of vectors in the image of $f$, we can find a corresponding vector in $V$. This means the $\alpha \mathbf{u} + \beta \mathbf{v} \in \text{im}(f)$. Hence the image is a non-empty subset of $W$ that is closed under linear combinations, that is, it is a vector subspace of $W$.
+
+\theorem{Generator of the image}{The image of any linear map, $f:V\to W$, has a generator set that can be found by the action of $f$ on any basis of $V$. That is, let $V$ be an $n$ dimensional vector space and $\mathcal{B}_V=\{\mathbf{b}_1, \dots, \mathbf{b}_n\}$ be a basis of $V$. Then the set $\mathcal{C}=\{f(\mathbf{b}_1),\dots, f(\mathbf{b}_n)\}\subset W$ generates $\text{im}(f)$, that is, 
+\begin{align*}
+\text{im}(f) = \text{SPAN}\left( f(\mathbf{b}_1),\dots, f(\mathbf{b}_n) \right)
+\end{align*}
+}
+
+\begin{proof}
+Let $\mathbf{w}\in \text{im}(f)$. This means there must exist a $\mathbf{v}\in V$ such that $f(\mathbf{v})=\mathbf{w}$. As $\mathcal{B}_V$ is a basis of $V$, the vector $\mathbf{v}$ can be expressed as a linear combination of the basis vectors
+\begin{align*}
+\mathbf{v} = \alpha_1 \mathbf{b}_1 + \cdots + \alpha_n \mathbf{b}_n
+\end{align*}
+hence
+\begin{align*}
+\mathbf{w} = f(\mathbf{v}) = f(\alpha_1 \mathbf{b}_1 + \cdots + \alpha_n \mathbf{b}_n) = \alpha_1 f(\mathbf{b}_1) + \cdots + \alpha_n f(\mathbf{b}_n).
+\end{align*}
+This shows that any vector of the image can be expressed as a linear combination of vectors in the set $\mathcal{C}=\{f(\mathbf{b}_1),\dots, f(\mathbf{b}_n)\}$, i.e.
+\begin{align*}
+\text{im}(f) \subset \text{SPAN}\left( f(\mathbf{b}_1),\dots, f(\mathbf{b}_n) \right).
+\end{align*}
+The other direction is trivial, but worth the practice. Let $\mathbf{w}\in \text{SPAN}\left( f(\mathbf{b}_1),\dots, f(\mathbf{b}_n) \right)$. This means it can be written as a linear combination of these vectors
+\begin{align*}
+\mathbf{w} &= \alpha_1 f(\mathbf{b}_1) + \cdots + \alpha_n f(\mathbf{b}_n) \\
+&= f(\alpha_1 \mathbf{b}_1 + \cdots + \alpha_n \mathbf{b}_n)
+\end{align*}
+which means we have found a corresponing vector $\mathbf{v}=\alpha_1 \mathbf{b}_1 + \cdots + \alpha_n \mathbf{b}_n \in V$ such that $f(\mathbf{v}) = \mathbf{w}$. Hence $\mathbf{w}\in \text{im}(f)$. This proves 
+\begin{align*}
+\text{SPAN}\left( f(\mathbf{b}_1),\dots, f(\mathbf{b}_n) \right) \subset \text{im}(f)
+\end{align*}
+and so we have the equality of these two sets.
+\end{proof}
+
+\definition{Rank}{
+The \textit{rank of a linear map} is the dimension of its image: $\text{rank}(f)=\dim(\text{im}(f))$.
+}
+
+\example{Rank of a linear map from $\mathbb{R}^3$ to $\mathbb{R}^3$}{Let's find the dimension of a given linear map. Let $f:\mathbb{R}^3 \to \mathbb{R}^3$ be the linear map defined by
+\begin{align*}
+f(x,y,z) = (x+z, z-y, y-x-2z).
+\end{align*}
+We take the canonical basis of $\mathbb{R}^3$, $\mathcal{C}=\{\mathbf{e}_1,\mathbf{e}_2,\mathbf{e}_3\}=\{(1,0,0),\, (0,1,0), \, (0,0,1)\}$. From theorem ... we can form the generator set
+\begin{align*}
+\mathcal{B} &= \{f(\mathbf{e}_1),\, f(\mathbf{e}_2), \, f(\mathbf{e}_3) \} \\
+&= \{(1,0,-1), \, (0,-1,1), \, (1,1,-2) \}.
+\end{align*}
+\noindent Now this set is not a basis, because the third vector is the subtraction of the second from the first (and thus the set $\mathcal{B}$ is not a set of linearly independent vectors). So we can drop the third vector to find
+\begin{align*}
+\text{im}(f) = \text{SPAN}((1,0,-1), \, (0,-1,1), \, (1,1,-2) ) = \text{SPAN}((1,0,-1), \, (0,-1,1))
+\end{align*}
+and thus we have the basis of the image
+\begin{align*}
+\mathcal{C} &= \{(1,0,-1), \, (0,-1,1) \}
+\end{align*}
+which means the dimension is 2 and hence $\text{rank}(f)=2$.
+}
+
+\definition{Kernel}{
+The \textit{kernel of a linear map}  $f: V \to W$, denoted $\ker(f)$, is the set of vectors that $f$ maps to the zero vector, $\mathbf{0}_W$, of $W$. That is,
+\begin{align*}
+\ker(f) = \{\mathbf{v} \in V \,\, | \,\, f(\mathbf{v}) = \mathbf{0}_W \}.
+\end{align*}
+}
+
+\noindent This can be understood pictorially as so:
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+	\coordinate (v) at (0,-1.45);
+	\coordinate (Ow) at (5.2,-1.1);
+	
+	% domain set V
+	%\fill[pattern=north west lines, pattern color=blue,opacity=.5,draw] 
+		%(0,0) ellipse (1.5cm and 2.5cm);
+    \draw[very thick,blue,rotate around={-15:(0,0)}] (0,0) ellipse (1.7cm and 2.5cm);
+    \node[align=left,scale=3] at (-2.5,0) {$V$};
+    %\fill[draw] (0,-1.5) circle (0.1cm and 0.1cm);
+    %\node[above,scale=1] at (v) {$\mathbf{v}$};
+  
+	% codomain set W
+    \draw[very thick] (6,0) ellipse (2cm and 2.7cm);
+    \node[align=right,scale=3] at (9,0) {$W$};
+    
+	% kernel set ker(f) inside V
+	\fill[pattern=north west lines, pattern color=red,opacity=.5,draw] 
+  		(0.3,1) ellipse (1.2cm and 0.9cm);
+    \draw[thick,red] (0.3,1) ellipse (1.2cm and 0.9cm);
+    \node[align=left,scale=1.5] at (0.35,1) {$\ker(f)$};
+    
+	% image set f(V) inside W
+    \draw[thick] (6,-1) ellipse (1.5cm and 1cm);
+    \node[align=left,scale=1.5] at (6.5,0.5) {$\text{im}(f)$};
+    
+    % zero vector in W
+    \fill[draw,red] (Ow) circle (0.1cm and 0.1cm);
+    \node[right=2pt,scale=1] at (Ow) {$\mathbf{0}_W$};
+    
+    % mapping lines
+	\draw[->, thick, red, dashed] (0.5,1.9) to[bend left] node[pos=0.5,above, black,scale=1] {$f$}  ($(Ow)+(-0.12,0.3)$);
+	\draw[->, thick, red, dashed] (-0.4,0.2) to[bend right] ($(Ow)+(-0.17,-0.1)$);
+\end{tikzpicture}
+\end{figure}
+
+
+
+\example{Kernel of a linear map from $\mathbb{R}^3$ to $\mathbb{R}^3$}{Let's find the kernel of the linear map from the previous example, the map $f:\mathbb{R}^3 \to \mathbb{R}^3$ defined by
+\begin{align*}
+f(x,y,z) = (x+z, z-y, y-x-2z).
+\end{align*}
+We want to find all the triples that $f$ takes to the zero vector of $\mathbb{R}^3$, which is $(0,0,0)$. Hence we are looking to solve
+\begin{align*}
+f(x,y,z)=(0,0,0) \quad \implies \quad (x+z, z-y, y-x-2z) = (0,0,0).
+\end{align*}
+Equating components gives us the linear system
+\begin{align*}
+\begin{cases}
+x+z = 0 \\
+z-y=0 \\ 
+y-x-2z =0
+\end{cases}
+%
+\quad \implies \quad
+%
+\begin{cases}
+x = -z \\
+y=z \\ 
+y-x-2z =0
+\end{cases}.
+\end{align*}
+So $x$ and $y$ can each be expressed in terms of $z$ and the 3rd equation gives no extra constraint. $z$ is therefore a free variable, denote it $z=t\in\mathbb{R}$, and we have
+\begin{align*}
+f(x,y,z) = (0,0,0)\quad \implies \quad (x,y,z)=(-t,t,t)=(-1,1,1)t.
+\end{align*}
+So we can write the kernel as the set
+\begin{align*}
+\ker(f) = \{(-1,1,1)t \, | \, t\in\mathbb{R} \}.
+\end{align*}
+}
+
+\noindent The kernel is a vector subspace of $W$. It is non-empty because the zero vector necessarily maps to the zero, $f(\mathbf{0}_V)=\mathbf{0}_W$, and so $\mathbf{0}_V\in \ker(f)$. Let $\mathbf{u},\mathbf{v}\in \ker(f)$ and $\alpha,\beta \in\mathbb{R}$. Then $f$ maps the linear combination as
+\begin{align*}
+f( \alpha \mathbf{u} + \beta \mathbf{v}) =  \alpha f(\mathbf{u}) + \beta f(\mathbf{v}) = \alpha \mathbf{0}_W + \beta \mathbf{0}_W = \mathbf{0}_W
+\end{align*}
+and so $\alpha \mathbf{u} + \beta \mathbf{v}$ is also in the kernel of $f$. Thus $\ker(f)$ is closed under linear combinations and is a non-empty subset of $V$. Therefore it is a vector subspace of $V$.
+
+\definition{Nullity}{
+The \textit{nullity of a linear map} is the dimension of its kernel: $\text{nullity}(f)=\dim(\ker(f))$.
+}
+
+
+
+
+
+\example{Nullity of a linear map from $\mathbb{R}^3$ to $\mathbb{R}^3$}{Let's retake the linear map from the previous example, $f:\mathbb{R}^3 \to \mathbb{R}^3$ defined by
+\begin{align*}
+f(x,y,z) = (x+z, z-y, y-x-2z).
+\end{align*}
+We found the kernel as the set
+\begin{align*}
+\ker(f) = \{(-1,1,1)t \, | \, t\in\mathbb{R} \} = \text{SPAN}( \, (-1,1,1) \, ).
+\end{align*}
+This means that the set $\mathcal{B} = \{ (-1,1,1) \}$ is a basis for the kernel. Hence the dimension of kernel is 1, and so
+\begin{align*}
+\text{nullity}(f) = \dim(\ker(f)) = 1.
+\end{align*}
+}
+
+\theorem{Rank-Nullity}{
+For any linear map $f: V \to W$ we have
+\begin{gather*}
+\text{rank}(f) + \text{nullity}(f) = \dim(V) \\
+\text{or} \\
+\dim(\text{im}(f)) + \dim(\ker(f)) = \dim(V). 
+\end{gather*}
+}
+
+\example{Projection map onto the $x$-$y$ plane}{
+Consider the linear map $f:\mathbb{R}^3 \to \mathbb{R}^3$ defined by
+\begin{align*}
+f(x,y,z) = (x,y,0).
+\end{align*}
+This map takes any vector in 3d space and gives you the component of that vector in the $x$-$y$ plane. Here's a sketch of the action of $f$ on a couple of example vectors
+
+\begin{figure}[H]
+\centering
+\tdplotsetmaincoords{105}{-30}
+\begin{tikzpicture}[tdplot_main_coords,font=\sffamily]
+  \begin{scope}[canvas is xy plane at z=0]
+    \fill[blue,fill opacity=0.1] (-3,-3) rectangle (3,4); 
+   
+   \pgflowlevelsynccm
+  \end{scope}
+    
+  \coordinate (O) at (0,0);
+  \coordinate (u) at (2,5,2);
+  \coordinate (fu) at (2,5,0);
+  \coordinate (v) at (3,-1,2);
+  \coordinate (fv) at (3,-1,0);
+  \draw [->,red,thick] (O) --(u) node[pos=0.6,below=1pt] {$\mathbf{u}$};
+  \draw [->,blue,dashed,thick] (O) --(fu) node[pos=0.6,right=1pt] {$f(\mathbf{u})$};
+  \draw [-,black,dashed] ($0.1*(fu)+0.9*(u)$) --($0.8*(fu)+0.2*(u)$);
+  
+  
+  \draw [->,red,thick] (O) --(v) node[pos=0.6,above=1pt] {$\mathbf{v}$};
+  \draw [->,blue,dashed,thick] (O) --(fv) node[pos=0.6,above=1pt] {$f(\mathbf{v})$};
+  \draw [-,black,dashed] ($0.1*(fv)+0.9*(v)$) --($0.9*(fv)+0.1*(v)$);
+    
+  \pgfmathsetmacro{\Radius}{1.5}
+  \draw[-stealth] (O)-- (2.5*\Radius,0,0) node[pos=1.15] {$y$};
+  \draw[-stealth] (O) -- (0,3.5*\Radius,0) node[pos=1.15] {$x$};
+  \draw[-stealth] (O) -- (0,0,2*\Radius) node[pos=1.05] {$z$};
+\end{tikzpicture}
+\end{figure}
+
+\noindent Now the image of this function is clearly all of the $x$-$y$ plane, but let's show that mathematically. Take the canonical basis of $\mathbb{R}^3$: $\mathcal{C}=\{\mathbf{e}_1,\mathbf{e}_2,\mathbf{e}_3\}=\{(1,0,0),\, (0,1,0), \, (0,0,1)\}$. We have the generator set
+\begin{align*}
+\mathcal{B} &= \{f(\mathbf{e}_1),\, f(\mathbf{e}_2), \, f(\mathbf{e}_3) \} \\
+&= \{(1,0,0), \, (0,1,0), \, (0,0,0) \}.
+\end{align*}
+The span of this set is the same as if we drop the zero vector, so
+\begin{align*}
+\mathcal{C} = \{(1,0,0), \, (0,1,0) \}
+\end{align*}
+is a set of linearly independent vectors such that $\text{im}(f)=\text{SPAN}(\mathcal{C})$, which means $\mathcal{C}$ is a basis for the image. With two vectors in this basis, we have the dimension of the image, and therefore the rank of $f$, is 2.
+
+Now for the kernel we must solve
+\begin{align*}
+f(x,y,z)=(0,0,0).
+\end{align*}
+This gives us $(x,y,0) = (0,0,0)$ so that $x=0$ and $y=0$. There is no restriction on $z$, so that the kernel can be written as the set
+\begin{align*}
+\ker(f) = \{ (0,0,1)t \, | \, t\in\mathbb{R}\} = \text{SPAN}((0,0,1)).
+\end{align*}
+So we can form the obvious basis $\mathcal{D}=\{ (0,0,1) \}$, showing the dimension of the kernel, and hence the nullity of $f$, is 1. We thus verify that for this linear map, we have $\text{rank}(f) + \text{nullity}(f) = 2 + 1 = 3 = \dim(\mathbb{R}^3)$.
+}
+
+\definition{Injectivity}{
+Let $f:V\to W$ be a linear map. We say $f$ is injective if no two vectors of $V$ are mapped to the same vector of $W$. In symbols we have two equivalent expressions
+\begin{gather*}
+\forall \, \mathbf{x},\mathbf{y}\in V, \quad \left(f(\mathbf{x})=f(\mathbf{y}) \implies \mathbf{x}=\mathbf{y}\right) \\
+%
+\text{or} \\
+%
+\forall \, \mathbf{x},\mathbf{y}\in V, \quad \left( \mathbf{x} \neq \mathbf{y} \implies f(\mathbf{x}) \neq f(\mathbf{y})\right)  
+\end{gather*}
+}
+
+\definition{Surjectivity}{
+Let $f:V\to W$ be a linear map. We say that $f$ is surjective if every vector in the output space has a corresponding input vector. In symbols
+\begin{align*}
+\forall \, \mathbf{w} \in W \quad \exists \mathbf{v}\in V \, \text{such that} \, f(\mathbf{v})=\mathbf{w}.
+\end{align*}
+}
+
+\definition{Categories of linear maps}{
+Let $f:V\to W$ be a linear map.
+\begin{itemize}
+\item If $W=V$ we call $f$ an \textit{endomorphism}.
+\item If $f$ is both injective and surjective then we say it is bijective and we call it an \textit{isomorphism}.
+\item If $f$ is both an isomorphism and an endomorphism we call it an \textit{automorphism}.
+\end{itemize}
+}
+
+\definition{Composition of linear maps}{
+Composition of linear maps works exactly as you would expect if you remember the composition of regular functions. We must have a coherence between the output of one linear map and the input of another. So, two linear maps $f:A\to B$ and $g:U\to V$ can be composed as a well defined linear map $g\circ f$ (``$g$ of $f$'') if and only if the output space of $f$ is the input space of $g$: $U=B$. For any $\mathbf{u}\in A$ the composition is written
+\begin{align*}
+g\circ f: A \to V \quad \text{and} \quad (g\circ f)(\mathbf{u}) = g(f(\mathbf{u})).
+\end{align*}
+}
+
+\noindent The composition can be represented pictorially as so:
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+	\coordinate (a) at (-0.5,-1.45);
+	\coordinate (b) at (5.5,-1.3);
+	\coordinate (v) at (11,0);
+	
+	% domain set A
+	\fill[pattern=north west lines, pattern color=blue,opacity=.3,draw] 
+  (0,0) ellipse (1.5cm and 2.5cm);
+    \draw[very thick,blue] (0,0) ellipse (1.5cm and 2.5cm);
+    \node[align=center,scale=3] at (0,3.5) {$A$};
+    \fill[draw] (a) circle (0.1cm and 0.1cm);
+    \node[left,scale=1] at (a) {$\mathbf{a}$};
+  
+	% codomain set B=U
+    \draw[very thick] (6,0) ellipse (2cm and 2.7cm);
+    \node[align=center,scale=3] at (6,3.5) {$B=U$};
+    \fill[draw] (b) circle (0.1cm and 0.1cm);
+    \node[right,scale=1] at (b) {$\mathbf{b}$};
+  
+	% codomain set V
+    \draw[very thick] (12,0) ellipse (2cm and 1.5cm);
+    \node[align=center,scale=3] at (12,3.5) {$V$};
+    \fill[draw] (v) circle (0.1cm and 0.1cm);
+    \node[right,scale=1] at (v) {$\mathbf{v}$};
+    
+	% image set g(A) inside B
+	\fill[pattern=north west lines, pattern color=blue,opacity=.3,draw] 
+  (6,-1) ellipse (1.5cm and 1cm);
+    \draw[very thick,blue] (6,-1) ellipse (1.5cm and 1cm);
+    \node[align=left,scale=1.5] at (6,-0.7) {$\text{im}(f)$};
+  
+	% iamge set f(g(A))
+	\fill[pattern=north west lines, pattern color=blue,opacity=.3,draw] 
+  (12,0.5) ellipse (1.5cm and 0.9cm);
+    \draw[very thick,blue] (12,0.5) ellipse (1.5cm and 0.9cm);
+    \node[align=left,scale=1.5] at (12,0.7) {$\text{im}(g\circ f)$};
+    
+    % mapping lines
+    % A to B
+	\draw[->, thick, blue, dashed] (0,2.5) to[bend left] node[pos=0.5,above, black,scale=1.5] {$f$}  (5.8,0);
+	\draw[->, thick, blue, dashed] (0,-2.5) to[bend right] (5.8,-2);
+	
+    % B to V
+	\draw[->, thick, blue, dashed] (6.2,0) to[bend left] node[pos=0.5,above, black,scale=1.5] {$g$}  (12,1.4);
+	\draw[->, thick, blue, dashed] (6.2,-2) to[bend right] (12,-0.4);
+	
+	% example functions f(a)=b, g(b)=v, and g(f(a))=v
+	\draw[->, thick, blue] (a) to[bend right] node[pos=0.5,above, black,scale=1] {$f(\mathbf{a})$}  ($(b)-(0.1,0.1)$);
+	\draw[->, thick, blue] ($(b)+(0.5,-0.15)$) to[bend right]
+	 node[pos=0.5,above, black,scale=1] {$g(\mathbf{b})$}  ($(v)-(0.15,0.15)$);
+	\draw[->, thick, blue] ($(a)+(0.1,0.1)$) to[bend left]
+	 node[pos=0.3,above,rotate=15,black,scale=1] {$(g\circ f)(\mathbf{a})$}  ($(v)+(-0.15,0.15)$);
+\end{tikzpicture}
+\end{figure}
+
+
+\example{Composition of linear maps}{
+Let's come up with a couple of linear maps and then take their composition, why not? Consider $f:\mathbb{R}^2 \to \mathcal{P}_3[\mathbb{R}]$ and $g: \mathcal{P}_3[\mathbb{R}]\to \mathbb{R}^3$ defined by
+\begin{align*}
+& f(\alpha,\beta) = \alpha + (\beta-\alpha)x + (\alpha + 2\beta)x^3 \\
+& g(a_0 + a_1 x + a_2 x^2 + a_3 x^3) = (a_3, \, a_2-a_1, \, a_0+a_3).
+\end{align*}
+Now the composition of these linear maps will skip the polynomial space (the output of $f$ and input of $g$):
+\begin{align*}
+g \circ f: & \mathbb{R}^2 \to \mathbb{R}^3 \\
+(g \circ f)(\alpha,\beta) & = g \left(f(\alpha,\beta)\right) \\
+ & = g \left(\alpha + (\beta-\alpha)x + (\alpha + 2\beta)x^3\right) \\
+ & = (\alpha + 2\beta, \, \alpha-\beta, \, 2\alpha + 2\beta)
+\end{align*}
+So let's see for example what happens to the vector $\mathbf{v}=(1,1)$. If we consider the step-by-step process, first act with $f$ to obtain a polynomial, then hit that polynomial with $g$, we find
+\begin{align*}
+f(\mathbf{v}) & = f(1,1) = 1 + 3x^3 \\
+\implies g(f(\mathbf{v})) &= g(1+3x^3) = \left(3, \, 0, \, 4 \right).
+\end{align*}
+If we want to avoid this 2-step process we can use the composition rule as we found above
+\begin{align*}
+(g \circ f)(1,1) = (1 + 2, \, 1-1, \, 2 + 2) = (3, \, 0, \, 4).
+\end{align*}
+Of course we get the same answer, but the lesson here is that we never had to think about polynomials this way.
+}
+
+
+
+\theorem{Inverse linear map}{
+Let $f:V\to W$ be a linear map. If $f$ is bijective then there exists a linear map $g:W\to V$ such that
+\begin{gather*}
+\forall \, \mathbf{v}\in V \, \text{we have} \, (g \circ f)(\mathbf{v}) = \mathbf{v}\\
+\text{and}\\
+\forall \, \mathbf{w}\in W \, \text{we have} \, (f \circ g)(\mathbf{w}) = \mathbf{w}
+\end{gather*}
+$g$ is called the inverse of $f$ and is denoted $f^{-1}$.
+}
+
+\section{The vector space of linear maps}
+
+
+\theorem{The set of linear maps as a vector space}{
+Consider the set of all possible linear maps from the vector space $V$ to the vector space $W$, denoted $\mathcal{L}(V,W)$. This set satisfies all of the vector space axioms if we define vector addition and scalar multiplication as follows:
+\begin{gather*}
+\forall f,g \in \mathcal{L}(V,W), \quad f+g=h \quad \text{such that} \quad h(\mathbf{v})=f(\mathbf{v}) + g(\mathbf{v}) \\
+\text{and} \\
+\forall \alpha \in \mathbb{R}\, \quad \alpha f = f_\alpha \quad \text{such that} \quad f_\alpha(\mathbf{v})=\alpha \left( f(\mathbf{v}) \right).
+\end{gather*}
+}
+
+\noindent \textbf{Proof}. Let $f,g,h\in \mathcal{L}(V,W)$ and $\alpha,\beta\in\mathbb{R}$. Let's go through the vector space axioms in order:
+
+\noindent \underline{VA1 - closure under vector addition: $f+g\in \mathcal{L}(V,W)$} \\
+\noindent Let the addition be denoted $h = f+g$. We have to show that $h$ is a linear map from $V$ to $W$. For every $\mathbf{v},\mathbf{u}\in V$ and $\alpha,\beta\in\mathbb{R}$ we have
+\begin{align*}
+h(\alpha\mathbf{v} + \beta\mathbf{u}) &= f(\alpha\mathbf{v} + \beta\mathbf{u}) + g(\alpha\mathbf{v} + \beta\mathbf{u}) \\
+%
+&= \alpha f(\mathbf{v}) + \beta f (\mathbf{u}) + \alpha g(\mathbf{v}) + \beta g(\mathbf{u}) \quad \text{(because $f$ and $g$ are linear maps)}\\
+%
+&= \alpha \left( f(\mathbf{v}) + g(\mathbf{v})\right)  + \beta\left( f (\mathbf{u})+ g(\mathbf{u})\right) \\
+%
+&= \alpha h(\mathbf{v}) + \beta h(\mathbf{u}).
+\end{align*}
+So $f+g$ preserves linear combinations and is therefore a linear map. Hence $\mathcal{L}(V,W)$ is closed under vector addition. \\
+%%%%%%%
+
+
+%%%%%%%
+\noindent \underline{VA2 - associativity of vector addition: $f+(g+h) = (f+g)+h \in \mathcal{L}(V,W)$}
+
+\noindent For every $\mathbf{v}\in V$ we have
+\begin{align*}
+(f+(g+h))(\mathbf{v}) &= f(\mathbf{v})+(g+h)(\mathbf{v})  &  (\text{definition of vector addition of linear maps})\\
+ &= f(\mathbf{v})+(g(\mathbf{v})+h(\mathbf{v}) )   &  (\text{definition of vector addition of linear maps})\\
+ &= (f(\mathbf{v})+g(\mathbf{v}))+h(\mathbf{v})    &  (\text{associativity of vectors in $W$})\\
+ &= (f+g)(\mathbf{v})+h(\mathbf{v})    &  (\text{definition of vector addition of linear maps})\\
+ &= ((f+g)+h)(\mathbf{v})    &  (\text{definition of vector addition of linear maps}).
+\end{align*}
+This shows that $f+(g+h)$ is the same linear map as $(f+g)+h$. Hence the addition of vectors in $\mathcal{L}(V,W)$ is associative. \\
+%%%%%%%
+
+
+%%%%%%%
+\noindent \underline{VA3 - additive identity: $\exists \, f_0 \in \mathcal{L}(V,W), \, \text{such that} \, f + f_0 = f_0 + f = f$}
+
+\noindent Define the zero map $f_0: V \to W$ by
+\begin{align*}
+f_0(\mathbf{v}) = \mathbf{0}_W
+\end{align*}
+for every $\mathbf{v}\in V$. Firstly, is this a linear map? Let's see if it preserves linear combinations
+\begin{align*}
+f_0(\alpha \mathbf{v} + \beta \mathbf{u}) &= \mathbf{0}_W  &  (\text{definition of the zero map}) \\
+%
+ &= \mathbf{0}_W + \mathbf{0}_W  &  (\text{definition of the zero vector of $W$}) \\
+%
+ &= \alpha \mathbf{0}_W + \beta\mathbf{0}_W  &  (\text{a number multiplied by the zero vector is the zero vector})  \\
+%
+ &= \alpha f_0(\mathbf{v}) + \beta f_0(\mathbf{u})  &  (\text{reverse definition of the zero map}) .
+\end{align*}
+Indeed, this zero map is a linear map from $V$ to $W$, that is $f_0 \in \mathcal{L}(V,W)$. Now we must show that this map acts as the zero vector of $\mathcal{L}(V,W)$. For every $\mathbf{v}\in V$ we have
+\begin{align*}
+(f_0 + f)(\mathbf{v}) &= f_0(\mathbf{v})+f(\mathbf{v})  &  (\text{definition of vector addition of linear maps})\\
+%
+&= \mathbf{0}_W+f(\mathbf{v})  &  (\text{definition of zero map})\\
+%
+&= f(\mathbf{v})+\mathbf{0}_W  &  (\text{commutativity of vector addition in $W$})\\
+%
+&= f(\mathbf{v})  &  (\text{definition of zero vector of $W$})
+\end{align*}
+Hence this zero map is a member of $\mathcal{L}(V,W)$ and satisifes $f + f_0 = f_0 + f = f$. This proves the zero map is the zero \textit{vector} of $\mathcal{L}(V,W)$. \\
+%%%%%%%
+
+
+%%%%%%%
+\noindent \underline{VA4 - additive inverse: $\exists \, f_- \in \mathcal{L}(V,W) \, \text{such that} \, f + f_- = f_0$}
+
+\noindent This can easily become symbolically ambiguous, so I will try to be pedantically careful here. Define the additive inverse of any map $f$, denote it $f_-$, as the scalar multiplication of that map (as defined) by the real number $-1$. So that the map $f_-:V\to W$ is given by
+\begin{align*}
+f_-(\mathbf{v}) = -1 \times f(\mathbf{v}).
+\end{align*}
+First let's show this map belongs to $\mathcal{L}(V,W)$ by checking the preservation of linear combinations
+\begin{align*}
+f_-(\alpha \mathbf{v} + \beta \mathbf{u}) &= -1\times f(\alpha \mathbf{v} + \beta \mathbf{u})  &  (\text{definition of this map}) \\
+%
+ &= -1\times \left( \alpha f(\mathbf{v)} + \beta f(\mathbf{u}) \right)  &  (\text{linearity of the map $f$}) \\
+%
+ &= -1\times \alpha f(\mathbf{v)} -1\times \beta f(\mathbf{u})  &  (\text{distributivity of the reals}) \\
+%
+ &= \alpha \times -1\times f(\mathbf{v)} + \beta \times -1\times f(\mathbf{u})  &  (\text{commutativity of real multiplication}) \\
+%
+ &= \alpha f_-(\mathbf{v)} + \beta f_-(\mathbf{u})  &  (\text{definition of this map}).
+\end{align*}
+Indeed, this map is a linear map from $V$ to $W$, that is $f_- \in \mathcal{L}(V,W)$. Now we show that it acts as an additive inverse. For every $\mathbf{v}\in V$ we have
+\begin{align*}
+(f_- + f)(\mathbf{v}) &= f_-(\mathbf{v}) + f(\mathbf{v})  &  (\text{definition of vector addition of linear maps}) \\
+%
+ &= -1\times f(\mathbf{v}) + f(\mathbf{v})  &  (\text{definition of this map}) \\
+%
+ &= -f(\mathbf{v}) + f(\mathbf{v})  &  (\text{multiplication by 1 for vectors in $W$}) \\
+%
+ &= \mathbf{0}_W  &  (\text{additive inverse of vectors in $W$})
+\end{align*}
+With commutativity of vectors in $W$ you can also show $f_- + f = f + f_-$. Hence this additive inverse map exists in $\mathcal{L}(V,W)$.
+\\
+%%%%%%%
+
+
+%%%%%%%
+\noindent \underline{VA5 - commutativity of vector addition: $f + g  = g + f$}
+
+\noindent This one is pretty simple. For every $\mathbf{v}\in V$ we have
+\begin{align*}
+(f + g)(\mathbf{v}) &= f(\mathbf{v}) + g(\mathbf{v})  &  (\text{definition of vector addition of linear maps}) \\
+%
+&= g(\mathbf{v}) + f(\mathbf{v})  &  (\text{commutativity of vector addition in $W$}) \\
+%
+&= (g+ f)(\mathbf{v})  &  (\text{definition of vector addition of linear maps}).
+\end{align*}
+Hence the addition of vectors in $\mathcal{L}(V,W)$ is commutative. \\
+%%%%%%%
+
+
+%%%%%%%
+\noindent \underline{SM1 - closure under scalar multiplication: $\alpha f \in \mathcal{L}(V,W)$}
+
+\noindent Recall the definition of scalar multiplication of the linear map $f$ by a real number $k$ gives a new map, denote it $f_k$, such that
+\begin{align*}
+f_k(\mathbf{v}) = k f(\mathbf{v}).
+\end{align*}
+Let's show this map belongs to $\mathcal{L}(V,W)$ by checking the preservation of linear combinations
+\begin{align*}
+f_k(\alpha \mathbf{v} + \beta \mathbf{u}) &= k f(\alpha \mathbf{v} + \beta \mathbf{u})  &  (\text{definition of this map}) \\
+%
+ &= k \left( \alpha f(\mathbf{v)} + \beta f(\mathbf{u}) \right)  &  (\text{linearity of the map $f$}) \\
+%
+ &= k \alpha f(\mathbf{v)} +k \beta f(\mathbf{u})  &  (\text{distributivity of the reals}) \\
+%
+ &= \alpha \times kf(\mathbf{v)} + \beta \times kf(\mathbf{u})  &  (\text{commutativity of real multiplication}) \\
+%
+ &= \alpha f_k(\mathbf{v)} + \beta f_k(\mathbf{u})  &  (\text{definition of this map}).
+\end{align*}
+Indeed, this map is a linear map from $V$ to $W$, and so $\mathcal{L}(V,W)$ is closed under scalar multiplication. \\
+%%%%%%%
+
+
+%%%%%%%
+\noindent \underline{SM2 - distributivity over vector addition: $\alpha(f+g)=\alpha f+\alpha g$}
+
+\noindent For every $\mathbf{v}\in V$ we have
+\begin{align*}
+(\alpha(f+g)) (\mathbf{v}) &= \alpha((f+g) (\mathbf{v}))  &  (\text{definition of scalar multiplication for linear maps}) \\
+%
+&=  \alpha(f(\mathbf{v})+g(\mathbf{v})) &  (\text{definition of vector addition for linear maps}) \\
+%
+&=  \alpha \left(f(\mathbf{v})\right) +\alpha \left( g(\mathbf{v})\right)  &  (\text{distributivity over vector addition in $W$})\\
+%
+&=  \left(\alpha f\right)(\mathbf{v}) +\left(\alpha  g\right)(\mathbf{v})  &  (\text{definition of scalar multiplication for linear maps})\\
+%
+&=  \left(\alpha f + \alpha  g\right)(\mathbf{v})  &  (\text{definition of addition  for linear maps}).
+\end{align*}
+This shows that $\alpha(f+g)$ is the same linear map as $\alpha f+\alpha g$. Hence scalar multiplication for linear maps distributes over vector addition of linear maps. \\
+%%%%%%%
+
+
+%%%%%%%
+\noindent \underline{SM3 - distributivity with field addition: $(\alpha+\beta)f=\alpha f+\beta g$}
+
+\noindent For every $\mathbf{v}\in V$ we have
+\begin{align*}
+\left( (\alpha+\beta)f \right)(\mathbf{v}) &= (\alpha+\beta)\left( f(\mathbf{v}) \right) 
+ & (\text{definition of scalar multiplication for linear maps}) \\
+%
+ &= \alpha  f(\mathbf{v}) +\beta  f(\mathbf{v})
+ & (\text{distributivity over field addition for $W$}) \\
+%
+ &= \left(\alpha f\right)(\mathbf{v}) + \left(\beta f\right) (\mathbf{v})
+ & (\text{definition of scalar multiplication for linear maps}) \\
+%
+ &= \left(\alpha f + \beta f\right) (\mathbf{v})
+ & (\text{definition of vector addition for linear maps}).
+\end{align*}
+This shows that $(\alpha+\beta)f$ is the same linear map as $\alpha f + \beta f$. Hence field addition distributes over linear maps. 
+\\
+%%%%%%%
+
+
+%%%%%%%
+\noindent \underline{SM4 - compatibility of scalar and field multiplication: $\alpha(\beta f)=(\alpha\beta) f$}
+
+\noindent For every $\mathbf{v}\in V$ we have
+\begin{align*}
+\left( \alpha(\beta f) \right)(\mathbf{v}) &= \alpha\left( (\beta f) (\mathbf{v}) \right)
+ & (\text{definition of scalar multiplication for linear maps}) \\
+%
+ &= \alpha\left( \beta (f (\mathbf{v}))  \right)
+ & (\text{definition of scalar multiplication for linear maps}) \\
+%
+ &= \left(\alpha \beta \right)(f (\mathbf{v}))
+ & (\text{compatibility of scalar and field multiplication for $W$}) \\
+%
+ &= \left(\left( \alpha \beta \right)f \right) (\mathbf{v})
+ & (\text{definition of scalar multiplication for linear maps})
+\end{align*}
+This shows that $\alpha(\beta f)$ is the same linear map as $(\alpha\beta) f$. Hence scalar multiplication is compatible with field multiplication for linear maps. 
+\\
+%%%%%%%
+
+
+%%%%%%%
+\noindent \underline{SM5 - multiplicative identity: $1f=f$}
+
+\noindent For every $\mathbf{v}\in V$ we have
+\begin{align*}
+\left(1 f \right)(\mathbf{v}) &= 1\left( f(\mathbf{v}) \right)
+ & (\text{definition of scalar multiplication for linear maps}) \\
+%
+ &= f (\mathbf{v})
+ & (\text{multiplicative identity for $W$})
+\end{align*}
+This shows that $1f$ is the same linear map as $f$. Hence the real number $1$ is the scalar multiplicative identity for linear maps. \vspace{0.5cm} \\
+\noindent It was long and perhaps tedious but we have now completed the proof that with this definition of linear map vector addition and scalar multiplication, the set $\mathcal{L}(V,W)$ satisfies all 10 of the vector space axioms.
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%
+\section{Linear maps as matrices}
+
+Let's recall the definition of coordinates of a vector. Given any vector $\mathbf{v}$ in some $n$-dimensional vector space $V$, if we have a basis $\mathcal{B}=\{ \mathbf{b}_1, \dots, \mathbf{b}_n \}$ then the coordinates of $\mathbf{v}$ \textit{in this basis}, denoted $[\mathbf{v}]_\mathcal{B}$, is a column of $n$ numbers which are the coefficients of the linear combination of $\mathbf{v}$ in the basis vectors
+\begin{align*}
+\mathbf{v}=\alpha_1 \mathbf{b}_1 + \cdots + \alpha_n \mathbf{b}_n \quad\implies\quad [\mathbf{v}]_\mathcal{B} = \begin{pmatrix} \alpha_1 \\ \vdots \\ \alpha_n \end{pmatrix}.
+\end{align*}
+
+\noindent I hope to show in this section something quite powerful about linear algebra, that any $n$-dimensional vector space can be mapped to $\mathbb{R}^n$, via the coordinates, and that linear maps take on a particularly simple to use form when mapping between coordinates. We'll start by an example.
+
+\example{Rotation linear map}{
+Let's retake the first example of this chapter, the linear map, $f:\mathbb{R}^2 \to \mathbb{R}^2$, that rotates 2d vectors by $45^\circ$ anti-clockwise, defined in detail by
+\begin{align*}
+f(x,y) = \frac{1}{\sqrt{2}} \left(x-y, x+y \right).
+\end{align*}
+Let $\mathcal{C}=\{\mathbf{e}_x, \, \mathbf{e}_y\} = \{(1,0), \, (0,1)\}$. We will want to represent $f$ by some operation, call it $F$, that takes the coordinates of any vector to the coordinates of the rotated vector. Let's write this desired property as
+\begin{align*}
+F[\mathbf{v}]_\mathcal{C} = [f(\mathbf{v})]_\mathcal{C}.
+\end{align*}
+Now let $\mathbf{v}=(x,y)$ be some arbitrary vector, so that 
+\begin{align*}
+[f(\mathbf{v})]_\mathcal{C} &= [f(x\mathbf{e}_x + y \mathbf{e}_y)]_\mathcal{C} \\
+%
+ &= [ \frac{1}{\sqrt{2}} \left(x-y, x+y \right)]_\mathcal{C} \\
+%
+ &= [\left(\frac{x - y}{\sqrt{2}}\right)\mathbf{e}_x + \left(\frac{x + y}{\sqrt{2}}\right)\mathbf{e}_y]_\mathcal{C} \\
+%
+ &= \begin{pmatrix}
+ \dfrac{x - y}{\sqrt{2}} \\ \dfrac{x + y}{\sqrt{2}}
+ \end{pmatrix}.
+\end{align*}
+These coordinates can be rearranged to focus on the $x$ and $y$
+\begin{align*}
+\begin{pmatrix}
+ \dfrac{x - y}{\sqrt{2}} \\ \dfrac{x + y}{\sqrt{2}}
+\end{pmatrix}
+%
+=
+%
+\begin{pmatrix}
+ \dfrac{x}{\sqrt{2}} \\ \dfrac{x}{\sqrt{2}}
+\end{pmatrix}
++
+\begin{pmatrix}
+ \dfrac{- y}{\sqrt{2}} \\ \dfrac{y}{\sqrt{2}}
+\end{pmatrix}
+%
+=
+%
+\begin{pmatrix}
+ \dfrac{1}{\sqrt{2}} \\ \dfrac{1}{\sqrt{2}}
+\end{pmatrix}x
++
+\begin{pmatrix}
+ \dfrac{-1}{\sqrt{2}} \\ \dfrac{1}{\sqrt{2}}
+\end{pmatrix}y.
+\end{align*}
+So at this point we have
+\begin{align*}
+F[\mathbf{v}]_\mathcal{C} = [f(\mathbf{v})]_\mathcal{C} \quad\implies\quad 
+F
+\begin{pmatrix}
+ x \\ y
+\end{pmatrix}
+%
+=
+%
+\begin{pmatrix}
+ \dfrac{1}{\sqrt{2}} \\ \dfrac{1}{\sqrt{2}}
+\end{pmatrix}x
++
+\begin{pmatrix}
+ \dfrac{-1}{\sqrt{2}} \\ \dfrac{1}{\sqrt{2}}
+\end{pmatrix}y.
+\end{align*}
+We will define a certain rearrangement of the right hand side
+\begin{align*}
+\begin{pmatrix}
+ \dfrac{1}{\sqrt{2}} \\ \dfrac{1}{\sqrt{2}}
+\end{pmatrix}x
++
+\begin{pmatrix}
+ \dfrac{-1}{\sqrt{2}} \\ \dfrac{1}{\sqrt{2}}
+\end{pmatrix}y
+=
+\begin{pmatrix}
+ \dfrac{1}{\sqrt{2}} & \dfrac{-1}{\sqrt{2}} \\ 
+ \dfrac{1}{\sqrt{2}} & \dfrac{1}{\sqrt{2}}
+\end{pmatrix}
+\begin{pmatrix}
+ x \\ y
+\end{pmatrix}
+\end{align*}
+so that the equation
+\begin{align*}
+F
+\begin{pmatrix}
+ x \\ y
+\end{pmatrix}
+%
+=
+%
+\begin{pmatrix}
+ \dfrac{1}{\sqrt{2}} & \dfrac{-1}{\sqrt{2}} \\ 
+ \dfrac{1}{\sqrt{2}} & \dfrac{1}{\sqrt{2}}
+\end{pmatrix}
+\begin{pmatrix}
+ x \\ y
+\end{pmatrix}
+\end{align*}
+lets us identify the operation of $F$ with this array of 4 numbers
+\begin{align*}
+F
+%
+=
+%
+\begin{pmatrix}
+ \dfrac{1}{\sqrt{2}} & \dfrac{-1}{\sqrt{2}} \\ 
+ \dfrac{1}{\sqrt{2}} & \dfrac{1}{\sqrt{2}}
+\end{pmatrix}
+\end{align*}
+\noindent This kind of array of numbers is called a \textit{matrix}. In this case we say that $F$ is a matrix representation of the linear map $f$. Its job is to represent the same mapping as $f$ but on the \textit{coordinates} of vectors in the domain and codomain of $f$.
+}
+
+\noindent Let's take another example to show that the matrix representation is not always an array of 4 numbers.
+
+\example{Non-square matrix}{
+Consider a linear map $f:\mathbb{R}^2 \to \mathcal{P}_2[\mathbb{R}]$ defined by 
+\begin{align*}
+f(\alpha,\beta) = \alpha + \beta x + (\alpha-\beta)x^2.
+\end{align*}
+As in the previous example, we desire that the matrix $F$ maps the coordinates of an arbitrary vector $\mathbf{v}=(\alpha, \beta)$ to the coordinates of $f(\mathbf{v})$. The coordinates depend on the choices of bases for the domain and codomain vector spaces. Let's take the canonical bases
+\begin{align*}
+\mathcal{A} =& \{ \mathbf{e}_x, \, \mathbf{e}_y \} = \{(1,0),\, (0,1) \} \\
+\mathcal{B} =& \{ \mathbf{p}_0, \, \mathbf{p}_1, \, \mathbf{p}_2\} = \{1,\, x, \, x^2 \}
+\end{align*}
+so that
+\begin{align*}
+F[(\alpha, \beta)]_\mathcal{A} = [f(\alpha, \beta)]_\mathcal{B} 
+%
+\quad \implies \quad 
+%
+F
+\begin{pmatrix}
+\alpha \\ \beta
+\end{pmatrix}
+&=
+[\alpha + \beta x + (\alpha-\beta)x^2]_\mathcal{B} 
+\\
+&=
+\begin{pmatrix}
+\alpha \\ \beta \\ \alpha-\beta
+\end{pmatrix}\\
+&=
+\begin{pmatrix}
+1 \\ 0 \\ 1
+\end{pmatrix}
+\alpha
++
+\begin{pmatrix}
+0 \\ 1 \\ -1
+\end{pmatrix}
+\beta.
+\end{align*}
+We then use this last term to define a matrix
+\begin{align*}
+\begin{pmatrix}
+1 \\ 0 \\ 1
+\end{pmatrix}
+\alpha
++
+\begin{pmatrix}
+0 \\ 1 \\ -1
+\end{pmatrix}
+\beta.
+=
+\begin{pmatrix}
+ 1 &  0 \\
+ 0 &  1 \\
+ 1 & -1
+\end{pmatrix}
+\begin{pmatrix}
+\alpha \\ \beta
+\end{pmatrix}
+.
+\end{align*}
+So we see that we have a matrix with 3 rows and 2 columns
+\begin{align*}
+F
+\begin{pmatrix}
+\alpha \\ \beta
+\end{pmatrix}
+=
+\begin{pmatrix}
+ 1 &  0 \\
+ 0 &  1 \\
+ 1 & -1
+\end{pmatrix}
+\begin{pmatrix}
+\alpha \\ \beta
+\end{pmatrix}
+\quad \implies \quad
+F=
+\begin{pmatrix}
+ 1 &  0 \\
+ 0 &  1 \\
+ 1 & -1
+\end{pmatrix}.
+\end{align*}
+}
+
+\noindent So now that we perhaps can see that matrices can take any shape we may as well define them clearly.
+
+\definition{Matrix}{
+A matrix, denoted $A$, is an array of numbers organised into rows and columns. 
+\begin{align*}
+A = 
+\begin{pmatrix}
+a_{11} & \cdots & a_{1j} & \cdots & a_{1n}   \\
+\vdots & \ddots & \vdots &        & \vdots    \\
+a_{i1} & \cdots & a_{ij} & \cdots & a_{in}   \\
+\vdots &        & \vdots & \ddots & \vdots    \\
+a_{m1} & \cdots & a_{mj} & \cdots & a_{mn} 
+\end{pmatrix} \\
+\end{align*}
+We say $A$ is an $m \times n$ matrix if it has $m$ rows and $n$ columns. The numbers in the array are called coefficients or elements of $A$, and are often denoted by their indices
+\begin{align*}
+a_{ij} = \left(A\right)_{ij} = a_{i,j}.
+\end{align*}
+}
+
+\noindent In the previous examples, there was a key step in the creation of the matrices, when we claimed
+\begin{align*}
+\begin{pmatrix}
+\alpha \\ \gamma
+\end{pmatrix}
+x
++
+\begin{pmatrix}
+\beta \\ \delta
+\end{pmatrix}
+y
+=
+\begin{pmatrix}
+\alpha &\beta \\ 
+\delta & \gamma
+\end{pmatrix}
+\begin{pmatrix}
+x \\ y
+\end{pmatrix}
+%%%%%
+%%%%%
+\quad \text{or} \quad
+%%%%%
+%%%%%
+\begin{pmatrix}
+\alpha \\ \gamma \\ \epsilon
+\end{pmatrix}
+x
++
+\begin{pmatrix}
+\beta \\ \delta \\ \zeta
+\end{pmatrix}
+y
+=
+\begin{pmatrix}
+ \alpha   & \beta \\
+ \gamma   & \delta  \\
+ \epsilon & \zeta
+\end{pmatrix}
+\begin{pmatrix}
+x \\ y
+\end{pmatrix}
+\end{align*}
+\noindent We will simply reverse the direction of the equality and take this as a defining statement of how to multiply a matrix by a column:
+
+\definition{Matrix multiplication by a column}{
+The multiplication of an $m \times n$ matrix, $A$, by a column, $X$, is defined only if the column contains as many elements as the columns of $A$. It is given by
+\begin{align*}
+AX = 
+\begin{pmatrix}
+a_{11} & \cdots & a_{1j} & \cdots & a_{1n}   \\
+\vdots & \cdots & \vdots & \cdots & \vdots    \\
+a_{i1} & \cdots & a_{ij} & \cdots & a_{in}   \\
+\vdots & \cdots & \vdots & \cdots & \vdots    \\
+a_{m1} & \cdots & a_{mj} & \cdots & a_{mn} 
+\end{pmatrix}
+%%%
+\begin{pmatrix}
+x_1 \\ 
+\vdots \\
+x_n
+\end{pmatrix}
+%%%
+&=
+%%%
+\begin{pmatrix}
+a_{11} \\ 
+\vdots \\
+a_{j1} \\ 
+\vdots \\
+a_{m1}
+\end{pmatrix}
+x_1
++
+\cdots
++
+\begin{pmatrix}
+a_{1n} \\ 
+\vdots \\
+a_{jn} \\ 
+\vdots \\
+a_{mn}
+\end{pmatrix}
+x_n \\
+%%%
+&=
+%%%
+\begin{pmatrix}
+a_{11}x_1 + \cdots + a_{1j}x_j + \cdots + a_{1n}x_n   \\
+\vdots  \\
+a_{i1}x_1 + \cdots + a_{ij}x_j + \cdots + a_{in}x_n   \\
+\vdots   \\
+a_{m1}x_1 + \cdots + a_{mj}x_j + \cdots + a_{mn}x_n 
+\end{pmatrix}
+\end{align*}
+This gives an expression for the $i^{th}$ element of the resulting column that you may have seen in other textbooks
+\begin{align*}
+(AX)_i = \sum_{j=1}^n a_{ij}x_j.
+\end{align*}
+}
+
+\noindent Now let's be very general and consider an undefined linear map. Let $f\in \mathcal{L}(V,W)$, $\mathcal{A}=\{ \mathbf{a}_1, \dots , \mathbf{a}_n\}$ be a basis for the $n$-dimensional vector space $V$ and $\mathcal{B}=\{ \mathbf{b}_1, \dots , \mathbf{b}_m\}$ be a basis for the $m$-dimensional vector space $W$. Then let $F$ be the operation of $f$ that takes the coordinates of an arbitrary vector $\mathbf{v}\in V$ to the coordinates of $f(\mathbf{v}) \in W$
+\begin{align*}
+F[\mathbf{v}]_\mathcal{A} = [f(\mathbf{v})]_\mathcal{B}.
+\end{align*}
+As $\mathcal{A}$ is basis of $V$, the vector $\mathbf{v}$ can be expressed as a linear combination of these vectors and the coefficients give its coordinates in this basis
+\begin{align*}
+\exists \alpha_1, \dots, \alpha_n \in \mathbb{R}\quad\text{such that} \quad \mathbf{v} = \alpha_1 \mathbf{a}_1 + \cdots + \alpha_n \mathbf{a}_n \quad\implies\quad [\mathbf{v}]_\mathcal{A} = 
+\begin{pmatrix}
+\alpha_1 \\ \vdots \\ \alpha_n
+\end{pmatrix}.
+\end{align*}
+Hence we have
+\begin{align*}
+F
+\begin{pmatrix}
+\alpha_1 \\ \vdots \\ \alpha_n
+\end{pmatrix}
+%
+&=[f(\alpha_1 \mathbf{a}_1 + \alpha_2 \mathbf{a}_2 + \cdots + \alpha_n \mathbf{a}_n)]_\mathcal{B} \\
+%
+&= [\alpha_1 f(\mathbf{a}_1) + \alpha_2  f(\mathbf{a}_2) + \cdots + \alpha_n f(\mathbf{a}_n)]_\mathcal{B}  \\
+%
+&= \alpha_1 [f(\mathbf{a}_1)]_\mathcal{B}  + \alpha_2 [f(\mathbf{a}_2)]_\mathcal{B} + \cdots + \alpha_n [f(\mathbf{a}_n)]_\mathcal{B} .
+\end{align*}
+If we remember that the $[f(\mathbf{a}_k)]_\mathcal{B}$ are columns, then this last line gives us the form  of a matrix multiplied by a column
+\begin{align*}
+F
+\begin{pmatrix}
+\alpha_1 \\ \vdots \\ \alpha_n
+\end{pmatrix}
+=
+\alpha_1 [f(\mathbf{a}_1)]_\mathcal{B}  + \cdots + \alpha_n [f(\mathbf{a}_n)]_\mathcal{B} = 
+\begin{pmatrix}
+| & | & & | \\
+[f(\mathbf{a}_1)]_\mathcal{B} & [f(\mathbf{a}_2)]_\mathcal{B} & \dots & [f(\mathbf{a}_n)]_\mathcal{B}\\
+| & | & & | 
+\end{pmatrix}
+\begin{pmatrix}
+\alpha_1 \\ \vdots \\ \alpha_n
+\end{pmatrix}
+\end{align*}
+This gives us a general method of finding the matrix representation of any linear map. Let's formalise what we did first with a definition:
+
+
+
+\definition{Matrix representation of a linear map}{
+Let $f:V \to W$ be a linear map, $\mathcal{A}$ be a basis of $V$ and $\mathcal{B}$ be a basis of $W$. The \textit{matrix representation} of $f$ in bases $\mathcal{A}$ and $\mathcal{B}$ is defined by the operation
+\begin{align*}
+\mathcal{M}(f,\mathcal{A}\to\mathcal{B})[\mathbf{v}]_\mathcal{A} = [f(\mathbf{v})]_\mathcal{B}
+\end{align*}
+for every $\mathbf{v}$ in $V$. In words, the matrix takes the coordinates of $\mathbf{v}$ to the coordinates of $f(\mathbf{v})$ in their respective bases.
+}
+
+\noindent Now we have already proven the following theorem before expressing it:
+
+\theorem{Matrix representation of a linear map}{
+Let $f:V \to W$ be a linear map, $\mathcal{A}=\{\mathbf{a}_1,\dots,\mathbf{a}_n\}$ be a basis of $V$ and $\mathcal{B}=\{\mathbf{b}_1,\dots,\mathbf{b}_m\}$ be a basis of $W$. Then the \textit{matrix representation} of $f$ in bases $\mathcal{A}$ and $\mathcal{B}$ is a unique $m\times n$ matrix calculated by expressing the coordinates of the linear map acting on the basis vectors of the input space as columns
+\begin{align*}
+\mathcal{M}(f,\mathcal{A}\to\mathcal{B})=
+\begin{pmatrix}
+| &  & | \\
+[f(\mathbf{a}_1)]_\mathcal{B} & \dots & [f(\mathbf{a}_n)]_\mathcal{B}\\
+| &  & | 
+\end{pmatrix}
+\end{align*}
+where the vertical lines are reminders that the coordinates of the $f(\mathbf{a}_k)$ vectors are columns. We often shorten ``matrix representation of $f$'' to just ``matrix of $f$''. If the input and output vector spaces are the same, i.e. if $f$ is an endomorphism, we can use the same basis for both spaces and we may shorten the notation: $\mathcal{M}(f,\mathcal{A}\to\mathcal{A}) = \mathcal{M}(f,\mathcal{A})$.
+}
+
+\example{Matrix of a linear map in canonical bases}{
+
+\noindent Consider a linear map $f:\mathbb{R}^3 \to \mathbb{R}^2$ defined by 
+\begin{align*}
+f(x,y,z) = (x-z, 2y+3z)
+\end{align*}
+and canonical bases $\mathcal{C}_3$ and $\mathcal{C}_2$ of $\mathbb{R}^3$ and $\mathbb{R}^2$, respectively. What is the matrix representation of $f$ in the canonical bases? \\
+
+\noindent To build the matrix of $f$ we use $f$ on the basis vectors of the domain, $\mathcal{C}_3=\{(1,0,0), \, (0,1,0), \, (0,0,1)\}$, and find the coordinates of the results in the given basis of the codomain, $\mathcal{C}_2=\{(1,0), \, (0,1)\}$. That is, we want the $2 \times 3$ matrix:
+\begin{align*}
+\mathcal{M}(f,\mathcal{C}_3\to\mathcal{C}_2)=
+\begin{pmatrix}
+| & | & | \\
+[f(1,0,0)]_{\mathcal{C}_2} & [f(0,1,0)]_{\mathcal{C}_2} & [f(0,0,1)]_{\mathcal{C}_2}\\
+| & | & | 
+\end{pmatrix}
+\end{align*}
+So we have
+\begin{align*}
+f(1,0,0) &= (1,0) \quad\implies\quad [f(1,0,0)]_{\mathcal{C}_2} = \begin{pmatrix} 1 \\ 0 \end{pmatrix} \\
+%
+f(0,1,0) &= (0,2) \quad\implies\quad [f(0,1,0)]_{\mathcal{C}_2} = \begin{pmatrix} 0 \\ 2 \end{pmatrix} \\
+%
+f(0,0,1) &= (-1,3) \quad\implies\quad [f(0,0,1)]_{\mathcal{C}_2} = \begin{pmatrix} -1 \\ 3 \end{pmatrix}.
+\end{align*}
+These coordinates form the columns of the matrix of $f$:
+\begin{align*}
+\mathcal{M}(f,\mathcal{C}_3\to\mathcal{C}_2)=
+\begin{pmatrix}
+1 & 0 & -1 \\
+0 & 2 & 3
+\end{pmatrix}.
+\end{align*}
+We can illustrate the usage of the matrix by showing that matrix multiplication by a coordinate column gives the same answer as applying the linear map directly
+\begin{gather*}
+f(1,2,3) = (-2, 13) = -2(1,0) + 13(0,1) \quad\implies\quad [f(1,2,3)]_{\mathcal{C}_2} = 
+\begin{pmatrix}
+-2 \\ 13
+\end{pmatrix}
+\end{gather*}
+and
+\begin{align*}
+\mathcal{M}(f,\mathcal{C}_3\to\mathcal{C}_2) [(1,2,3)]_{\mathcal{C}_3} &=
+\begin{pmatrix}
+1 & 0 & -1 \\
+0 & 2 & 3
+\end{pmatrix}
+\begin{pmatrix}
+1 \\ 2 \\  3
+\end{pmatrix}
+\\
+&=
+1 \begin{pmatrix}  1 \\ 0 \end{pmatrix}
++
+2 \begin{pmatrix}  0 \\ 2 \end{pmatrix}
++
+3 \begin{pmatrix} -1 \\ 3 \end{pmatrix}\\
+&=
+\begin{pmatrix} -2 \\ 13 \end{pmatrix}\\
+&=
+[(-2,13)]_{\mathcal{C}_2}
+\end{align*}
+}
+
+
+\example{Matrix of a linear map in non-canonical bases}{
+
+\noindent Consider the same linear map as the previous example but instead let's use bases 
+\begin{align*}
+\mathcal{A}=\{(1,0,1), \, (0,1,1), \, (1,0,-1)\} \quad\text{and}\quad \mathcal{B}=\{(1,1), \, (0,1)\}
+\end{align*} 
+of $\mathbb{R}^3$ and $\mathbb{R}^2$, respectively. What is the matrix representation of that linear map in these new bases? \\
+
+\noindent Again, we must use $f$ on the basis vectors of the domain and find the coordinates of the results in the given basis of the codomain:
+\begin{align*}
+f(1,0,1) &= (0,3) =0(1,1) + 3(0,1) \quad\implies\quad [f(1,0,0)]_{\mathcal{B}} = \begin{pmatrix} 0 \\ 3 \end{pmatrix} \\
+%
+f(0,1,1) &= (-1,5) =-1(1,1) + 6(0,1) \quad\implies\quad [f(0,1,0)]_{\mathcal{B}} = \begin{pmatrix} -1 \\ 6 \end{pmatrix} \\
+%
+f(1,0,-1) &= (2,-3) =2(1,1) -5(0,1) \quad\implies\quad [f(0,0,1)]_{\mathcal{B}} = \begin{pmatrix} 2 \\ -5 \end{pmatrix}.
+\end{align*}
+Hence the matrix of $f$ in these bases is
+\begin{align*}
+\mathcal{M}(f,\mathcal{A}\to\mathcal{B})=
+\begin{pmatrix}
+0 & -1 & 2 \\
+3 &  6 & 5
+\end{pmatrix}.
+\end{align*}
+Now let's check that matrix multiplication by a coordinate column gives the same answer as applying the linear map directly
+\begin{gather*}
+f(1,2,3) = (-2, 13) = -2(1,1) + 15(0,1) \quad\implies\quad [f(1,2,3)]_{\mathcal{B}} = 
+\begin{pmatrix}
+-2 \\ 15
+\end{pmatrix} 
+%
+\\ \quad\text{and}\quad \\
+%
+(1,2,3) = 1(1,0,1) + 2(0,1,1) + 0(1,0,-1)\quad\implies\quad [(1,2,3)]_{\mathcal{A}} = 
+\begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix} 
+%
+\\ \quad\text{so}\quad \\
+%
+\begin{pmatrix}
+0 & -1 & 2 \\
+3 &  6 & 5
+\end{pmatrix}
+\begin{pmatrix}
+1 \\ 2 \\  0
+\end{pmatrix}
+=
+\begin{pmatrix}
+-2 \\ 15
+\end{pmatrix}.
+\end{gather*}
+}
+
+\example{Matrix of differentiation of polynomials}{
+
+\noindent Let $\mathcal{C}_n$ and $\mathcal{C}_{n-1}$ be the canonical bases of the vector spaces of polynomials with degree up to $n$, $\mathcal{P}_n$, and up to $n-1$, $\mathcal{P}_{n-1}$, respectively. What is the matrix representing the differentation linear map $D:\mathcal{P}_n \to \mathcal{P}_{n-1}$ which maps a polynomial to its derivative? \\
+
+\noindent We consider the linear map on the basis vectors of the domain:
+\begin{align*}
+D(1) &= 0 \\
+D(x) &= 1 \\
+D(x^2) &= 2x \\
+&\vdots \\
+D(x^n) &= nx^{n-1}
+\end{align*}
+The pattern is quite clear I hope. If we write the coordinates of these resulting vectors generally we have
+\begin{align*}
+[D(x^k)]_{\mathcal{C}_{n-1}} = 
+\begin{pmatrix} 
+\alpha_0 \\ 
+\alpha_1 \\ 
+\vdots \\ 
+\alpha_{n-1}
+\end{pmatrix}
+\end{align*}
+%\begin{align*}
+%[D(x^k)]_{\mathcal{C}_{n-1}} = 
+%\begin{pmatrix} 
+%0 \\ 
+%\vdots \\ 
+%k \\ 
+%\vdots \\ 
+%0 \end{pmatrix}
+%\leftarrow \text{in the $(k-1)^{th}$ position}
+%\end{align*}
+where
+\begin{align*}
+\alpha_j = \begin{cases}
+k & \text{for } j=k-1\\
+0 & \text{for } j\neq k-1
+\end{cases}
+\end{align*}
+The matrix representation of $D$ is therefore the following matrix with $n$ columns and $n-1$ rows
+\begin{align*}
+\mathcal{M}(D,\mathcal{C}_n\to\mathcal{C}_{n-1})
+=
+\begin{pmatrix}
+| & | &  & | \\
+[D(1)]_{\mathcal{C}_{n-1}} & [D(x)]_{\mathcal{C}_{n-1}} & \dots & [D(x^n)]_{\mathcal{C}_{n-1}} \\
+| & | &  & | 
+\end{pmatrix}
+=
+\begin{pmatrix}
+  0    &   1    &   0    &   0    & \cdots &   0 \\
+  0    &   0    &   2    &   0    & \cdots &   0 \\
+  0    &   0    &   0    &   3    & \cdots &   0 \\
+  0    &   0    &   0    &   0    & \cdots &   0 \\
+\vdots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+  0    &   0    &   0    & \cdots &   n-1  &   0 \\
+  0    &   0    &   0    & \cdots &   0    &   n \\
+\end{pmatrix}
+\end{align*}
+For example, if we want to use this matrix to differentiate the polynomial $2 - x^2 + 3x^3$ we perform the following calculation
+\begin{align*}
+\mathcal{M}(D,\mathcal{C}_3\to\mathcal{C}_{2}) [2 - x^2 + 3x^3]_{\mathcal{C}_3}
+&=
+\begin{pmatrix}
+  0  &  1  &  0  &  0\\
+  0  &  0  &  2  &  0\\
+  0  &  0  &  0  &  3  
+\end{pmatrix}
+\begin{pmatrix}
+2 \\ 0 \\ -1 \\ 3
+\end{pmatrix} \\
+&=
+\begin{pmatrix}
+0 \\ -2 \\ 9 
+\end{pmatrix} \\
+&=
+[-2x + 9x^2]_{\mathcal{C}_2}
+\end{align*}
+}
+
+\theorem{Identity map and identity matrix}{
+The identity map is the endomorphism $f_I: V \to V$ for any $n$-dimensional vector space $V$, defined by
+\begin{align*}
+f_I(\mathbf{v}) = \mathbf{v} \quad \forall \, \mathbf{v}\in V.
+\end{align*}
+Let $\mathcal{B} = \{ \mathbf{b}_1, \dots, \mathbf{b}_n \}$ be some basis of $V$. Then the matrix of $f_I$ in this basis for both the input and output space is given by
+\begin{align*}
+\mathcal{M}(f_I,\mathcal{B})
+=
+\begin{pmatrix}
+| &  & | \\
+[f_I(\mathbf{b}_1)]_\mathcal{B} & \dots & [f_I(\mathbf{b}_n)]_\mathcal{B}\\
+| &  & | 
+\end{pmatrix}
+=
+\begin{pmatrix}
+| &  & | \\
+[\mathbf{b}_1]_\mathcal{B} & \dots & [\mathbf{b}_n]_\mathcal{B}\\
+| &  & | 
+\end{pmatrix}
+=
+\begin{pmatrix}
+1      & 0      & \cdots & 0 \\
+0      & 1      & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0      &  0     & \cdots & 1 
+\end{pmatrix}
+\end{align*}
+This matrix is called the identity matrix of size $n$ and is denoted $I_n$ or just $I$ when the context is clear.
+}
+
+\theorem{Map composition and matrix multiplication}{
+\begin{align*}
+F[\mathbf{v}]_\mathcal{A} = [f(\mathbf{v})]_\mathcal{B}, \quad
+G[\mathbf{w}]_\mathcal{B} = [g(\mathbf{w})]_\mathcal{C}, \quad 
+M[\mathbf{v}]_\mathcal{A} = [g\circ f(\mathbf{v})]_\mathcal{C} \quad \implies \quad M = GF
+\end{align*}
+}
+
+\theorem{Inverse linear map and matrix inversion}{
+\begin{align*}
+F[\mathbf{v}]_\mathcal{A} = [\mathbf{w}]_\mathcal{B}, \quad
+G[\mathbf{w}]_\mathcal{B} = [\mathbf{v}]_\mathcal{A}, \quad 
+\implies \quad G = F^{-1}
+\end{align*}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%
+\section{Transition matrices}
+
+
+\definition{Transition matrix (change-of-basis matrix)}{
+The \textit{transition matrix} changes the representation of the coordinates of a vector from one basis into another. Let $\mathcal{A}$ and $\mathcal{B}$ be two bases of the same vector space, $V$, and let $\mathbf{v} \in V$. The transition matrix from $\mathcal{A}$ to $\mathcal{B}$, denoted $P_{\mathcal{A}\to \mathcal{B}}$ is defined by the relation
+\begin{align*}
+P_{\mathcal{A}\to \mathcal{B}} [\mathbf{v}]_\mathcal{A} = [\mathbf{v}]_\mathcal{B}.
+\end{align*}
+}
+
+
+
+
+
+\theorem{Transition matrix (change-of-basis matrix)}{
+Let $\mathcal{A}=\{\mathbf{a}_1,\dots,\mathbf{a}_n\}$ and $\mathcal{B}=\{\mathbf{b}_1,\dots,\mathbf{b}_m\}$ be two bases of a vector space $V$. Then transition matrix from $\mathcal{A}$ to $\mathcal{B}$ can be calculated by
+\begin{align*}
+P_{\mathcal{A}\to\mathcal{B}} =
+\begin{pmatrix}
+| & | & & | \\
+[\mathbf{a}_1]_\mathcal{B} & [\mathbf{a}_2]_\mathcal{B} & \dots & [\mathbf{a}_n]_\mathcal{B}\\
+| & | & & | 
+\end{pmatrix}
+\end{align*}
+where the vertical lines are reminders that the coordinates of the $A$ basis vectors are columns.
+}
+
+\theorem{Transition matrix is the matrix representation of the identity map}{
+For a vector space $V$ with two bases $\mathcal{A}$ and $\mathcal{B}$, the transition matrix from $\mathcal{A}$ to $\mathcal{B}$ is exactly the matrix representing the identity map of $V$, $I_V$, in bases $\mathcal{A}$ and $\mathcal{B}$. That is,
+\begin{align*}
+P_{\mathcal{A}\to \mathcal{B}} = \mathcal{M}(I_V,\mathcal{A}\to \mathcal{B}).
+\end{align*}
+}
+
+\begin{proof}
+This one is pretty simple. Let $\mathcal{A} = \left\{ \mathbf{a}_1, \dots, \mathbf{a}_n \right\}$. Then
+\begin{align*}
+\mathcal{M}(I_V,\mathcal{A}\to \mathcal{B})
+&=
+\begin{pmatrix}
+| & | & & | \\
+[I_V(\mathbf{a}_1)]_\mathcal{B} & [I_V(\mathbf{a}_2)]_\mathcal{B} & \dots & [I_V(\mathbf{a}_n)]_\mathcal{B}\\
+| & | & & | 
+\end{pmatrix} 
+&=
+\begin{pmatrix}
+| & | & & | \\
+[\mathbf{a}_1]_\mathcal{B} & [\mathbf{a}_2]_\mathcal{B} & \dots & [\mathbf{a}_n]_\mathcal{B}\\
+| & | & & | 
+\end{pmatrix}
+=
+P_{\mathcal{A}\to\mathcal{B}}
+\end{align*}
+\end{proof}
+
+\example{Transition matrix in $\mathbb{R}^2$}{
+\noindent Find the transition matrix from the canonical basis of $\mathbb{R}^2$, $\mathcal{C}_2$, to the basis $\mathcal{B}=\{ (2,1), \, (1,3) \}$. Use this matrix to find the coordinates of $(-2,3)$ in the basis $\mathcal{B}$. \\
+
+\noindent Let $\mathbf{b}_1 = (2,1)$ and $\mathbf{b}_2 = (1,3)$. Then the transition matrix $P_{\mathcal{C}_2\to\mathcal{B}}$ has columns $[(1,0)]_\mathcal{B}$ and $[(0,1)]_\mathcal{B}$. For the first, we have
+\begin{align*}
+(1,0) &= \alpha \mathbf{b}_1 + \beta \mathbf{b}_2 \\
+\implies & 
+\begin{cases}
+ 2\alpha + \beta = 1 \\
+ \alpha + 3\beta = 0
+\end{cases} \\
+\implies &
+\begin{cases}
+ 2\alpha + \beta = 1 \\
+ \alpha  = -3\beta
+\end{cases} \\
+\implies &
+\begin{cases}
+ -6\beta + \beta = 1 \\
+ \alpha  = -3\beta
+\end{cases} \\
+\implies &
+\begin{cases}
+ \beta = -\dfrac{1}{5} \\
+ \alpha  = \dfrac{3}{5}
+\end{cases}
+\end{align*}
+Hence 
+\begin{align*}
+[(1,0)]_\mathcal{B}
+=
+\begin{pmatrix}
+3/5 \\
+-1/5
+\end{pmatrix}
+\end{align*}
+With similar working we find
+\begin{align*}
+[(0,1)]_\mathcal{B}
+=
+\begin{pmatrix}
+-1/5\\
+2/5
+\end{pmatrix}
+\end{align*}
+and so the transition matrix is given by
+\begin{align*}
+P_{\mathcal{C}_2\to\mathcal{B}}
+=
+\begin{pmatrix}
+3/5  & -1/5 \\
+-1/5 & 2/5
+\end{pmatrix}
+\end{align*}
+Now we use this matrix to calculate $[(-2,3)]_\mathcal{B}$:
+\begin{align*}
+[(-2,3)]_\mathcal{B} = P_{\mathcal{C}_2\to\mathcal{B}}[(-2,3)]_{\mathcal{C}_2}
+= 
+\begin{pmatrix}
+3/5  & -1/5 \\
+-1/5 & 2/5
+\end{pmatrix}
+\begin{pmatrix}
+-2 \\
+3
+\end{pmatrix}
+=
+\begin{pmatrix}
+-9/5 \\
+8/5
+\end{pmatrix}
+\end{align*}
+}
+
+
+
+\theorem{Reverse transition matrix is the inverse}{
+For a vector space $V$ with two bases $\mathcal{A}$ and $\mathcal{B}$, the transition matrix from $\mathcal{B}$ to $\mathcal{A}$ is the inverse of the transition matrix from $\mathcal{A}$ to $\mathcal{B}$
+\begin{align*}
+P_{ \mathcal{B}\to \mathcal{A}} = P_{\mathcal{A}\to \mathcal{B}}^{-1}.
+\end{align*}
+}
+
+
+\theorem{Changing the bases of a matrix representation}{ \label{thm:map_diff_bases}
+Let $f:U \to V$ be a linear map, $\mathcal{B}_U$ and $\mathcal{B}'_U$ be two bases of $U$, $\mathcal{B}_V$ and $\mathcal{B}'_V$ be two bases of $V$, and $F=\mathcal{M}(f,\mathcal{B}_U\to\mathcal{B}_V)$ be the matrix representation of $f$ from basis $\mathcal{B}_U$ to basis $\mathcal{B}_V$. 
+
+Then $F'=\mathcal{M}(f,\mathcal{B}'_U\to\mathcal{B}'_V)$, the matrix representation of $f$ from basis $\mathcal{B}'_U$ to basis $\mathcal{B}'_V$, is given by
+\begin{align*}
+F' = P_{\mathcal{B}_V\to\mathcal{B}_V'} \, F \, P_{\mathcal{B}'_U\to\mathcal{B}_U}
+\end{align*}
+
+The following diagram may help visualise this relation
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+	\coordinate (U)  at (-2.5,+2);
+	\coordinate (Ud) at (-2.5,-2);
+	\coordinate (V)  at (+2.5,+2);
+	\coordinate (Vd) at (+2.5,-2);
+	
+	\coordinate (F)  at (+0,+2.7);
+	\coordinate (Fd) at (+0,-2.7);
+	\coordinate (P1) at (-4,+0);
+	\coordinate (P2) at (+4,+0);
+	
+	\node[black,scale=2.5] at (U)  {$\mathcal{B}_U$};
+	\node[black,scale=2.5] at (Ud) {$\mathcal{B}'_U$};
+	\node[black,scale=2.5] at (V)  {$\mathcal{B}_V$};
+	\node[black,scale=2.5] at (Vd) {$\mathcal{B}'_V$};
+	
+	\node[black,scale=2.5] at (F)  {$F$};
+	\node[black,scale=2.5] at (Fd) {$F'$};
+	\node[black,scale=2] at (P1) {$P_{\mathcal{B}'_U\to\mathcal{B}_U}$};
+	\node[black,scale=2] at (P2) {$P_{\mathcal{B}_V\to\mathcal{B}_V'}$};
+	
+	\draw[->,ultra thick] ($(U)+(1,0)$)--($(V)-(1,0)$);
+	\draw[->,ultra thick] ($(Ud)+(1,0)$)--($(Vd)-(1,0)$);
+	\draw[->,ultra thick] ($(Ud)+(0,0.8)$)--($(U)-(0,0.8)$);
+	\draw[->,ultra thick] ($(V)-(0,0.8)$)--($(Vd)+(0,0.8)$);
+\end{tikzpicture}
+\end{figure}
+To read this schematic, consider that the arrow for $F'$ has the same input and output as following the other three arrows to go up, then right (through $F$) then down again. This ordered path is the matrix multiplication given above.
+}
+
+\example{Changing the bases of a matrix representation}{
+
+\noindent Consider the linear map $f:\mathbb{R}^2 \to \mathcal{P}_2$ given by
+\begin{align*}
+f(\alpha,\beta) = \beta + \alpha x^2.
+\end{align*}
+What is the matrix representation of $f$ using the canonical bases of $\mathbb{R}^2$, call it $\mathcal{A}$, and $\mathcal{P}_2$, call it $\mathcal{B}$? Consider the two bases $\mathcal{A}'=\{(-1,1),\, (1,2)\}$ and $\mathcal{B}'=\{ 2, \,1- x, \, 3 + x^2 \}$. Use transition matrices to find the matrix representation of $f$ in these new bases: $\mathcal{M}(f,\mathcal{A}'\to\mathcal{B}')$. \\
+
+\noindent For the matrix in the canonical bases, we use the linear map on the basis vectors:
+\begin{align*}
+f(1,0) &= x^2 \implies [f(1,0)]_{\mathcal{B}} = \begin{pmatrix} 0 \\ 0 \\ 1\end{pmatrix} \\
+f(0,1) &= 1 \implies [f(0,1)]_{\mathcal{B}} = \begin{pmatrix} 1 \\ 0 \\ 0\end{pmatrix}
+\end{align*}
+and so that matrix of $f$ in the canonical bases is given by
+\begin{align*}
+\mathcal{M}(f,\mathcal{A}\to\mathcal{B})
+=
+\begin{pmatrix} 
+0 & 1 \\
+0 & 0 \\
+1 & 0
+\end{pmatrix}
+\end{align*}
+We need transition matrices $P_{\mathcal{A}'\to\mathcal{A}}$ and $P_{\mathcal{B}\to\mathcal{B}'}$. The first is really simple
+\begin{align*}
+(-1,1) &= -1(1,0) + 1(0,1) \implies[(1,1)]_{\mathcal{A}} = \begin{pmatrix} -1 \\ 1 \end{pmatrix} \\
+(1,2) &= 1(1,0) + 2(0,1) \implies[(0,2)]_{\mathcal{A}} = \begin{pmatrix} 1 \\ 2 \end{pmatrix} \\
+\implies P_{\mathcal{A}'\to\mathcal{A}}
+&=
+\begin{pmatrix} 
+ -1 & 1\\ 
+  1 & 2
+\end{pmatrix}
+\end{align*}
+The second transition matrix, from $\mathcal{B}=\{1,\,x,\,x^2\}$ to $\mathcal{B}'=\{2,\,1-x,\,3+x^2\}$, requires a bit more effort
+\begin{align*}
+1 &= \alpha(2) + \beta(1-x) + \gamma(3+x^2) \\
+\implies &
+\begin{cases}
+2\alpha + \beta + 3\gamma = 1 \\
+-\beta = 0 \\
+\gamma = 0
+\end{cases} \\
+\implies & \alpha = 1/2 \\
+\implies & [1]_{\mathcal{B}'} = \begin{pmatrix} 1/2 \\ 0 \\ 0 \end{pmatrix} \\ \\
+%%
+%%
+x &= \alpha(2) + \beta(1-x) + \gamma(3+x^2) \\
+\implies &
+\begin{cases}
+2\alpha + \beta + 3\gamma = 0 \\
+-\beta = 1 \\
+\gamma = 0
+\end{cases} \\
+\implies & \alpha = 0 \\
+\implies & [x]_{\mathcal{B}'} = \begin{pmatrix} 0 \\ -1 \\ 0 \end{pmatrix} \\ \\
+%%
+%%
+x^2 &= \alpha(2) + \beta(1-x) + \gamma(3+x^2) \\
+\implies &
+\begin{cases}
+2\alpha + \beta + 3\gamma = 0 \\
+-\beta = 0 \\
+\gamma = 1
+\end{cases} \\
+\implies & \alpha = -3/2 \\
+\implies & [x^2]_{\mathcal{B}'} = \begin{pmatrix} -3/2 \\ 0 \\ 1 \end{pmatrix}
+\end{align*}
+so we have transition matrix
+\begin{align*}
+P_{\mathcal{B}\to\mathcal{B}'}
+&=
+\begin{pmatrix} 
+  1/2 & 0 & -3/2 \\
+  0 & -1 & 0 \\
+  0 & 0 & 1
+\end{pmatrix}
+\end{align*}
+Now we can use these transition matrices to compute the matrix representation of $f$ in these alternate bases:
+\begin{align*}
+F' &= P_{\mathcal{B}\to\mathcal{B}'} \, F \, P_{\mathcal{A}'\to\mathcal{A}} \\
+%%%
+%%%
+%%%
+&= \begin{pmatrix} 
+  1/2 & 0 & -3/2 \\
+  0 & -1 & 0 \\
+  0 & 0 & 1
+\end{pmatrix}
+\begin{pmatrix} 
+  0 & 1 \\
+  0 & 0 \\
+  1 & 0
+\end{pmatrix}
+\begin{pmatrix} 
+ -1 & 1 \\ 
+  1 & 2
+\end{pmatrix} \\
+%%%
+%%%
+%%%
+&=
+\begin{pmatrix} 
+  2 & -1/2 \\
+  0 & 0 \\
+ -1 & 1
+\end{pmatrix}
+\end{align*}
+}
