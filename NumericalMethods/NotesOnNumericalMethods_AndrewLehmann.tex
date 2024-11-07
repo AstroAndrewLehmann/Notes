@@ -12,7 +12,31 @@
 \usepackage[shortlabels]{enumitem}
 \usepackage{float}
 \usepackage{relsize} % for \mathlarger
+
+%%%%%%%%%%% tikz %%%%%%%%%%%
 \usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{angles, arrows.meta, calc, quotes}
+\usetikzlibrary{decorations.pathreplacing,calligraphy}
+\usetikzlibrary{patterns}
+\usetikzlibrary{bending,matrix,positioning} % for matrix colours stuff
+\usetikzlibrary{arrows, fit, shapes, backgrounds} % for matrix colours stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%% colours %%%%%%%%%%%
+\usepackage{xcolor,colortbl}
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+\definecolor{battleshipgrey}{rgb}{0.52, 0.52, 0.51}
+\definecolor{brightmaroon}{rgb}{0.76, 0.13, 0.28}
+% \textcolor{MidnightBlue}{}
+% \textcolor{Maroon}{}
+% \textcolor{Purple}{matrix}
+% \textcolor{BurntOrange}{}
+% \textcolor{MidnightBlue}{}
+% \textcolor{Mahogany}{}
+% \textcolor{ForestGreen}{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 % version
@@ -91,13 +115,15 @@
 	}
 %*************************************************
 
+\newcommand{\dsum}{\displaystyle\sum}
+
 \begin{document}
 
 % testing area
 %\input{Ch1_SquareRoot2.tex}
 %\input{Ch2_RootFinding.tex}
-\input{Ch3_PolynomialInterpolation.tex} % complete 28/06/22
-%\input{Ch4_LeastSquares.tex}
+%\input{Ch3_PolynomialInterpolation.tex} % complete 07/11/24
+\input{Ch4_LeastSquares.tex}
 %\input{Ch5_IntegrationAndDifferentiation.tex}
 %\input{Ch6_DifferentialEquations.tex}
 %\input{Ch7_MatrixMethods.tex}
@@ -120,7 +146,7 @@
 \pagenumbering{arabic}
 \input{Ch1_SquareRoot2.tex}
 \input{Ch2_RootFinding.tex}
-\input{Ch3_PolynomialInterpolation.tex} % complete 28/06/22
+\input{Ch3_PolynomialInterpolation.tex} % complete 07/11/24
 \input{Ch4_LeastSquares.tex}
 \input{Ch5_IntegrationAndDifferentiation.tex}
 \input{Ch6_DifferentialEquations.tex}
