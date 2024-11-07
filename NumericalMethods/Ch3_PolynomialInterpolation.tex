@@ -177,6 +177,20 @@ The components of the polynomial, $L_k(x)$, are called \textit{Lagrange basis po
 		& - (x-1)(x-2)(x-4) + \frac{2}{3}(x-1)(x-2)(x-3)
 	\end{align*}
 }{\downline}
+
+
+
+
+\subsection{Interpolation error estimation}
+We can use a Lagrange polynomial to approximate a function $f(x)$ by sampling it at $n+1$ points $x_0$, \dots, $x_n$. That is, we take as data points $(x_0,f(x_0))$, $(x_1,f(x_1))$, \dots, $(x_n,f(x_n))$. If the function is continuous on the interval of the interpolation $[x_0,x_n]$, and its derivative of order $n+1$ exists and is also continuous on that interval, then the interpolation error is bounded:
+\begin{align*}
+|f(x) - p_n(x)| \leq \frac{M_{n+1}}{(n+1)!} \left| \prod_{i=0}^n (x-x_i) \right|
+\end{align*}
+where 
+\begin{align*}
+M_{n+1} = \max_{\alpha \in [x_0,x_n]} \left| f^{(n+1)}(\alpha)\right|
+\end{align*}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -402,6 +416,7 @@ p_3(x) &= p_2(x) + \frac{2}{3}(x-1)(x-3)(x-4) \\
 \end{align*}
 which is the same polynomial we found in the previous example! The order doesn't matter, and we can extend the polynomials one term at a time.
 }{\downline}
+
 
 
 
