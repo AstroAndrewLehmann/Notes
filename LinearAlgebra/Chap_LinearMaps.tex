@@ -935,7 +935,7 @@ We then use this last term to define a matrix
 \begin{pmatrix}
 0 \\ 1 \\ -1
 \end{pmatrix}
-\beta.
+\beta
 =
 \begin{pmatrix}
  1 &  0 \\
@@ -1160,6 +1160,44 @@ Let $f:V \to W$ be a linear map, $\mathcal{A}=\{\mathbf{a}_1,\dots,\mathbf{a}_n\
 \end{align*}
 where the vertical lines are reminders that the coordinates of the $f(\mathbf{a}_k)$ vectors are columns. We often shorten ``matrix representation of $f$'' to just ``matrix of $f$''. If the input and output vector spaces are the same, i.e. if $f$ is an endomorphism, we can use the same basis for both spaces and we may shorten the notation: $\mathcal{M}(f,\mathcal{A}\to\mathcal{A}) = \mathcal{M}(f,\mathcal{A})$.
 }
+
+We will use the following type of schema to represent the relations between matrix representations of linear maps and their underlying map. Once we develop further relations, I find it particularly useful in showing at a glance what certain matrix equations really mean. Here's the simplest case of a scheme simply showing the matrix representation and its bases in parallel with the map and its vector spaces.
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+	% map, domain/codomain
+	\coordinate (V)  at (-2.5,+1.5);
+	\coordinate (W)  at (+2.5,+1.5);
+	\coordinate (fmap)  at ($0.5*(V)+ 0.5*(W) + (0,0.6)$);
+	
+	\node[black,scale=2.5] at (V)  {$V$};
+	\node[black,scale=2.5] at (W)  {$W$};
+	\draw[->,ultra thick] ($(V)+(1,0)$)--($(W)-(1,0)$);
+	
+	\node[black,scale=2.5] at (fmap)  {$f$};
+	
+	% matrix, bases
+	\coordinate (A) at (-2.5,-1.5);
+	\coordinate (B) at (+2.5,-1.5);
+	\coordinate (fmat) at ($0.5*(A)+ 0.5*(B) + (0,0.6)$);
+	
+	\node[black,scale=2.5] at (A)  {$\mathcal{A}$};
+	\node[black,scale=2.5] at (B)  {$\mathcal{B}$};
+	\node[black,scale=2.5] at (fmat)  {$F$};
+	
+	\draw[->,ultra thick] ($(A)+(1,0)$)--($(B)-(1,0)$);
+	
+	% separation
+	\draw[dashed,thick] ($(-8,0)$)--($(8,0)$);
+	\node[black,scale=1] at (-7,0.2) {map};
+	\node[black,scale=1] at (-7,-0.2) {matrix};
+	
+	\node[black,scale=1.2] at (-5,1.5) {domain};
+	\node[black,scale=1.2] at (5,1.5) {codomain};
+	\node[black,scale=1.2] at (-5,-1.5) {\begin{tabular}{c} domain \\ basis \end{tabular}};
+	\node[black,scale=1.2] at (5,-1.5) {\begin{tabular}{c} codomain \\ basis \end{tabular}};
+\end{tikzpicture}
+\end{figure}
 
 \example{Matrix of a linear map in canonical bases}{
 
@@ -1389,21 +1427,368 @@ Let $\mathcal{B} = \{ \mathbf{b}_1, \dots, \mathbf{b}_n \}$ be some basis of $V$
 This matrix is called the identity matrix of size $n$ and is denoted $I_n$ or just $I$ when the context is clear.
 }
 
-\theorem{Map composition and matrix multiplication}{
+
+\example{Different maps for the same matrix}{
+\noindent Consider the matrix
 \begin{align*}
-F[\mathbf{v}]_\mathcal{A} = [f(\mathbf{v})]_\mathcal{B}, \quad
-G[\mathbf{w}]_\mathcal{B} = [g(\mathbf{w})]_\mathcal{C}, \quad 
-M[\mathbf{v}]_\mathcal{A} = [g\circ f(\mathbf{v})]_\mathcal{C} \quad \implies \quad M = GF
+F = \begin{pmatrix}
+  1 &  0 &  3 \\
+  2 & -1 &  1 
+\end{pmatrix}
+\end{align*}
+Determine the linear maps
+\begin{align*}
+& f_1: \mathbb{R}^3 \to \mathbb{R}^2 \\
+& f_2: \mathbb{R}^3 \to \mathcal{P}_1 \\
+& f_3: \mathcal{P}_2 \to \mathcal{D}_2
+\end{align*}
+for which $F$ is their matrix representation in the appropriate canonical bases. Reminder: $\mathcal{P}_n$ is the vector space of polynomials of degree up to $n$ and $\mathcal{D}_2$ is the vector space of 2 by 2 diagonal matrices.
+
+\noindent Let's start with defining the canonical bases
+\begin{align*}
+& \mathcal{C}_3 = \left\{ (1,0,0), \, (0,1,0), \, (0,0,1) \right\} \\
+& \mathcal{C}_2 = \left\{ (1,0), \, (0,1) \right\} \\
+& \mathcal{C}_{\mathcal{P}_1} = \left\{ 1, \, x \right\} \\
+& \mathcal{C}_{\mathcal{P}_2} = \left\{ 1, \, x, \, x^2 \right\} \\
+& \mathcal{C}_{\mathcal{D}_2} = \left\{ \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} \, \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix} \right\} \\
+\end{align*}
+
+\noindent Starting with $f_1$, we must have the following coordinates to fill the columns of $F$ if it is to be its matrix:
+\begin{align*}
+[f_1(1,0,0)]_{\mathcal{C}_2} = \begin{pmatrix} 1 \\ 2 \end{pmatrix}, \quad [f_1(0,1,0)]_{\mathcal{C}_2} = \begin{pmatrix} 0 \\-1 \end{pmatrix}, \quad [f_1(0,0,1)]_{\mathcal{C}_2} = \begin{pmatrix} 3 \\ 1 \end{pmatrix}
+\end{align*}
+This unpacks as the following
+\begin{align*}
+& f_1(1,0,0) = (1)(1,0) + (2)(0,1) = (1,2) \\
+& f_1(0,1,0) = (0)(1,0) + (-1)(0,1) = (0,-1) \\
+& f_1(0,0,1) = (3)(1,0) + (1)(0,1) = (3,1)
+\end{align*}
+And now the general formula for $f_1$ can be found recalling the fundamental property of linear maps:
+\begin{align*}
+f_1(x,y,z) &= f_1(x(1,0,0) + y(0,1,0) + z(0,0,1)) \\
+           &= xf_1(1,0,0) + yf_1(0,1,0) + zf_1(0,0,1) \\
+           &= x(1,2) + y(0,-1) + z(3,1) \\
+           &= (x+3z,2x-y+z)
+\end{align*}
+and so we have determined the linear map, $f_1$, that has matrix representation in the canonical bases given by $F$. \\
+
+\noindent We repeat this process for $f_2$: we must have the following coordinates to fill the columns of $F$ if it is to be its matrix:
+\begin{align*}
+[f_2(1,0,0)]_{\mathcal{P}_1} = \begin{pmatrix} 1 \\ 2 \end{pmatrix}, \quad [f_2(0,1,0)]_{\mathcal{P}_1} = \begin{pmatrix} 0 \\-1 \end{pmatrix}, \quad [f_2(0,0,1)]_{\mathcal{P}_1} = \begin{pmatrix} 3 \\ 1 \end{pmatrix}
+\end{align*}
+This unpacks as the following
+\begin{align*}
+& f_2(1,0,0) = (1)1 + (2)x = 1+2x \\
+& f_2(0,1,0) = (0)1 + (-1)x = -x \\
+& f_2(0,0,1) = (3)1 + (1)x = 3+x
+\end{align*}
+And now the general formula for $f_2$:
+\begin{align*}
+f_2(\alpha,\beta,\gamma) &= \alpha f_2(1,0,0) + \beta f_2(0,1,0) + \gamma f_2(0,0,1) \\
+           &= \alpha(1+2x) + \beta(-x) + \gamma (3+x) \\
+           &= \alpha + 3\gamma + (2\alpha - \beta + 3\gamma)x
+\end{align*}
+and so we have determined the linear map, $f_2$, that has matrix representation in the canonical bases given by $F$. \\
+
+\noindent Finally for $f_3$: we must have the following coordinates to fill the columns of $F$ if it is to be its matrix:
+\begin{align*}
+[f_3(1)]_{\mathcal{D}_2} = \begin{pmatrix} 1 \\ 2 \end{pmatrix}, \quad [f_3(x)]_{\mathcal{D}_2} = \begin{pmatrix} 0 \\-1 \end{pmatrix}, \quad [f_3(x^2)]_{\mathcal{D}_2} = \begin{pmatrix} 3 \\ 1 \end{pmatrix}
+\end{align*}
+This unpacks as the following
+\begin{align*}
+& f_3(1) = (1)\begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} + (2)\begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix} = \begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix} \\
+& f_3(x) = (0)\begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} + (-1)\begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix} = \begin{pmatrix} 0 & 0 \\ 0 & -1 \end{pmatrix} \\
+& f_3(x^2) = (3)\begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} + (1)\begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix} = \begin{pmatrix} 3 & 0 \\ 0 & 1 \end{pmatrix}
+\end{align*}
+And now the general formula for $f_3$:
+\begin{align*}
+f_3(a_0 + a_1 x + a_2 x^2) &= a_0 f_3(1) + a_1 f_3(x) + a_2 f_3(x^2) \\
+           &= a_0 \begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix} + a_1 \begin{pmatrix} 0 & 0 \\ 0 & -1 \end{pmatrix} + a_2 \begin{pmatrix} 3 & 0 \\ 0 & 1 \end{pmatrix} \\
+           &= \begin{pmatrix} a_0 + 3 a_2 & 0 \\ 0 & 2a_0-a_1 + a_2 \end{pmatrix}
+\end{align*}
+and so we have determined the linear map, $f_3$, that has matrix representation in the canonical bases given by $F$. \\
+
+\noindent To summarise, the following three maps all have the same matrix representation in the respective canonical bases:
+\begin{align*}
+& f_1: \mathbb{R}^3 \to \mathbb{R}^2 \quad (x,y,z) \mapsto (x+3z,2x-y+z) \\
+& f_2: \mathbb{R}^3 \to \mathcal{P}_1 \quad (\alpha,\beta,\gamma) \mapsto \alpha + 3\gamma + (2\alpha - \beta + 3\gamma)x \\
+& f_3: \mathcal{P}_2 \to \mathcal{D}_2 \quad a_0 + a_1 x + a_2 x^2 \mapsto \begin{pmatrix} a_0 + 3 a_2 & 0 \\ 0 & 2a_0-a_1 + a_2 \end{pmatrix} \\
+\implies & \mathcal{M}(f_1,\mathcal{C}_3 \to \mathcal{C}_2)
+= \mathcal{M}(f_2,\mathcal{C}_3 \to \mathcal{C}_{\mathcal{P}_1})
+= \mathcal{M}(f_3,\mathcal{C}_{\mathcal{P}_1} \to \mathcal{C}_{\mathcal{D}_2})
+= \begin{pmatrix}
+  1 &  0 &  3 \\
+  2 & -1 &  1 
+\end{pmatrix}
+\end{align*}
+Can you invent other linear maps with this same matrix? What if the bases were non-canonical? Hopefully you can see that the domain vector space must have dimension 3 and the codomain vector space must have dimension 2.
+}
+
+
+\theorem{Map composition and matrix multiplication}{
+Consider linear maps $f:U \to V$, $g:V \to W$ and the composition $g \circ f: U \to W$. Let $\mathcal{B}_U$, $\mathcal{B}_V$ and $\mathcal{B}_W$ be bases of $U$, $V$ and $W$ respectively. Then the matrix representation of the composition is the matrix multiplication of the matrices representing the composed maps. That is,
+\begin{align*}
+\mathcal{M}(g \circ f,\mathcal{B}_U \to \mathcal{B}_W) =
+\mathcal{M}(g,\mathcal{B}_V \to \mathcal{B}_W)
+\mathcal{M}(f,\mathcal{B}_U \to \mathcal{B}_V)
+\end{align*}
+
+}
+\begin{proof}
+Rename the composition map  $h=g \circ f$. The matrix representations of these three linear maps in these bases are given by
+\begin{align*}
+F &= \mathcal{M}(f,\mathcal{B}_U \to \mathcal{B}_V) \\
+G &= \mathcal{M}(g,\mathcal{B}_V \to \mathcal{B}_W) \\
+H &= \mathcal{M}(h,\mathcal{B}_U \to \mathcal{B}_W) = \mathcal{M}(g \circ f,\mathcal{B}_U \to \mathcal{B}_W)
+\end{align*}
+Let $\mathbf{u}\in U$. Then we have
+\begin{align*}
+& F[\mathbf{u}]_{\mathcal{B}_U} = [f(\mathbf{u})]_{\mathcal{B}_V} \\
+\implies & G(F[\mathbf{u}]_{\mathcal{B}_U}) = G([f(\mathbf{u})]_{\mathcal{B}_V}) = [g(f(\mathbf{u}))]_{\mathcal{B}_W} \\
+\implies & (GF)[\mathbf{u}]_{\mathcal{B}_U} = [g\circ f(\mathbf{u})]_{\mathcal{B}_W} = [h(\mathbf{u})]_{\mathcal{B}_W} = H[\mathbf{u}]_{\mathcal{B}_U}
+\end{align*}
+This shows that $GF = H$.
+\end{proof}
+
+\noindent The parallel between composition and matrix multiplication is visualised in the following schema.
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+	% map, domain/codomain
+	\coordinate (U)  at (-5,+1.5);
+	\coordinate (V)  at (-0,+1.5);
+	\coordinate (W)  at (+5,+1.5);
+	\coordinate (fmap)  at ($0.5*(U)+ 0.5*(V) + (0,0.6)$);
+	\coordinate (gmap)  at ($0.5*(V)+ 0.5*(W) + (0,0.6)$);
+	\coordinate (hmap)  at ($0.5*(U)+ 0.5*(W) + (0,2.8)$);
+	
+	\node[black,scale=2.5] at (U)  {$U$};
+	\node[black,scale=2.5] at (V)  {$V$};
+	\node[black,scale=2.5] at (W)  {$W$};
+	
+	\draw[->,ultra thick] ($(U)+(1,0)$)--($(V)-(1,0)$);
+	\draw[->,ultra thick] ($(V)+(1,0)$)--($(W)-(1,0)$);
+	\draw[->,ultra thick] ($(U)+(1,0.3)$) to [out=45,in=135] ($(W)-(1,-0.3)$);
+	
+	\node[black,scale=2.5] at (fmap)  {$f$};
+	\node[black,scale=2.5] at (gmap)  {$g$};
+	\node[black,scale=2.5] at (hmap)  {$g \circ f$};
+	
+	% matrix, bases
+	\coordinate (Bu)  at (-5,-1.5);
+	\coordinate (Bv)  at (-0,-1.5);
+	\coordinate (Bw)  at (+5,-1.5);
+	\coordinate (fmat) at ($0.5*(Bu)+ 0.5*(Bv) + (0,0.6)$);
+	\coordinate (gmat) at ($0.5*(Bv)+ 0.5*(Bw) + (0,0.6)$);
+	\coordinate (hmat) at ($0.5*(Bu)+ 0.5*(Bw) + (0,-2.8)$);
+	
+	\node[black,scale=2.5] at (Bu)  {$\mathcal{B}_U$};
+	\node[black,scale=2.5] at (Bv)  {$\mathcal{B}_V$};
+	\node[black,scale=2.5] at (Bw)  {$\mathcal{B}_W$};
+	\node[black,scale=2.5] at (fmat)  {$F$};
+	\node[black,scale=2.5] at (gmat)  {$G$};
+	\node[black,scale=2.5] at (hmat)  {$GF$};
+	
+	\draw[->,ultra thick] ($(Bu)+(1,0)$)--($(Bv)-(1,0)$);
+	\draw[->,ultra thick] ($(Bv)+(1,0)$)--($(Bw)-(1,0)$);
+	\draw[->,ultra thick] ($(Bu)+(1,-0.3)$) to [out=-45,in=-135] ($(Bw)-(1,0.3)$);
+	
+	% separation
+	\draw[dashed,thick] ($(-8,0)$)--($(8,0)$);
+	\node[black,scale=1] at (-7,0.2) {map};
+	\node[black,scale=1] at (-7,-0.2) {matrix};
+\end{tikzpicture}
+\end{figure}
+
+
+\example{Map composition and matrix multiplication}{
+
+\noindent Consider two linear maps $f:\mathbb{R}^3 \to \mathcal{M}_{2,2}$, where $\mathcal{M}_{2,2}$ is the vector space of 2 by 2 matrices, and $g:\mathcal{M}_{2,2} \to \mathcal{P}_2$, where $\mathcal{P}_2$ is the vector space of polynomials of degree up to $2$. The maps are defined by
+\begin{align*}
+& f(a,b,c) = \begin{pmatrix}
+a-c & b \\ 0 & c-a
+\end{pmatrix} \\
+& g\left( \begin{pmatrix}
+a & b \\ c & d
+\end{pmatrix} \right) = d + (2a)x + (b-a)x^2
+\end{align*}
+Let $\mathcal{B}_1$, $\mathcal{B}_2$ and $\mathcal{B}_3$ be the canonical bases of $\mathbb{R}^3$, $\mathcal{M}_{2,2}$ and $\mathcal{P}_2$, respectively. What are the matrix representations of $f$, $g$ and the composition $g \circ f$ in the canonical bases? Compare $\mathcal{M}(g \circ f,\mathcal{B}_1\to\mathcal{B}_3)$ to the matrix multiplication $\mathcal{M}(g,\mathcal{B}_2\to\mathcal{B}_3)\mathcal{M}(f,\mathcal{B}_1\to\mathcal{B}_2)$. \\
+
+\noindent Let's start by defining the canonical bases:
+\begin{align*}
+\mathcal{B}_1 & = \left\{ (1,0,0), \, (0,1,0) \, (0,0,1) \right\} \\
+\mathcal{B}_2 & = \left\{ \begin{pmatrix} 1 & 0 \\ 0 & 0\end{pmatrix}, \, \begin{pmatrix} 0 & 1 \\ 0 & 0\end{pmatrix}, \, \begin{pmatrix} 0 & 0 \\ 1 & 0\end{pmatrix}, \, \begin{pmatrix} 0 & 0 \\ 0 & 1\end{pmatrix} \right\}  \\
+\mathcal{B}_3 & = \left\{ 1, \, x, \, x^2 \right\} 
+\end{align*}
+So we have the matrix representation of $f$ in the canonical bases:
+\begin{align*}
+\mathcal{M}(f,\mathcal{B}_1 \to \mathcal{B}_2)
+&=
+\begin{pmatrix}
+| & | & | \\
+[f(1,0,0)]_{\mathcal{B}_2} & [f(0,1,0)]_{\mathcal{B}_2} & [f(0,0,1)]_{\mathcal{B}_2}\\
+| & | & | 
+\end{pmatrix} \\
+&=
+\begin{pmatrix}
+| & | & | \\
+  \left[\begin{pmatrix}  1 & 0 \\ 0 & -1 \end{pmatrix}\right]_{\mathcal{B}_2} 
+& \left[\begin{pmatrix}  0 & 1 \\ 0 &  0 \end{pmatrix}\right]_{\mathcal{B}_2} 
+& \left[\begin{pmatrix} -1 & 0 \\ 0 &  1 \end{pmatrix}\right]_{\mathcal{B}_2}\\
+| & | & | 
+\end{pmatrix}  \\
+&=
+\begin{pmatrix}
+  1 & 0 & -1 \\
+  0 & 1 &  0 \\
+  0 & 0 &  0 \\
+ -1 & 0 &  1
+\end{pmatrix} 
+\end{align*}
+and we have the matrix representation of $g$ in the canonical bases:
+\begin{align*}
+&\mathcal{M}(g,\mathcal{B}_2 \to \mathcal{B}_3)
+=
+\begin{pmatrix}
+| & | & | & |\\
+   \left[g\left( \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} \right)\right]_{\mathcal{B}_3} 
+ & \left[g\left( \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} \right)\right]_{\mathcal{B}_3} 
+ & \left[g\left( \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix} \right)\right]_{\mathcal{B}_3} 
+ & \left[g\left( \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix} \right)\right]_{\mathcal{B}_3} \\
+| & | & | & |
+\end{pmatrix} \\
+&=
+\begin{pmatrix}
+| & | & | & |\\
+   [0 + (2)x + (-1)x^2]_{\mathcal{B}_3} 
+ & [0 + (0)x + (1)x^2]_{\mathcal{B}_3} 
+ & [0 + (0)x + (0)x^2]_{\mathcal{B}_3} 
+ & [1 + (0)x + (0)x^2]_{\mathcal{B}_3} \\
+| & | & | & |
+\end{pmatrix}  \\
+&=
+\begin{pmatrix}
+  0 & 0 & 0 & 1 \\
+  2 & 0 & 0 & 0 \\
+ -1 & 1 & 0 & 0
+\end{pmatrix}
+\end{align*}
+Now the composition map is defined on any arbitrary input vector $\mathbf{v} = (a,b,c) \in \mathbb{R}^3$ by:
+\begin{align*}
+g \circ f (a,b,c) &= g(f(a,b,c)) \\
+&= g\left( \begin{pmatrix} a-c & b \\ 0 & c-a \end{pmatrix} \right) \\
+&= c-a + (2a-2c)x + (b-a+c)x^2
+\end{align*}
+This composition map therefore has matrix representation in the canonical bases given by
+\begin{align*}
+\mathcal{M}(g \circ f,\mathcal{B}_1 \to \mathcal{B}_3)
+&=
+\begin{pmatrix}
+| & | & | \\
+[g \circ f(1,0,0)]_{\mathcal{B}_3} & [g \circ f(0,1,0)]_{\mathcal{B}_3} & [g \circ f(0,0,1)]_{\mathcal{B}_3}\\
+| & | & | 
+\end{pmatrix} \\
+&=
+\begin{pmatrix}
+| & | & | \\
+  \left[-1 +  (2)x + (-1)x^2\right]_{\mathcal{B}_3} 
+& \left[ 0 +  (0)x +  (1)x^2\right]_{\mathcal{B}_3} 
+& \left[ 1 + (-2)x +  (1)x^2\right]_{\mathcal{B}_3}\\
+| & | & | 
+\end{pmatrix}  \\
+&=
+\begin{pmatrix}
+ -1 & 0 &  1 \\
+  2 & 0 & -2 \\
+ -1 & 1 &  1
+\end{pmatrix} 
+\end{align*}
+The matrix multiplication of each matrix representation will indeed give the same matrix of the composition
+\begin{align*}
+\mathcal{M}(g,\mathcal{B}_2\to\mathcal{B}_3)\mathcal{M}(f,\mathcal{B}_1\to\mathcal{B}_2) & = 
+\begin{pmatrix}
+  0 & 0 & 0 & 1 \\
+  2 & 0 & 0 & 0 \\
+ -1 & 1 & 0 & 0
+\end{pmatrix}
+\begin{pmatrix}
+  1 & 0 & -1 \\
+  0 & 1 &  0 \\
+  0 & 0 &  0 \\
+ -1 & 0 &  1
+\end{pmatrix}  \\
+&= 
+\begin{pmatrix}
+ -1 & 0 &  1 \\
+  2 & 0 & -2 \\
+ -1 & 1 &  1
+\end{pmatrix}  \\
+&= 
+\mathcal{M}(g \circ f,\mathcal{B}_1 \to \mathcal{B}_3)
 \end{align*}
 }
 
 \theorem{Inverse linear map and matrix inversion}{
+Let $f:V \to W$ be an invertible linear map, and $f^{-1}=g:W \to V$ be its inverse. Let $\mathcal{A}$ be a basis of $V$ and $\mathcal{B}$ be a basis of $W$. Then matrix representation of $f$ from basis $\mathcal{A}$ to $\mathcal{B}$ is the inverse of the matrix representation of $g$ from basis $\mathcal{B}$ to $\mathcal{A}$. That is:
 \begin{align*}
-F[\mathbf{v}]_\mathcal{A} = [\mathbf{w}]_\mathcal{B}, \quad
-G[\mathbf{w}]_\mathcal{B} = [\mathbf{v}]_\mathcal{A}, \quad 
-\implies \quad G = F^{-1}
+& F = \mathcal{M}(f, \mathcal{A}\to \mathcal{B}) \quad \text{and} \quad
+G = \mathcal{M}(f, \mathcal{B}\to \mathcal{A}) \\
+&\implies \quad G = F^{-1}
 \end{align*}
 }
+\begin{proof}
+Let $\mathbf{v}\in V$ and $f(\mathbf{v}) = \mathbf{w} \in W$. Then we have $F[\mathbf{v}]_\mathcal{A} = [f(\mathbf{v})]_\mathcal{B}$ and $G[\mathbf{w}]_\mathcal{B} = [g(\mathbf{w})]_\mathcal{A}$. So we find
+\begin{align*}
+\left(GF\right)[\mathbf{v}]_\mathcal{A} = G\left(F[\mathbf{v}]_\mathcal{A}\right) = [g(f(\mathbf{v}))]_\mathcal{A} = [\mathbf{v}]_\mathcal{A}
+\end{align*}
+which means $GF = I$. Similarly
+\begin{align*}
+\left(FG\right)[\mathbf{w}]_\mathcal{B} = F\left(G[\mathbf{w}]_\mathcal{B}\right) = [f(g(\mathbf{w}))]_\mathcal{B} = [\mathbf{w}]_\mathcal{B}
+\end{align*}
+which means $FG = I$. $GF = FG = I$ is the defining relation of inverse matrices: $F = G^{-1}$.
+\end{proof}
+\noindent The inverse relation is visualised in the following schema.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+	% map, domain/codomain
+	\coordinate (V)  at (-2.5,+1.5);
+	\coordinate (W)  at (+2.5,+1.5);
+	\coordinate (fmap)  at ($0.5*(V)+ 0.5*(W) + (0,0.8)$);
+	\coordinate (gmap)  at ($0.5*(V)+ 0.5*(W) + (0,-0.8)$);
+	
+	\node[black,scale=2.5] at (V)  {$V$};
+	\node[black,scale=2.5] at (W)  {$W$};
+	\draw[->,ultra thick] ($(V)+(1,0.2)$)--($(W)-(1,-0.2)$);
+	\draw[<-,ultra thick] ($(V)+(1,-0.2)$)--($(W)-(1,+0.2)$);
+	
+	\node[black,scale=2.3] at (fmap)  {$f$};
+	\node[black,scale=2.3] at (gmap)  {$g=f^{-1}$};
+	
+	% matrix, bases
+	\coordinate (A) at (-2.5,-1.5);
+	\coordinate (B) at (+2.5,-1.5);
+	\coordinate (fmat) at ($0.5*(A)+ 0.5*(B) + (0,0.8)$);
+	\coordinate (gmat) at ($0.5*(A)+ 0.5*(B) + (0,-0.8)$);
+	
+	\node[black,scale=2.5] at (A)  {$\mathcal{A}$};
+	\node[black,scale=2.5] at (B)  {$\mathcal{B}$};
+	\node[black,scale=2.3] at (fmat)  {$F$};
+	\node[black,scale=2.3] at (gmat)  {$G=F^{-1}$};
+	
+	\draw[->,ultra thick] ($(A)+(1,0.2)$)--($(B)-(1,-0.2)$);
+	\draw[<-,ultra thick] ($(A)+(1,-0.2)$)--($(B)-(1,0.2)$);
+	
+	% separation
+	\draw[dashed,thick] ($(-8,0)$)--($(8,0)$);
+	\node[black,scale=1] at (-7,0.2) {map};
+	\node[black,scale=1] at (-7,-0.2) {matrix};
+\end{tikzpicture}
+\end{figure}
+
+
+To do: how does $\det(F)\neq 0$ as a condition for matrix inversion transfer to a condition on the linear map $f$? Something to do with the linear independence of the map acting on basis vectors.
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -1424,7 +1809,7 @@ P_{\mathcal{A}\to \mathcal{B}} [\mathbf{v}]_\mathcal{A} = [\mathbf{v}]_\mathcal{
 
 
 \theorem{Transition matrix (change-of-basis matrix)}{
-Let $\mathcal{A}=\{\mathbf{a}_1,\dots,\mathbf{a}_n\}$ and $\mathcal{B}=\{\mathbf{b}_1,\dots,\mathbf{b}_m\}$ be two bases of a vector space $V$. Then transition matrix from $\mathcal{A}$ to $\mathcal{B}$ can be calculated by
+Let $\mathcal{A}=\{\mathbf{a}_1,\dots,\mathbf{a}_n\}$ and $\mathcal{B}=\{\mathbf{b}_1,\dots,\mathbf{b}_m\}$ be two bases of a vector space $V$. Then the transition matrix from $\mathcal{A}$ to $\mathcal{B}$ can be calculated by
 \begin{align*}
 P_{\mathcal{A}\to\mathcal{B}} =
 \begin{pmatrix}
@@ -1539,6 +1924,67 @@ Now we use this matrix to calculate $[(-2,3)]_\mathcal{B}$:
 }
 
 
+\example{Transition matrix for polynomial bases}{
+\noindent Consider two bases of the vector space of polynomials with degree up to 1, $\mathcal{P}_1$:
+\begin{align*}
+& \mathcal{A} = \left\{ p_1, \, p_2 \right\} = \left\{ 1-x, \, 1+x \right\} \\
+& \mathcal{B} = \left\{ q_1, \, q_2 \right\} = \left\{ 2, \, 1-3x \right\}
+\end{align*}
+What is the transition matrix from basis $\mathcal{A}$ to basis $\mathcal{B}$? \\
+
+\noindent We first write down the general method of finding the transition matrix
+\begin{align*}
+P_{\mathcal{A}\to\mathcal{B}} =
+\begin{pmatrix}
+| & | \\
+[\mathbf{p}_1]_\mathcal{B} & [\mathbf{p}_2]_\mathcal{B}\\
+| & | 
+\end{pmatrix}
+\end{align*}
+To find the coordinates, $\alpha$ and $\beta$, of $p_1$ in $\mathcal{B}$ we must solve
+\begin{align*}
+p_1 &= \alpha q_1 + \beta q_2 \\
+\implies 1-x &= \alpha (2) + \beta (1-3x)
+\end{align*}
+giving the system of equations
+\begin{align*}
+\begin{cases}
+2\alpha + \beta = 1 \\
+-3\beta = -1
+\end{cases}.
+\end{align*}
+This system has solution $(\alpha,\,\beta)=(1/3,1/3)$ and therefore
+\begin{align*}
+[\mathbf{p}_1]_\mathcal{B} = \begin{pmatrix} 1/3 \\ 1/3 \end{pmatrix}
+\end{align*}
+
+\noindent To find the coordinates, $\alpha'$ and $\beta'$, of $p_2$ in $\mathcal{B}$ we must solve
+\begin{align*}
+p_2 &= \alpha' q_1 + \beta' q_2 \\
+\implies 1+x &= \alpha' (2) + \beta' (1-3x)
+\end{align*}
+giving the system of equations
+\begin{align*}
+\begin{cases}
+2\alpha' + \beta' = 1 \\
+-3\beta' = 1
+\end{cases}.
+\end{align*}
+This system has solution $(\alpha',\,\beta')=(2/3,-1/3)$ and therefore
+\begin{align*}
+[\mathbf{p}_1]_\mathcal{B} = \begin{pmatrix} 2/3 \\ -1/3 \end{pmatrix}
+\end{align*}
+Hence the transition matrix is given by
+\begin{align*}
+P_{\mathcal{A}\to\mathcal{B}} =
+\dfrac{1}{3}
+\begin{pmatrix}
+1 & 2 \\ 
+1 & -1
+\end{pmatrix}
+\end{align*}
+}
+
 
 \theorem{Reverse transition matrix is the inverse}{
 For a vector space $V$ with two bases $\mathcal{A}$ and $\mathcal{B}$, the transition matrix from $\mathcal{B}$ to $\mathcal{A}$ is the inverse of the transition matrix from $\mathcal{A}$ to $\mathcal{B}$
@@ -1547,6 +1993,116 @@ P_{ \mathcal{B}\to \mathcal{A}} = P_{\mathcal{A}\to \mathcal{B}}^{-1}.
 \end{align*}
 }
 
+Now we saw in the previous example that these transition matrices are used to calculate the coordinates of a vector in one basis from its coordinates in another basis. Well this idea can also be used to change the bases in the matrix representation of a linear map. Consider such a map $f:U \to V$, a basis of the domain $\mathcal{B}_U$, and two different bases of the codomain $\mathcal{B}_V$ and $\mathcal{B}'_V$. Let $\mathbf{u} \in U$. Then we have the definition of the matrix representation of $f$ from bases $\mathcal{B}_U$ to $\mathcal{B}_V$
+\begin{align*}
+\mathcal{M}(f,\mathcal{B}_U\to \mathcal{B}_V)[\mathbf{u}]_{\mathcal{B}_U} = [f(\mathbf{u})]_{\mathcal{B}_V}
+\end{align*}
+Lets rename the matrix: $F=\mathcal{M}(f,\mathcal{B}_U\to \mathcal{B}_V)$. Now we can change the coordinate representation of $f(\mathbf{u})$ using the transition matrix as follows: $[f(\mathbf{u})]_{\mathcal{B}_V} = P_{\mathcal{B}'_V\to\mathcal{B}_V}[f(\mathbf{u})]_{\mathcal{B}'_V}$. So we get
+\begin{align*}
+& F [\mathbf{u}]_{\mathcal{B}_U} = P_{\mathcal{B}'_V\to\mathcal{B}_V}[f(\mathbf{u})]_{\mathcal{B}'_V} \\
+\implies & P^{-1}_{\mathcal{B}'_V\to\mathcal{B}_V} F[\mathbf{u}]_{\mathcal{B}_U} = [f(\mathbf{u})]_{\mathcal{B}'_V} \implies P_{\mathcal{B}_V \to \mathcal{B}'_V} F[\mathbf{u}]_{\mathcal{B}_U} = [f(\mathbf{u})]_{\mathcal{B}'_V}
+\end{align*}
+The matrix multiplication $P_{\mathcal{B}_V \to \mathcal{B}'_V} F$ acts exactly as we would expect the matrix representation of $f$ from basis $\mathcal{B}_U$ to basis $\mathcal{B}'_V$ to act on every input vector $\mathbf{u} \in U$. We have thus shown
+\begin{align*}
+\mathcal{M}(f,\mathcal{B}_U\to \mathcal{B}'_V)  = P_{\mathcal{B}_V \to \mathcal{B}'_V} \mathcal{M}(f,\mathcal{B}_U\to \mathcal{B}_V)
+\end{align*}
+If we let $F' = \mathcal{M}(f,\mathcal{B}_U\to \mathcal{B}'_V)$, the relation between $F'$ and $F$ is visualised in the following schema
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+	% map, domain/codomain
+	\coordinate (U)  at (-2.5,+1.5);
+	\coordinate (V)  at (+2.5,+1.5);
+	\coordinate (fmap)  at ($0.5*(U)+ 0.5*(V) + (0,0.6)$);
+	
+	\node[black,scale=2.5] at (U)  {$U$};
+	\node[black,scale=2.5] at (W)  {$V$};
+	\draw[->,ultra thick] ($(U)+(1,0)$)--($(V)-(1,0)$);
+	
+	\node[black,scale=2.3] at (fmap)  {$f$};
+	
+	% matrix, bases
+	\coordinate (Bu) at (-2.5,-1.5);
+	\coordinate (Bv) at (+2.5,-1.5);
+	\coordinate (Bv2) at (+2.5,-4.5);
+	\coordinate (fmat) at ($0.5*(Bu)+ 0.5*(Bv) + (0,0.8)$);
+	\coordinate (fmat2) at ($0.5*(Bu)+ 0.5*(Bv2) + (-0.5,-0.5)$);
+	\coordinate (pmat) at ($0.5*(Bv)+ 0.5*(Bv2) + (2,0)$);
+	
+	\node[black,scale=2.5] at (Bu)   {$\mathcal{B}_U$};
+	\node[black,scale=2.5] at (Bv)   {$\mathcal{B}_V$};
+	\node[black,scale=2.5] at (Bv2)  {$\mathcal{B}'_V$};
+	\node[black,scale=2.3] at (fmat)  {$F$};
+	\node[black,scale=2.3] at (fmat2) {$F'$};
+	\node[black,scale=2.3, align=left] at (pmat)  {$P_{\mathcal{B}_V\to\mathcal{B}'_V}$};
+	
+	\draw[->,ultra thick] ($(Bu)+(1,0)$)--($(Bv)-(1,0)$);
+	\draw[->,ultra thick] ($(Bu)+(1,-0.2)$)--($(Bv2)-(1,-0.5)$);
+	\draw[->,ultra thick] ($(Bv)+(0,-0.5)$)--($(Bv2)+(0,0.8)$);
+	
+	% separation
+	\draw[dashed,thick] ($(-8,0)$)--($(8,0)$);
+	\node[black,scale=1] at (-7,0.2) {map};
+	\node[black,scale=1] at (-7,-0.2) {matrix};
+\end{tikzpicture}
+\end{figure}
+
+\noindent Hopefully from this schema it is clear that the action of $F'$ is equivalent to first doing $F$, then doing $P_{\mathcal{B}_V\to\mathcal{B}'_V}$.
+
+We can also consider the matrix of the map with a change of the domain basis. Let $\mathcal{B}'_U$ be another domain basis. Recall that $F$ is defined by
+\begin{align*}
+F[\mathbf{u}]_{\mathcal{B}_U} = [f(\mathbf{u})]_{\mathcal{B}_V}
+\end{align*}
+and that the transition matrix from $\mathcal{B}'_U$ to $\mathcal{B}_U$ is defined by
+\begin{align*}
+[\mathbf{u}]_{\mathcal{B}_U} = P_{\mathcal{B}'_U\to\mathcal{B}_U}[\mathbf{u}]_{\mathcal{B}'_U} 
+\end{align*}
+So we have
+\begin{align*}
+FP_{\mathcal{B}'_U\to\mathcal{B}_U}[\mathbf{u}]_{\mathcal{B}'_U}   = [f(\mathbf{u})]_{\mathcal{B}_V}
+\end{align*}
+and the matrix $F'' = FP_{\mathcal{B}'_U\to\mathcal{B}_U}$ represents the map with this new domain basis. This relation is represented by the following schema
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+	% map, domain/codomain
+	\coordinate (U)  at (-2.5,+1.5);
+	\coordinate (V)  at (+2.5,+1.5);
+	\coordinate (fmap)  at ($0.5*(U)+ 0.5*(V) + (0,0.6)$);
+	
+	\node[black,scale=2.5] at (U)  {$U$};
+	\node[black,scale=2.5] at (W)  {$V$};
+	\draw[->,ultra thick] ($(U)+(1,0)$)--($(V)-(1,0)$);
+	
+	\node[black,scale=2.3] at (fmap)  {$f$};
+	
+	% matrix, bases
+	\coordinate (Bu) at (-2.5,-1.5);
+	\coordinate (Bv) at (+2.5,-1.5);
+	\coordinate (Bu2) at (-2.5,-4.5);
+	\coordinate (fmat) at ($0.5*(Bu)+ 0.5*(Bv) + (0,0.8)$);
+	\coordinate (fmat2) at ($0.5*(Bu2)+ 0.5*(Bv) + (0.5,-0.5)$);
+	\coordinate (pmat) at ($0.5*(Bu)+ 0.5*(Bu2) + (-2,0)$);
+	
+	\node[black,scale=2.5] at (Bu)   {$\mathcal{B}_U$};
+	\node[black,scale=2.5] at (Bv)   {$\mathcal{B}_V$};
+	\node[black,scale=2.5] at (Bu2)  {$\mathcal{B}'_U$};
+	\node[black,scale=2.3] at (fmat)  {$F$};
+	\node[black,scale=2.3] at (fmat2) {$F''$};
+	\node[black,scale=2.3, align=left] at (pmat)  {$P_{\mathcal{B}'_U\to\mathcal{B}_U}$};
+	
+	\draw[->,ultra thick] ($(Bu)+(1,0)$)--($(Bv)-(1,0)$);
+	\draw[->,ultra thick] ($(Bu2)+(1,0.2)$)--($(Bv)+(-1,-0.5)$);
+	\draw[<-,ultra thick] ($(Bu)+(0,-0.5)$)--($(Bu2)+(0,0.8)$);
+	
+	% separation
+	\draw[dashed,thick] ($(-8,0)$)--($(8,0)$);
+	\node[black,scale=1] at (-7,0.2) {map};
+	\node[black,scale=1] at (-7,-0.2) {matrix};
+\end{tikzpicture}
+\end{figure}
+These two cases, matrix representations with a change in the domain basis or codomain basis, are generalised in the following theorem.
 
 \theorem{Changing the bases of a matrix representation}{ \label{thm:map_diff_bases}
 Let $f:U \to V$ be a linear map, $\mathcal{B}_U$ and $\mathcal{B}'_U$ be two bases of $U$, $\mathcal{B}_V$ and $\mathcal{B}'_V$ be two bases of $V$, and $F=\mathcal{M}(f,\mathcal{B}_U\to\mathcal{B}_V)$ be the matrix representation of $f$ from basis $\mathcal{B}_U$ to basis $\mathcal{B}_V$. 
@@ -1556,7 +2112,7 @@ Then $F'=\mathcal{M}(f,\mathcal{B}'_U\to\mathcal{B}'_V)$, the matrix representat
 F' = P_{\mathcal{B}_V\to\mathcal{B}_V'} \, F \, P_{\mathcal{B}'_U\to\mathcal{B}_U}
 \end{align*}
 
-The following diagram may help visualise this relation
+The following schema visualises this relation
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}

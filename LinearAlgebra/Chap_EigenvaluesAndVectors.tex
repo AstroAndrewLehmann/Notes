@@ -5,7 +5,7 @@
 \section{Basic definitions}
 
 \definition{Eigenvalues and eigenvectors of a linear map}{
-Consider an endomorphism $f:V \to V$ and a vector $\mathbf{v}\in V$. We call a number $\lambda \neq 0$ an eigenvalue of $f$ if there exists a non-zero vector $\mathbf{v}$ satisfying the relation
+Consider an endomorphism $f:V \to V$ and a vector $\mathbf{v}\in V$. We call a number $\lambda$ an eigenvalue of $f$ if there exists a non-zero vector $\mathbf{v}$ satisfying the relation
 \begin{align*}
 f(\mathbf{v}) = \lambda \mathbf{v}.
 \end{align*}
@@ -720,7 +720,36 @@ A square matrix $A$ of size $n$ is diagonalizable if and only if there exists an
 \begin{align*}
 A = P D P^{-1}
 \end{align*}
-where $P$ consists of eigenvectors of $A$ as columns \textit{in the order that corresponds to their eigenvalue placement in $D$}. The matrix $P$ is the transition matrix from the eigenbasis, $\mathcal{E}$, to the canonical basis of $\mathbb{R}^n$: $P_{\mathcal{E}\to \mathcal{C}_n}$.
+where $P$ consists of eigenvectors of $A$ as columns \textit{in the order that corresponds to their eigenvalue placement in $D$}. The matrix $P$ is the transition matrix from the eigenbasis, $\mathcal{E}$, to the canonical basis of $\mathbb{R}^n$: $P_{\mathcal{E}\to \mathcal{C}_n}$. The following diagram summarises the relations between these different matrices and bases
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+	\coordinate (Cn1)  at (-2.5,+2);
+	\coordinate (E1) at (-2.5,-2);
+	\coordinate (Cn2)  at (+2.5,+2);
+	\coordinate (E2) at (+2.5,-2);
+	
+	\coordinate (F)  at (+0,+2.7);
+	\coordinate (Fd) at (+0,-2.7);
+	\coordinate (P1) at (-4,+0);
+	\coordinate (P2) at (+4,+0);
+	
+	\node[black,scale=2.5] at (Cn1)  {$\mathcal{C}_n$};
+	\node[black,scale=2.5] at (E1) {$\mathcal{E}$};
+	\node[black,scale=2.5] at (Cn2)  {$\mathcal{C}_n$};
+	\node[black,scale=2.5] at (E2) {$\mathcal{E}$};
+	
+	\node[black,scale=2.5] at (F)  {$A$};
+	\node[black,scale=2.5] at (Fd) {$D$};
+	\node[black,scale=2] at (P1) {$P_{\mathcal{E}\to\mathcal{C}_n}^{-1}$};
+	\node[black,scale=2] at (P2) {$P_{\mathcal{E}\to\mathcal{C}_n}$};
+	
+	\draw[->,ultra thick] ($(Cn1)+(1,0)$)--($(Cn2)-(1,0)$);
+	\draw[->,ultra thick] ($(E1)+(1,0)$)--($(E2)-(1,0)$);
+	\draw[<-,ultra thick] ($(E1)+(0,0.8)$)--($(Cn1)-(0,0.8)$);
+	\draw[<-,ultra thick] ($(Cn2)-(0,0.8)$)--($(E2)+(0,0.8)$);
+\end{tikzpicture}
+\end{figure}
 }
 
 \example{Eigenvalue diagonalization}{

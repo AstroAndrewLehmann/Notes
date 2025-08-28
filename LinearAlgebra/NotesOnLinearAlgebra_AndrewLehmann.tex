@@ -13,7 +13,10 @@
 \usepackage[shortlabels]{enumitem}
 \usepackage{float}
 \usepackage{relsize} % for \mathlarger
+\usepackage{moresize}
 \usepackage{nicematrix}
+\usepackage{fix-cm} % for fonts of arbitrary size
+\usepackage{comfortaa} % must install texlive-fonts-extra
 
 %%%%%%%%%%% tikz %%%%%%%%%%%
 \usepackage{tikz}
@@ -30,6 +33,7 @@
 \definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
 \definecolor{battleshipgrey}{rgb}{0.52, 0.52, 0.51}
 \definecolor{brightmaroon}{rgb}{0.76, 0.13, 0.28}
+\definecolor{plum}{rgb}{0.86,0.59,0.86}
 % \textcolor{MidnightBlue}{}
 % \textcolor{Maroon}{}
 % \textcolor{Purple}{matrix}
@@ -37,9 +41,35 @@
 % \textcolor{MidnightBlue}{}
 % \textcolor{Mahogany}{}
 % \textcolor{ForestGreen}{}
+\definecolor{nicegreen}{RGB}{133, 204, 111}
+\definecolor{darkgreen}{RGB}{0, 100, 0}
+\definecolor{goldenrod}{RGB}{218,165,32}
+\definecolor{gold}{RGB}{255,215,0}
+%%%%%%%%%%%%%%%%%%%%%
+
+%%%% To get a nice colourful box around an equation
+\newcommand*{\colourboxed}{}
+\def\colourboxed#1#{%
+  \colourboxedAux{#1}%
+}
+\newcommand*{\colourboxedAux}[3]{%
+  % #1: optional argument for color model
+  % #2: color specification
+  % #3: formula
+  \begingroup
+    \colorlet{cb@saved}{.}%
+    \color#1{#2}%
+    \boxed{%
+      \color{cb@saved}%
+      #3%
+    }%
+  \endgroup
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % for theorem list
 \usepackage{thmtools}
 \usepackage[nottoc]{tocbibind}
@@ -210,46 +240,25 @@
 %*************************************************
 
 
-%%%%%% COLOURS %%%%%%%%%%
-\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
-\definecolor{battleshipgrey}{rgb}{0.52, 0.52, 0.51}
-\definecolor{brightmaroon}{rgb}{0.76, 0.13, 0.28}
-\definecolor{nicegreen}{RGB}{133, 204, 111}
-\definecolor{darkgreen}{RGB}{0, 100, 0}
-
-
-%%%% To get a nice colourful box around an equation
-\newcommand*{\colourboxed}{}
-\def\colourboxed#1#{%
-  \colourboxedAux{#1}%
-}
-\newcommand*{\colourboxedAux}[3]{%
-  % #1: optional argument for color model
-  % #2: color specification
-  % #3: formula
-  \begingroup
-    \colorlet{cb@saved}{.}%
-    \color#1{#2}%
-    \boxed{%
-      \color{cb@saved}%
-      #3%
-    }%
-  \endgroup
-}
-%%%%%%%%%%%%%%%%
 
 
 \usepackage{hyperref}
 \begin{document}
 
 % testing area
+%\pagenumbering{roman}
+%\input{TitlePage.tex}
+%\onehalfspacing
+%\addcontentsline{toc}{chapter}{\bf Contents}
+%\tableofcontents
 %\input{Chap_EuclideanVectors.tex}
 %\input{Chap_MatrixAlgebra.tex}
 %\input{Chap_VectorSpaces.tex}
 %\input{Chap_LinearMaps.tex}
+%\input{Chap_DualSpaces.tex}
 %\input{Chap_EigenvaluesAndVectors.tex}
 %\input{Chap_InnerProductSpaces.tex}
-%\input{Chap_OrthogonalMatrices.tex}
+%\input{Chap_OrthogonalMatrices.tex} %skew-symmetric
 %\input{Chap_ComplexNumbers.tex}
 %\input{Chap_QuantumMechanics.tex}
 
