@@ -16,6 +16,61 @@ That is, the find the area under its curve, as graphed in figure~\ref{fig:ch5_in
 	\end{center}
 \end{figure}
 
+\subsection{Riemann Sums}
+Riemann sums approximate the integral with rectangular subdivisions. We divide the interval $[a,b]$ into $n$ equally spaced subdivisions. Denote the spacing $\Delta x = (b-a)/n$ so that the boundaries of the rectangles lie at $x_k = a + k\Delta x$ for $k=0,1,2,\dots,n$.
+
+The left Riemann sum defines the heights of the rectangles with the function \textit{as the height at their left sides}. This gives  \\
+
+\noindent \fbox{\begin{minipage}{\linewidth}
+\underline{\textbf{Left Riemann sum for approximating an integral}}
+\begin{align*}
+\int_a^b f(x) dx \sim \sum_{k=0}^{n-1} f(x_k) \Delta x
+\end{align*}
+\end{minipage}} \\
+
+\noindent Note the upper bound of the sum going to $n-1$, because the last rectangle will use the function at $x = b-\Delta x$ as its height. This integral approximation is represented below, for a choice of 4 subdivisions
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.6\textwidth]{figures/ch5_riemann_left.pdf} 
+	  \caption{Left Riemann sum with 4 subdivisions.} \label{fig:ch5_riemann_left}
+	\end{center}
+\end{figure}
+
+
+The right Riemann sum defines the heights of the rectangles with the function \textit{as the height at their right sides}. This gives  \\
+
+\noindent \fbox{\begin{minipage}{\linewidth}
+\underline{\textbf{Right Riemann sum for approximating an integral}}
+\begin{align*}
+\int_a^b f(x) dx \sim \sum_{k=1}^{n} f(x_k) \Delta x
+\end{align*}
+\end{minipage}} \\
+\noindent Note the sum indices going from 1 to $n$, because the first rectangle will use the function at $x = a+\Delta x$ as its height. This integral approximation is represented below, for a choice of 3 subdivisions
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.6\textwidth]{figures/ch5_riemann_right.pdf} 
+	  \caption{Left Riemann sum with 3 subdivisions.} \label{fig:ch5_riemann_right}
+	\end{center}
+\end{figure}
+
+The midpoint Riemann sum defines the heights of the rectangles with the function \textit{as the height at their centres}. This gives  \\
+
+\noindent \fbox{\begin{minipage}{\linewidth}
+\underline{\textbf{Midpoint Riemann sum for approximating an integral}}
+\begin{align*}
+\int_a^b f(x) dx \sim \sum_{k=0}^{n-1} f\left( \frac{x_k+x_{k+1}}{2} \right) \Delta x
+\end{align*}
+\end{minipage}} \\
+\noindent Note the sum indices going from 1 to $n$, because the first rectangle will use the function at $x = a+\Delta x$ as its height. This integral approximation is represented below, for a choice of 4 subdivisions
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width=0.6\textwidth]{figures/ch5_riemann_mid.pdf} 
+	  \caption{Left Riemann sum with 3 subdivisions.} \label{fig:ch5_riemann_mid}
+	\end{center}
+\end{figure}
+
+
+\subsection{Newton-Cotes methods}
 The method we will use is to first estimate $f(x)$ with the Lagrangian interpolation polynomial, $p_n(x)$, and integrate that instead. So we have the approximation for the integral
 \begin{align*}
 I \sim \int_a^b p_n(x) dx.
@@ -24,7 +79,7 @@ Figure~\ref{fig:ch5_lagrangian} shows the general schema, where we interpolate $
 \begin{figure}[H]
 	\begin{center}
 	\includegraphics[width=0.6\textwidth]{figures/ch5_lagrangian.pdf} 
-	  \caption{.} \label{fig:ch5_lagrangian}
+	  \caption{Area under a Lagrange polynomial approximation of the function $f(x)$.} \label{fig:ch5_lagrangian}
 	\end{center}
 \end{figure}
 
@@ -53,7 +108,7 @@ If we choose $n=1$, then we interpolate the function with $n+1=2$ points. These 
 \begin{figure}[H]
 	\begin{center}
 	\includegraphics[width=0.6\textwidth]{figures/ch5_trapezium.pdf} 
-	  \caption{.} \label{fig:ch5_trapezium}
+	  \caption{Trapezium rule integral approximation.} \label{fig:ch5_trapezium}
 	\end{center}
 \end{figure}
 The Newton-Cotes formula for $n=1$ is then
@@ -72,20 +127,20 @@ w_0 &= \int_a^b L_0(x) dx, \quad \text{and } L_0 = \frac{x-b}{a-b} \\
 and similarly the first weight is
 \begin{align*}
 w_1 &= \int_a^b L_1(x) dx, \quad \text{and } L_1 = \frac{x-a}{b-a} \\
- &= \frac{1}{b-a} \left. \left(\frac{x^2}{2} - ax \right) \right|_a^b \\exercice
+ &= \frac{1}{b-a} \left. \left(\frac{x^2}{2} - ax \right) \right|_a^b \\
  &= \frac{1}{2(b-a)} \left( b - a \right)^2 \\
  &= \frac{b - a}{2}.
 \end{align*}
-The two weights are the same! Hence we have 
+The two weights are the same! Hence we have  \\
 
 \noindent \fbox{\begin{minipage}{\linewidth}
 \underline{\textbf{Trapezium rule for approximating an integral}}
 \begin{align}
 \int_a^b f(x)dx \sim \frac{b-a}{2}\left(f(a) + f(b) \right) 
 \end{align}
-\end{minipage}}
+\end{minipage}} \\
 
-With a small rearrangement we can get an alternative geometric interpretation of this rule
+\noindent With a small rearrangement we can get an alternative geometric interpretation of this rule
 \begin{align*}
 I \sim \underbrace{\frac{f(a) + f(b)}{2}}_\text{average height in the range} \overbrace{\left(b-a \right)}^\text{size of range}.
 \end{align*}
@@ -94,7 +149,7 @@ This is simply the formula for the area of the rectangle shown below, with heigh
 \begin{figure}[H]
 	\begin{center}
 	\includegraphics[width=0.6\textwidth]{figures/ch5_trapezium_alternative.pdf} 
-	  \caption{.} \label{fig:ch5_trapezium_alternative}
+	  \caption{Trapezium rule interpretion.} \label{fig:ch5_trapezium_alternative}
 	\end{center}
 \end{figure}
 
@@ -109,7 +164,7 @@ Integrate $f(x)=e^x$ from 0 to 4 using the Trapezium rule with two (equal-sized)
 \begin{figure}[H]
 	\begin{center}
 	\includegraphics[width=0.6\textwidth]{figures/ch5_trapezium_example.pdf} 
-	  \caption{.} \label{fig:ch5_trapezium_example}
+	  \caption{Trapezium rule with two equal subdivisions.} \label{fig:ch5_trapezium_example}
 	\end{center}
 \end{figure}
 The two integrals are then
@@ -130,7 +185,7 @@ Now we choose $n=2$, so we interpolate the function with $n+1=3$ points. These 3
 \begin{figure}[H]
 	\begin{center}
 	\includegraphics[width=0.6\textwidth]{figures/ch5_simpsons.pdf} 
-	  \caption{.} \label{fig:ch5_simpsons}
+	  \caption{Simpson's rule.} \label{fig:ch5_simpsons}
 	\end{center}
 \end{figure}
 The Newton-Cotes formula for $n=2$ is then
@@ -167,20 +222,20 @@ It's not so difficult to show that the other two weights are
 w_1 &= \frac{4}{6}\left(b-a\right), \\
 w_2 &= \frac{b-a}{6}.
 \end{align*}
-And so we have 
+And so we have \\
 
 \noindent \fbox{\begin{minipage}{\linewidth}
 \underline{\textbf{Simpson's rule for approximating an integral}}
 \begin{align}
-\int_a^b f(x)dx \sim \frac{b-a}{6}\left(f(a) + 4f\left(\frac{a+b}{2}\right)+ f(b) \right).
+\int_a^b f(x)dx \sim \frac{b-a}{6}\left(f(a) + 4f\left(\frac{a+b}{2}\right)+ f(b) \right)
 \end{align}
-\end{minipage}}
+\end{minipage}} \\
 
-Sometimes we use the distance between the interpolation points, $h=(b-a)/2$, and then Simpson's rule is written
+\noindent Sometimes we use the distance between the interpolation points, $h=(b-a)/2$, and then Simpson's rule is written
 \begin{align*}
 \int_a^b f(x)dx \sim \frac{h}{3}\left(f(a) + 4f\left(\frac{a+b}{2}\right)+ f(b) \right).
 \end{align*}
-from which we get the alternative name \textit{Simpson's 1/3 rule}.
+from which we get the alternative name \textit{Simpson's 1/3 rule}. Be very careful here: $h$ is the distance between interpolation points (half the integration interval).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% EXAMPLE SIMPSON'S RULE %%%%%%%%%%%%
@@ -192,7 +247,7 @@ Integrate $f(x)=e^x$ from 0 to 4 using Simpson's rule with two (equal-sized) sub
 \begin{figure}[H]
 	\begin{center}
 	\includegraphics[width=0.6\textwidth]{figures/ch5_simpsons_example.pdf} 
-	  \caption{.} \label{fig:ch5_simpsons_example}
+	  \caption{Simpson's rule with two equal subdivisions.} \label{fig:ch5_simpsons_example}
 	\end{center}
 \end{figure}
 \noindent The two integrals are then
@@ -213,12 +268,13 @@ So the Simpson's rule approximation is much better than the Trapezium rule resul
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsubsection{Composite Simpson's rule}
 
-One final consideration: it's not necessarily the case that increasing the number of interpolation points increases the accuracy of the approximation. Consider the integral
+It's not necessarily the case that increasing the number of interpolation points increases the accuracy of the approximation. Consider the integral
 \begin{align*}
 \int_{-5}^5 \frac{1}{1+x^2} dx.
 \end{align*}
-Applying Newton-Cotes formulae with increasing $n$ does not converge, and in fact eventually increases without bound. It is generally better to stick with Simpson's rule, but to increase the number of subdivisions, as shown below:
+Applying Newton-Cotes formulae to this integral with increasing $n$ does not converge on the exact solution, and in fact eventually gives values that increase without bound. It is generally better to stick with Simpson's rule, but to increase the number of subdivisions, as shown below:
 \begin{figure}[H]
 	\begin{center}
 	\includegraphics[width=\textwidth]{figures/ch5_simpsons_refinement.pdf} 
@@ -226,7 +282,57 @@ Applying Newton-Cotes formulae with increasing $n$ does not converge, and in fac
 	\end{center}
 \end{figure}
 
+\noindent The total integral approximation is now formalised as a summation
+\begin{align*}
+\int_a^b f(x)dx \sim \sum_k I_k
+\end{align*}
+where the $I_k$ are each applications of Simpson's rule. We study here how this composite rule results in a simple formula. 
 
+Consider dividing an interval $[a,b]$ into $n$ equal sized subdivisions, so that $k=1,2,\dots,n$. We want to apply Simpson's rule to each subdivision, which has width $(b-a)/n$. Since $h$ is half the size of these subdivisions, we have $h = (b-a)/2n$. In each subdivision, the interpolation points are separated by $h$, and so the areas are
+\begin{align*}
+I_1 &= \frac{h}{3}\left( f(a) + 4f(a+h) + f(a+2h) \right) \\
+I_2 &= \frac{h}{3}\left( f(a+2h) + 4f(a+3h) + f(a+4h) \right) \\
+I_3 &= \frac{h}{3}\left( f(a+4h) + 4f(a+5h) + f(a+6h) \right) \\
+&\vdots \\
+I_n &= \frac{h}{3}\left( f(a+(2n-2)h) + 4f(a+(2n-1)h) + f(a+2nh) \right)
+\end{align*}
+We quickly make sure this is right by checking that the last term is what we expect:
+\begin{align*}
+I_n &= \frac{h}{3}\left( f(b-2h) + 4f(b-h) + f(b) \right)
+\end{align*}
+We should recover this last interval when we replace $n$ with $n = (b-a)/2h$:
+\begin{align*}
+I_n &= \frac{h}{3}\left( f(a+(2n-2)h) + 4f(a+(2n-1)h) + f(a+2nh) \right) \\
+&= \frac{h}{3}\left( f(a+(2\frac{b-a}{2h}-2)h) + 4f(a+(2\frac{b-a}{2h}-1)h) + f(a+2\frac{b-a}{2h}h) \right) \\
+&= \frac{h}{3}\left( f(a+b-a-2h) + 4f(a+b-a -h)) + f(a+b-a) \right) \\
+&= \frac{h}{3}\left( f(b-2h) + 4f(b-h)) + f(b) \right)
+\end{align*}
+Good it works. Now if we add all the subdivision Simpson rule areas together you should see that the 3rd term in one expression is the 1st term in the next. These can be collected
+\begin{align*}
+\int_a^b f(x)dx \sim \frac{h}{3}\left(f(a) + 4f(a+h) + 2f(a+2h)  + 4f(a+3h) + 2f(a+4h)  + 4f(a+5h) + \cdots + f(b) \right)
+\end{align*}
+The terms multiplied by 4 are always of the form $a+Xh$ for odd $X$, while the terms multiplied by 2 are all of the form $a+Yh$ for even $Y$. This gives the following formula. \\
+
+\noindent \fbox{\begin{minipage}{\linewidth}
+\underline{\textbf{Composite Simpson's rule for approximating an integral}} \\
+
+For a function $f(x)$ that is continuous on the interval $[a,b]$:
+\begin{align}
+\int_a^b f(x)dx \sim \frac{h}{3}\left(f(a) + 4\sum_{k=1}^n f\left(a+(2k-1)h\right) + 2\sum_{k=1}^{n-1} f\left(a+2kh\right) + f(b) \right)
+\end{align}
+where
+\begin{align*}
+h = \frac{b-a}{2n}.
+\end{align*}
+Alternatively:
+\begin{align}
+\int_a^b f(x)dx \sim \frac{h}{3}\left(f(a) + 4\sum_{k=1}^n f\left(x_{2k-1}\right) + 2\sum_{k=1}^{n-1} f\left(x_{2k}\right) + f(b) \right)
+\end{align}
+where
+\begin{align*}
+\quad x_k = a + k h
+\end{align*}
+\end{minipage}} \\
 
 \subsection{Degree of precision}
 
